@@ -4,16 +4,19 @@ import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../images/logo.png';
 import { useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
+import { registerNewUser }  from '../../utils/wssConnection/wssConnection';
 
 const Header = () => {
 	const token = localStorage.getItem('token');
 	const history = useNavigate();
 
-	const { error } = useSelector((state) => state.user);
+	const { error, user } = useSelector((state) => state.user);
 	const alert = useAlert();
 
 	const logoutHandler = () => {
 		localStorage.setItem('token','');
+		registerNewUser('');
+		user = null;
 		alert.success("Logged out successfully");
 		history('/login');
 	 };
