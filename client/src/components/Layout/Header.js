@@ -59,6 +59,8 @@ const Header = () => {
 											<li><Link to="/about-us"><span>About Us</span></Link></li>
 											<li><Link to="/team"><span>Our Team</span></Link></li>
 											<li><Link to="/patient-feedback"><span>Patient Feedback</span></Link></li>
+											{ token && token !=='' ? (<li> <Button onClick={logoutHandler} className="btn btn-primary shadow" variant="contained">Logout</Button> </li>)  : ''
+											}
 										</ul>
 									</li>
 								</ul>
