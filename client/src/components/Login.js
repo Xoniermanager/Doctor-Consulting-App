@@ -34,12 +34,12 @@ const Login = () => {
     setFormErrors(validate(formValues));
     setIsSubmit(true);
     let {name, email, password, username} = formValues;
-    dispatch(registerUser(name, email, password, username));
+    await dispatch(registerUser(name, email, password, username));
     dispatch(loadUser());
     registerNewUser(user.name);
 	let token = localStorage.getItem('token');
     if(token){
-		dispatch(loadUser());
+		await dispatch(loadUser());
 		registerNewUser(user.name);
 		history('/video-chat');
 	}
@@ -51,10 +51,10 @@ const Login = () => {
     setFormErrors(validate_login(loginValues));
     setIsSubmit(true);
     let {password, username} = loginValues;
-    dispatch(loginUser(username, password));
+    await dispatch(loginUser(username, password));
 	let token = localStorage.getItem('token');
     if(token){
-		dispatch(loadUser());
+		await dispatch(loadUser());
 		registerNewUser(user.name);
 		history('/video-chat');
 	}
