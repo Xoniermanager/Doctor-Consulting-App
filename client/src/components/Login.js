@@ -39,7 +39,7 @@ const Login = () => {
     registerNewUser(user.name);
 	let token = localStorage.getItem('token');
     if(token){
-		await dispatch(loadUser());
+		dispatch(loadUser());
 		registerNewUser(user.name);
 		history('/video-chat');
 	}

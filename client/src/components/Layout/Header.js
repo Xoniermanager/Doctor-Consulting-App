@@ -10,12 +10,11 @@ const Header = () => {
 	const token = localStorage.getItem('token');
 	const history = useNavigate();
 
-	const { error, user } = useSelector((state) => state.user);
+	let { error, user } = useSelector((state) => state.user);
 	const alert = useAlert();
 
 	const logoutHandler = () => {
 		localStorage.setItem('token','');
-		registerNewUser('');
 		user = null;
 		alert.success("Logged out successfully");
 		history('/login');
