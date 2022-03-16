@@ -25,7 +25,6 @@ process.on("uncaughtException", (err)=>{
 
 const server = app.listen(PORT, () => {
   console.log(`server is listening on port ${PORT}`);
-  console.log(`http://localhost:${PORT}`);
 });
 
 const peerServer = ExpressPeerServer(server, {
@@ -194,9 +193,5 @@ if(process.env.NODE_ENV  == 'production'){
   app.use(express.static(path.join(__dirname, "/client/build")));
   app.get('*', (req, res)=>{
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  })
-}else{
-  app.get("/", (req, res)=>{
-    res.send("API is running");
   })
 }
