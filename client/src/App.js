@@ -23,6 +23,7 @@ import { useEffect } from 'react';
 import { connectWithWebSocket } from './utils/wssConnection/wssConnection';
 import Dashboard from './Dashboard/Dashboard';
 import LoginPage from './LoginPage/LoginPage';
+import JoinMeeting from './components/Meeting/JoinMeeting';
 
 const App = () => {
 
@@ -52,6 +53,7 @@ const App = () => {
               <Route exact path='/pathology' element={<Pathology/>} />
               <Route exact path="/contact-us" element={<ContactUs/>} />
               <Route exact path="/login" element={<Login />} />
+              <Route exact path="/join-meeting" element={<JoinMeeting />} />
            </Routes>
 
        </Router>

@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../images/logo.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
-import { loginUser, loadUser, registerUser } from '../Actions/User';
+import { loginUser, registerUser, forgetPassword } from '../Actions/User';
+import ReCAPTCHA from "react-google-recaptcha";
 
 import { registerNewUser }  from '../utils/wssConnection/wssConnection';
 
@@ -12,15 +13,15 @@ const Login = () => {
   const dispatch = useDispatch();
   const alert = useAlert();
   const { error, message, user} = useSelector((state) => state.user);
- 
 
-  const loginInitialValue = { username:"", password:""};
+  // login 
+  const loginInitialValue = { email:"", password:""};
   const [loginValues, setLoginValues] = useState(loginInitialValue); 
   const handleLoginChange = (e) => {
     setLoginValues({...loginValues, [e.target.name] : e.target.value});
   }
-
-  const initialValue = { name : "", email :"", username:"", password:"" };
+ // register
+  const initialValue = { name : "", email :"", password:"", conf_password:"" };
   const [formValues, setFormValues] = useState(initialValue); 
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
@@ -33,16 +34,9 @@ const Login = () => {
     e.preventDefault();
     setFormErrors(validate(formValues));
     setIsSubmit(true);
-    let {name, email, password, username} = formValues;
-    await dispatch(registerUser(name, email, password, username));
-    dispatch(loadUser());
-    registerNewUser(user.name);
-	let token = localStorage.getItem('token');
-    if(token){
-		dispatch(loadUser());
-		registerNewUser(user.name);
-		history('/video-chat');
-	}
+    let {name, email, password} = formValues;
+    await dispatch(registerUser(name, email, password));
+	history('/login');
   };
  
 
@@ -50,13 +44,12 @@ const Login = () => {
     e.preventDefault();
     setFormErrors(validate_login(loginValues));
     setIsSubmit(true);
-    let {password, username} = loginValues;
-    await dispatch(loginUser(username, password));
+    let {password, email} = loginValues;
+    await dispatch(loginUser(email, password));
 	let token = localStorage.getItem('token');
     if(token){
-		await dispatch(loadUser());
 		registerNewUser(user.name);
-		history('/video-chat');
+		history('/join-meeting');
 	}
 	return false;
   };
@@ -76,11 +69,9 @@ const Login = () => {
   const validate = (values) => {
     const errors = {};
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+	const passwordRegex =  /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
     if (!values.name) {
       errors.name = "Name is required!";
-    }
-    if (!values.username) {
-      errors.username = "Username is required!";
     }
     if (!values.email) {
       errors.email = "Email is required!";
@@ -89,23 +80,55 @@ const Login = () => {
     }
     if (!values.password) {
       errors.password = "Password is required";
-    } else if (values.password.length < 6) {
-      errors.password = "Password must be more than 4 characters";
-    } else if (values.password.length > 16) {
-      errors.password = "Password cannot exceed more than 10 characters";
-    }
+    }  
+	if(!passwordRegex.test(values.password)){
+		errors.password = "Password should be strong and min 6 characters";
+	}if(values.password !== values.conf_password){
+		errors.conf_password = "Password and confirm password should be matched.";
+	}
     return errors;
   };
 
   const validate_login = (values) => {
     const errors = {};
-    if (!values.username) {
-      errors.username = "Username is required!";
+    if (!values.email) {
+      errors.email = "Email is required!";
     }
 
     if (!values.password) {
       errors.password = "Password is required";
     } 
+    return errors;
+  };
+
+  // Google recaptcha 
+  const [isGoogleValidate, setIsGoogleValidate] = useState(false);
+  const onChange = (value) =>{
+    console.log("Captcha value:", value);
+	setIsGoogleValidate(true);
+  }
+ 
+
+  // forget password
+  const forgetInitialValue = { forget_email:""};
+  const [forgetValues, setForgetValues] = useState(forgetInitialValue); 
+  const handleForgetChange = (e) => {
+    setForgetValues({...forgetValues, [e.target.name] : e.target.value});
+  }
+  const handleForgetPassword = async (e) => {
+    e.preventDefault();
+    setFormErrors(validate_forget(forgetValues));
+    setIsSubmit(true);
+    let { forget_email } = forgetValues;
+    await dispatch(forgetPassword(forget_email));
+  };
+
+  const validate_forget = (values) => {
+	  console.log(values);
+    const errors = {};
+    if (!values.forget_email) {
+      errors.forget_email = "Email is required!";
+    }
     return errors;
   };
 
@@ -126,15 +149,21 @@ const Login = () => {
 							) : ''}
 								<form onSubmit={handleLogin}>
 									<div className="form-group">
-										<input type="text" className="form-control" name="username" placeholder="Username" onChange={handleLoginChange}/>
-										<span className='text-danger'>{formErrors.username}</span>
+										<input type="text" className="form-control" name="email" placeholder="Email" onChange={handleLoginChange}/>
+										<span className='text-danger'>{formErrors.email}</span>
 									</div>
 									<div className="form-group">
 										<input type="password" className="form-control" name='password' placeholder="Password" onChange={handleLoginChange}/>
 										<span className='text-danger'>{formErrors.password}</span>
 									</div>
 									<div className="form-group">
-										<button type="submit" className="btn mb-30 btn-lg btn-primary w-100">login</button>
+									   <ReCAPTCHA
+											sitekey="6LeXBkkbAAAAACYj7aMH2oWsIIkhpCGvm1LDQX9H"
+											onChange={onChange}
+										/>
+									</div>
+									<div className="form-group">
+										<button type="submit" disabled={!isGoogleValidate} className="btn mb-30 btn-lg btn-primary w-100">login</button>
 										<a href="#formForget" data-toggle="tab">Forgot Password</a>
 									</div>
 									<div className="text-center mt-40">						
@@ -158,12 +187,12 @@ const Login = () => {
                       						<span className='text-danger'>{formErrors.email}</span>
 										</div>
 										<div className="form-group">
-											<input type="text" className="form-control" placeholder="Username" name="username" value={formValues.username} onChange={handleChange} />
-                      						<span className='text-danger'>{formErrors.username}</span>
-										</div>
-										<div className="form-group">
 											<input type="password" className="form-control" placeholder="Password" name="password" value={formValues.password} onChange={handleChange} />
                       						<span className='text-danger'>{formErrors.password}</span>
+										</div>
+										<div className="form-group">
+											<input type="password" className="form-control" placeholder="Confirm Password" name="conf_password" value={formValues.conf_password} onChange={handleChange} />
+                      						<span className='text-danger'>{formErrors.conf_password}</span>
 										</div>	
 										<div className="form-group">
 											<button type="submit" className="btn btn-primary w-100 radius-xl">Register Now</button>
@@ -177,15 +206,13 @@ const Login = () => {
 							</div>
 							<div className="tab-pane fade" id="formForget" role="tabpanel" aria-labelledby="formForget">
 								<div className="tab-pane fade show active" id="login-home" role="tabpanel" aria-labelledby="login-home">
-									<form action="#">
+									<form onSubmit={handleForgetPassword}>
 										<div className="form-group">
-											<input type="password" className="form-control" placeholder="Password" />
-										</div>
+											<input type="text" className="form-control" name="forget_email" placeholder="Email" value={forgetValues.forget_email} onChange={handleForgetChange} />
+											<span className='text-danger'>{formErrors.forget_email}</span>
+										</div>					
 										<div className="form-group">
-											<input type="password" className="form-control" placeholder="New Password" />
-										</div>						
-										<div className="form-group">
-											<button type="button" className="btn btn-primary w-100 radius-xl">Submit</button>
+											<button type="submit" className="btn btn-primary w-100 radius-xl">Submit</button>
 										</div>													
 										<div className="text-center mt-40">						
 											<p className="mt-0">Already have an account?</p>

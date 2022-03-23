@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-export const registerUser = (name, email, password, username) => async (dispatch) =>{
+export const registerUser = (name, email, password) => async (dispatch) =>{
     try {
         dispatch({
             type : "RegisterRequest"
         })
         const {data} = await axios.post(
-            "/api/register",{ name, email, password, username },
+            "/api/register",{ name, email, password },
             {
                 headers : {
                     "Content-Type": "application/json",
@@ -27,13 +27,13 @@ export const registerUser = (name, email, password, username) => async (dispatch
     }
 }
 
-export const loginUser = (username, password) => async (dispatch) =>{
+export const loginUser = (email, password) => async (dispatch) =>{
     try {
         dispatch({
             type : "LoginRequest"
         })
         const {data} = await axios.post(
-            "/api/login",{ username, password },
+            "/api/login",{ email, password },
             {
                 headers : {
                     "Content-Type": "application/json",
@@ -78,5 +78,59 @@ export const loadUser = () => async (dispatch) => {
     }
   };
 
+// forget password
+export const forgetPassword = (email) => async (dispatch) =>{
+    try {
+        dispatch({
+            type : "FrorgetPasswordRequest"
+        })
+        const {data} = await axios.post(
+            "/api/forget/password",{ email },
+            {
+                headers : {
+                    "Content-Type": "application/json",
+                }
+            }
+        )
+        dispatch({
+            type : "FrorgetPasswordSuccess",
+            payload : data.user
+        })
+    } catch (error) {
+        dispatch({
+            type : "FrorgetPasswordFailure",
+            payload: error.response.data.message,
+        }) 
+    }
+}
 
-  
+// update password
+
+export const updatePassword =
+  (oldPassword, newPassword) => async (dispatch) => {
+    try {
+      dispatch({
+        type: "updatePasswordRequest",
+      });
+      const { data } = await axios.put(
+        "/api/update/password",
+        { oldPassword, newPassword },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token" : localStorage.getItem('token')
+          },
+        }
+      );
+
+      dispatch({
+        type: "updatePasswordSuccess",
+        payload: data.message,
+      });
+    } catch (error) {
+      dispatch({
+        type: "updatePasswordFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };

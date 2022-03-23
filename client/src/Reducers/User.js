@@ -16,20 +16,6 @@ export const userReducer = createReducer(initialState,{
         state.error = action.payload;
         state.isAuthenticated = false;
     },
-    RegisterRequest : (state) =>{
-        state.loading = true;
-    },
-    RegisterSuccess : (state, action) =>{
-        state.loading = false;
-        state.user = action.payload;
-        state.isAuthenticate  = true;
-    },
-    RegisterFailure : (state, action) =>{
-        state.loading = false;
-        state.error = action.payload;
-        state.isAuthenticated = false;
-    },
-
      LoadUserRequest: (state) => {
         state.loading = true;
       },
@@ -47,5 +33,33 @@ export const userReducer = createReducer(initialState,{
     clearErrors: (state) => {
         state.error = null;
       },
-
 })
+
+export const forgetPasswordReducer = createReducer(initialState, {
+  RegisterRequest : (state) =>{
+    state.loading = true;
+  },
+  RegisterSuccess : (state, action) =>{
+      state.loading = false;
+      state.message = action.payload;
+  },
+  RegisterFailure : (state, action) =>{
+      state.loading = false;
+      state.error = action.payload;
+  },
+  FrorgetPasswordRequest: (state) => {
+    state.loading = true;
+  },
+  FrorgetPasswordSuccess: (state, action) => {
+    state.loading = false;
+    state.message = action.payload;
+  },
+  FrorgetPasswordFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  },
+
+clearErrors: (state) => {
+    state.error = null;
+  },
+});

@@ -10,12 +10,6 @@ const userSchema = new mongoose.Schema({
         maxlength : [30, 'Name can not exceed 30 characters'],
         minlength : [3, 'Name should have more than 3 characters']
     },
-    username : {
-        type : String,
-        required : [true, 'Please enter username'],
-        maxlength : [30, 'Username can not exceed 30 characters'],
-        minlength : [6, 'Username should have more than 6 characters']
-    },
     email : {
         type : String,
         required : [true, 'Please enter your email'],
@@ -25,12 +19,17 @@ const userSchema = new mongoose.Schema({
     password : {
         type : String,
         required : [true, 'Please enter your password'],
-        minlength : [8, 'Name should have more than 8 character'],
+        minlength : [6, 'Password should have more than 6 character'],
+        maxlength : [12, 'Password can not exceed 12 characters'],
         select : false
     },
     role : {
         type : String,
-        default : 'user'
+        default : 'patient'
+    },
+    isVerify : {
+        type : Number,
+        default : 0
     },
     createdAt :{
         type : Date,
@@ -61,8 +60,8 @@ userSchema.methods.comparePassword = async function(enteredPassword){
 //Generating Reset password token 
 userSchema.methods.getResetPasswordToken = function(){
     // Generating token 
-    const resetToken = crypto.randomBytes(20).toString('hex');
-    this.resetPasswordToken = crypto.createHas('sha256').update(resetToken).digest('hex');
+    const resetToken = Math.floor(1000 + Math.random() * 9000);
+    this.resetPasswordToken = resetToken;
     this.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
     return resetToken;
 }
