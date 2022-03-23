@@ -17,7 +17,7 @@ const JoinMeeting = () => {
 							<h2 className="ttr-title mb-3">Now free for everyone.</h2>
 							<p>We re-engineered the service we built for secure business meetings, Google Meet, to make it 
 							free and available for all.</p>			  
-							<a href="#" className="btn btn-primary mt-4"><i className="fa fa-video"></i> New Meeting</a>
+							<Link to="/video-chat" className="btn btn-primary mt-4"><i className="fa fa-video"></i> New Meeting</Link>
 							<Link to="/video-chat" className="btn p-2 mt-4"> 
 								<div className="input-group my-input-grp">
 									<div className="input-group-prepend">
