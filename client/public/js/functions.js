@@ -395,10 +395,10 @@
 	}(jQuery);
 
 	/* jQuery ready  */	
-	jQuery(document).ready(function() {ThemeBuilder.initialHelper();BasicFunction.initialHelper();});
+	//jQuery(document).ready(function() {ThemeBuilder.initialHelper();BasicFunction.initialHelper();});
 	/* jQuery Window Load */
-	jQuery(window).on("load", function (e) {ThemeBuilder.afterLoadThePage();});
+	//jQuery(window).on("load", function (e) {ThemeBuilder.afterLoadThePage();});
 	/* Screen Resize */
-	jQuery(window).on('resize',function(){ThemeBuilder.changeTheScreen();});
+	//jQuery(window).on('resize',function(){ThemeBuilder.changeTheScreen();});
 	
 })(jQuery);
