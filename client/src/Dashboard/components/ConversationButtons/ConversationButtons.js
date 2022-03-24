@@ -49,7 +49,7 @@ const ConversationButtons = (props) => {
   };
 
   return (
-    <div style={styles.buttonContainer}>
+    <div className='ctrl-btn' style={styles.buttonContainer}>
       <ConversationButton onClickHandler={handleMicButtonPressed}>
         {localMicrophoneEnabled ? <MdMic style={styles.icon} /> : <MdMicOff style={styles.icon} />}
       </ConversationButton>
