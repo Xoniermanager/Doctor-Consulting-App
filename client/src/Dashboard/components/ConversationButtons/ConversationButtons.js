@@ -7,7 +7,7 @@ const styles = {
   buttonContainer: {
     display: 'flex',
     position: 'absolute',
-    bottom: '0',
+    bottom: '0px !important',
     left: '35%'
   },
   icon: {

@@ -13,7 +13,7 @@ input:focus, textarea:focus, select:focus{
   position: absolute;
   margin: 0;
   right: 21%;
-  bottom: 0;
+  bottom: 0px!important;
   font-size: 16px;
   color: #e6e5e8;
   border-radius: 50px;
@@ -29,7 +29,7 @@ input:focus, textarea:focus, select:focus{
    position: absolute;
   margin: 0;
   right: 21%;
-  bottom: 0;
+  bottom: 0px!important;
   font-size: 16px;
   color: #e6e5e8;
   border-radius: 50px;
