@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 import { loginUser, registerUser, forgetPassword } from '../Actions/User';
 import ReCAPTCHA from "react-google-recaptcha";
+import Loader from './Loader';
 
 import { registerNewUser }  from '../utils/wssConnection/wssConnection';
 
@@ -12,7 +13,7 @@ const Login = () => {
   let history = useNavigate();
   const dispatch = useDispatch();
   const alert = useAlert();
-  const { error, message, user} = useSelector((state) => state.user);
+  const { loading, error, message, user} = useSelector((state) => state.user);
 
   // login 
   const loginInitialValue = { email:"", password:""};
@@ -144,7 +145,7 @@ const Login = () => {
 						</div>
 						<div className="tab-content" id="myTabContent">
 							<div className="tab-pane fade show active" id="formLogin" role="tabpanel" aria-labelledby="formLogin">
-							{error === '' && isSubmit ? (
+							{loading && <Loader /> ? (
 								<div className="ui message success">Logged in successfully</div>
 							) : ''}
 								<form onSubmit={handleLogin}>

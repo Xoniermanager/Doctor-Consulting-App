@@ -7,7 +7,7 @@ const styles = {
     borderRadius: '8px',
     position: 'absolute',
     top: '15%',
-    right: '23%'
+    right: '26%'
   },
   videoElement: {
     width: '100%',
