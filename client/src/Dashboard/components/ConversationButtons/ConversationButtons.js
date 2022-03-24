@@ -3,6 +3,20 @@ import { MdCallEnd, MdMic, MdMicOff, MdVideocam, MdVideocamOff, MdVideoLabel, Md
 import ConversationButton from './ConversationButton';
 import { switchForScreenSharingStream, hangUp } from '../../../utils/webRTC/webRTCHandler';
 
+const styles = {
+  buttonContainer: {
+    display: 'flex',
+    position: 'absolute',
+    bottom: '22%',
+    left: '35%'
+  },
+  icon: {
+    width: '25px',
+    height: '25px',
+    fill: '#e6e5e8'
+  }
+};
+
 const ConversationButtons = (props) => {
   const {
     localStream,
@@ -35,18 +49,18 @@ const ConversationButtons = (props) => {
   };
 
   return (
-    <div className='buttonContainer'>
+    <div style={styles.buttonContainer}>
       <ConversationButton onClickHandler={handleMicButtonPressed}>
-        {localMicrophoneEnabled ? <MdMic className='icon' /> : <MdMicOff className='icon' />}
+        {localMicrophoneEnabled ? <MdMic style={styles.icon} /> : <MdMicOff style={styles.icon} />}
       </ConversationButton>
       {!groupCall && <ConversationButton onClickHandler={handleHangUpButtonPressed}>
-        <MdCallEnd className='icon' />
+        <MdCallEnd style={styles.icon} />
       </ConversationButton>}
       <ConversationButton onClickHandler={handleCameraButtonPressed}>
-        {localCameraEnabled ? <MdVideocam className='icon' /> : <MdVideocamOff className='icon' />}
+        {localCameraEnabled ? <MdVideocam style={styles.icon} /> : <MdVideocamOff style={styles.icon} />}
       </ConversationButton>
       {!groupCall && <ConversationButton onClickHandler={handleScreenSharingButtonPressed}>
-        {screenSharingActive ? <MdCamera className='icon' /> : <MdVideoLabel className='icon' />}
+        {screenSharingActive ? <MdCamera style={styles.icon} /> : <MdVideoLabel style={styles.icon} />}
       </ConversationButton>}
     </div>
   );
