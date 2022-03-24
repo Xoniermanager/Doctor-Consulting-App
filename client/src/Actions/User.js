@@ -16,7 +16,7 @@ export const registerUser = (name, email, password) => async (dispatch) =>{
         localStorage.setItem('token', data.authToken);
         dispatch({
             type : "RegisterSuccess",
-            payload : data.user
+            payload : data.message,
         })
     } catch (error) {
         localStorage.setItem('token','');
@@ -82,7 +82,7 @@ export const loadUser = () => async (dispatch) => {
 export const forgetPassword = (email) => async (dispatch) =>{
     try {
         dispatch({
-            type : "FrorgetPasswordRequest"
+            type : "ForgetPasswordRequest"
         })
         const {data} = await axios.post(
             "/api/forget/password",{ email },
@@ -93,12 +93,12 @@ export const forgetPassword = (email) => async (dispatch) =>{
             }
         )
         dispatch({
-            type : "FrorgetPasswordSuccess",
-            payload : data.user
+            type : "ForgetPasswordSuccess",
+            payload : data.message,
         })
     } catch (error) {
         dispatch({
-            type : "FrorgetPasswordFailure",
+            type : "ForgetPasswordFailure",
             payload: error.response.data.message,
         }) 
     }
@@ -106,8 +106,7 @@ export const forgetPassword = (email) => async (dispatch) =>{
 
 // update password
 
-export const updatePassword =
-  (oldPassword, newPassword) => async (dispatch) => {
+export const updatePassword = (oldPassword, newPassword) => async (dispatch) => {
     try {
       dispatch({
         type: "updatePasswordRequest",
@@ -134,3 +133,33 @@ export const updatePassword =
       });
     }
   };
+
+  // Reset password
+
+export const resetPassword = (otp, password) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "ResetPasswordRequest",
+    });
+    const { data } = await axios.put(
+      "/api/password/reset",
+      { otp, password },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token" : localStorage.getItem('token')
+        },
+      }
+    );
+
+    dispatch({
+      type: "ResetPasswordSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "ResetPasswordFailure",
+      payload: error.response.data.message,
+    });
+  }
+};

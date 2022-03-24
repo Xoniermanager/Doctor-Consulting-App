@@ -16,7 +16,7 @@ export const userReducer = createReducer(initialState,{
         state.error = action.payload;
         state.isAuthenticated = false;
     },
-     LoadUserRequest: (state) => {
+      LoadUserRequest: (state) => {
         state.loading = true;
       },
       LoadUserSuccess: (state, action) => {
@@ -47,17 +47,30 @@ export const forgetPasswordReducer = createReducer(initialState, {
       state.loading = false;
       state.error = action.payload;
   },
-  FrorgetPasswordRequest: (state) => {
+  ForgetPasswordRequest: (state) => {
     state.loading = true;
   },
-  FrorgetPasswordSuccess: (state, action) => {
+  ForgetPasswordSuccess: (state, action) => {
     state.loading = false;
     state.message = action.payload;
   },
-  FrorgetPasswordFailure: (state, action) => {
+  ForgetPasswordFailure: (state, action) => {
     state.loading = false;
     state.error = action.payload;
   },
+
+  ResetPasswordRequest: (state) => {
+    state.loading = true;
+  },
+  ResetPasswordSuccess: (state, action) => {
+    state.loading = false;
+    state.message = action.payload;
+  },
+  ResetPasswordFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  },
+
 
 clearErrors: (state) => {
     state.error = null;

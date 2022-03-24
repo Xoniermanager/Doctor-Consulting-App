@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import logo from '../images/logo.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
@@ -143,8 +143,8 @@ const Login = () => {
 						<div className="logo">
 							<img src={logo} alt="" />
 						</div>
-						<div className="tab-content" id="myTabContent">
-							<div className="tab-pane fade show active" id="formLogin" role="tabpanel" aria-labelledby="formLogin">
+						<div className="tab-content">
+							<div className="tab-pane fade show active" role="tabpanel" aria-labelledby="formLogin">
 							{loading && <Loader /> ? (
 								<div className="ui message success">Logged in successfully</div>
 							) : ''}
@@ -165,63 +165,16 @@ const Login = () => {
 									</div>
 									<div className="form-group">
 										<button type="submit" disabled={!isGoogleValidate} className="btn mb-30 btn-lg btn-primary w-100">login</button>
-										<a href="#formForget" data-toggle="tab">Forgot Password</a>
+										<Link to="/forget-password">Forgot Password</Link>
 									</div>
 									<div className="text-center mt-40">						
 										<p className="mt-0">Dont have any account?</p>
-										<a className="btn btn-lg btn-secondary w-100" data-toggle="tab" href="#formRegister">Register</a>
+										<Link className="btn btn-lg btn-secondary w-100"  to="/signup">Register</Link>
 									</div>											
 								</form>
 							</div>
-							<div className="tab-pane fade" id="formRegister" role="tabpanel" aria-labelledby="formRegister">
-								<div className="tab-pane fade show active" id="register-home" role="tabpanel" aria-labelledby="register-home">
-								{error === '' && isSubmit ? (
-									<div className="ui message success">Signed in successfully</div>
-								) : ''}
-									<form onSubmit={handleSubmit}>
-										<div className="form-group">
-											<input type="text" className="form-control" placeholder="Name" name="name" value={formValues.name} onChange={handleChange}/>
-                      						<span className='text-danger'>{formErrors.name}</span>
-										</div>
-										<div className="form-group">
-											<input type="email" className="form-control" placeholder="Email" name="email" value={formValues.email} onChange={handleChange}/>
-                      						<span className='text-danger'>{formErrors.email}</span>
-										</div>
-										<div className="form-group">
-											<input type="password" className="form-control" placeholder="Password" name="password" value={formValues.password} onChange={handleChange} />
-                      						<span className='text-danger'>{formErrors.password}</span>
-										</div>
-										<div className="form-group">
-											<input type="password" className="form-control" placeholder="Confirm Password" name="conf_password" value={formValues.conf_password} onChange={handleChange} />
-                      						<span className='text-danger'>{formErrors.conf_password}</span>
-										</div>	
-										<div className="form-group">
-											<button type="submit" className="btn btn-primary w-100 radius-xl">Register Now</button>
-										</div>													
-										<div className="text-center mt-40">						
-											<p className="mt-0">Already have an account?</p>
-											<a className="btn btn-lg btn-secondary w-100" data-toggle="tab" href="#formLogin">Login</a>
-										</div>	
-									</form>
-								</div>
-							</div>
-							<div className="tab-pane fade" id="formForget" role="tabpanel" aria-labelledby="formForget">
-								<div className="tab-pane fade show active" id="login-home" role="tabpanel" aria-labelledby="login-home">
-									<form onSubmit={handleForgetPassword}>
-										<div className="form-group">
-											<input type="text" className="form-control" name="forget_email" placeholder="Email" value={forgetValues.forget_email} onChange={handleForgetChange} />
-											<span className='text-danger'>{formErrors.forget_email}</span>
-										</div>					
-										<div className="form-group">
-											<button type="submit" className="btn btn-primary w-100 radius-xl">Submit</button>
-										</div>													
-										<div className="text-center mt-40">						
-											<p className="mt-0">Already have an account?</p>
-											<a className="btn btn-lg btn-secondary w-100" data-toggle="tab" href="#formLogin">Login</a>
-										</div>	
-									</form>
-								</div>
-							</div>
+						
+						
 						</div>
 					</div>
 				</div>

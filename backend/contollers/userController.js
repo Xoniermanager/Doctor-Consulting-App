@@ -126,9 +126,7 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
   
       await user.save();
   
-      const resetUrl = `${req.protocol}://${req.get("host")}/reset-password`;
-  
-      const message = `Reset Your Password by clicking on the link below: \n\n Use this otp for reset password \n\n OTP : ${resetPasswordToken} \n\n <a href=${resetUrl}>Click here</a>`;
+      const message = `Reset Your Password by clicking on the link below: \n\n Use this otp for reset password \n\n OTP : ${resetPasswordToken}`;
   
       try {
         await sendEmail({
@@ -196,7 +194,6 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
 
   // update password
   exports.updatePassword = async (req, res) => {
-    console.log(req.user);
     try {
       const user = await User.findById(req.user._id).select("+password");
   

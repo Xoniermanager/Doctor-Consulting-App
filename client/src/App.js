@@ -24,6 +24,9 @@ import { connectWithWebSocket } from './utils/wssConnection/wssConnection';
 import Dashboard from './Dashboard/Dashboard';
 import LoginPage from './LoginPage/LoginPage';
 import JoinMeeting from './components/Meeting/JoinMeeting';
+import Signup from './components/Signup';
+import Forgetpassword from './components/Forgetpassword';
+import ResetPassword from './components/ResetPassword';
 
 const App = () => {
 
@@ -53,6 +56,10 @@ const App = () => {
               <Route exact path='/pathology' element={<Pathology/>} />
               <Route exact path="/contact-us" element={<ContactUs/>} />
               <Route exact path="/login" element={<Login />} />
+              <Route exact path="/signup" element={<Signup />} />
+              <Route exact path="/forget-password" element={<Forgetpassword />} />
+              <Route exact path="/reset-password" element={<ResetPassword />} />
+
               <Route exact path="/join-meeting" element={<JoinMeeting />} />
            </Routes>
 
