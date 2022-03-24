@@ -4,6 +4,7 @@ const styles = {
   videoContainer: {
     width: '150px',
     height: '150px',
+    background: '#000',
     borderRadius: '8px',
     position: 'absolute',
     top: '15%',
