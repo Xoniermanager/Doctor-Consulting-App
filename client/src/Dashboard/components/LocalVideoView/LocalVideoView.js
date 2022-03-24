@@ -12,8 +12,11 @@ const styles = {
   },
   videoElement: {
     width: '100%',
-    background: '#000',
+    background: '#000 !important',
     height: '100%'
+  },
+  video: {
+    background: '#000'
   }
 };
 
