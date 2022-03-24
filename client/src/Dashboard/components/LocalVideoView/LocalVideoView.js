@@ -11,12 +11,10 @@ const styles = {
     right: '26%',
   },
   videoElement: {
+    background:'#000',
+    backgroundColor: '#000',
     width: '100%',
-    background: '#000',
     height: '100%'
-  },
-  video: {
-    background: '#000'
   }
 };
 
