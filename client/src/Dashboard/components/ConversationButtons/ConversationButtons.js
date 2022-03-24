@@ -7,7 +7,7 @@ const styles = {
   buttonContainer: {
     display: 'flex',
     position: 'absolute',
-    bottom: '0px !important',
+    bottom: '0px',
     left: '35%'
   },
   icon: {
@@ -49,18 +49,18 @@ const ConversationButtons = (props) => {
   };
 
   return (
-    <div style={styles.buttonContainer}>
+    <div className='buttonContainer'>
       <ConversationButton onClickHandler={handleMicButtonPressed}>
-        {localMicrophoneEnabled ? <MdMic style={styles.icon} /> : <MdMicOff style={styles.icon} />}
+        {localMicrophoneEnabled ? <MdMic className='icon' /> : <MdMicOff className='icon' />}
       </ConversationButton>
       {!groupCall && <ConversationButton onClickHandler={handleHangUpButtonPressed}>
-        <MdCallEnd style={styles.icon} />
+        <MdCallEnd className='icon' />
       </ConversationButton>}
       <ConversationButton onClickHandler={handleCameraButtonPressed}>
-        {localCameraEnabled ? <MdVideocam style={styles.icon} /> : <MdVideocamOff style={styles.icon} />}
+        {localCameraEnabled ? <MdVideocam className='icon' /> : <MdVideocamOff className='icon' />}
       </ConversationButton>
       {!groupCall && <ConversationButton onClickHandler={handleScreenSharingButtonPressed}>
-        {screenSharingActive ? <MdCamera style={styles.icon} /> : <MdVideoLabel style={styles.icon} />}
+        {screenSharingActive ? <MdCamera className='icon' /> : <MdVideoLabel className='icon' />}
       </ConversationButton>}
     </div>
   );

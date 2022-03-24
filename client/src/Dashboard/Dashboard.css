@@ -62,3 +62,28 @@
 .dashboard_logo_image {
   width: 50%;
 }
+
+.videoContainer {
+  width: '150px';
+  height: '150px';
+  border-radius: 8px;
+  position: 'absolute';
+  top: 15%;
+  right: 26%!important;
+}
+.videoElement {
+  width: '100%';
+  height: '100%'
+}
+
+  .buttonContainer{
+    display: 'flex';
+    position: 'absolute';
+    bottom: '0px';
+    left: '35%';
+  }
+  .icon {
+    width: '25px';
+    height: '25px';
+    fill: '#e6e5e8'
+  }
