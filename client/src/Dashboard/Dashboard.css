@@ -19,6 +19,7 @@
 .dashboard_content_container {
   width: 100%;
   height: 100%;
+  background: #000;
   display: flex;
   align-items: center;
 }
