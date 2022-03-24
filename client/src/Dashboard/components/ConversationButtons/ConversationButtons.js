@@ -3,20 +3,6 @@ import { MdCallEnd, MdMic, MdMicOff, MdVideocam, MdVideocamOff, MdVideoLabel, Md
 import ConversationButton from './ConversationButton';
 import { switchForScreenSharingStream, hangUp } from '../../../utils/webRTC/webRTCHandler';
 
-const styles = {
-  buttonContainer: {
-    display: 'flex',
-    position: 'absolute',
-    bottom: '0px',
-    left: '35%'
-  },
-  icon: {
-    width: '25px',
-    height: '25px',
-    fill: '#e6e5e8'
-  }
-};
-
 const ConversationButtons = (props) => {
   const {
     localStream,
