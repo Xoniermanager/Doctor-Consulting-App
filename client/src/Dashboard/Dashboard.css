@@ -62,3 +62,6 @@
   width: 50%;
 }
 
+.ctrl-btn button:hover {
+  background: red !important;
+}
