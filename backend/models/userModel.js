@@ -3,6 +3,7 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+
 const userSchema = new mongoose.Schema({
     name : {
         type : String,
@@ -25,7 +26,7 @@ const userSchema = new mongoose.Schema({
     },
     role : {
         type : String,
-        default : 'patient'
+        required : [true, 'Please select your role'],
     },
     isVerify : {
         type : Number,
@@ -35,8 +36,62 @@ const userSchema = new mongoose.Schema({
         type : Date,
         default : Date.now
     },
+    specialist : String,
+    videoIntroUrl : String,
+    about : String,
+    clinic_details : String,
+    academic : String,
+    academic_details : [
+        {
+        academic : String
+       }
+    ],
+    awards : [
+        {
+            awardName : String 
+        }
+    ],
+    experiences : [
+        {
+            experience:String,
+            expYear:String  
+        }
+    ],
+    languages : [
+        {
+           value : {
+               type : String
+           }
+        }
+    ],
+    drugs : [
+        {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : 'Drug'  
+        }
+    ],
+    tests : [
+        {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : 'Test'  
+        }
+    ],
+    prescriptions : [
+        {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : 'Prescription'  
+        }
+    ],
     resetPasswordToken : String,
     resetPasswordExpire : Date,
+    //patients
+    birthday : String,
+    phone : Number,
+    gender : String,
+    bloodgroup : String,
+    address : String,
+    weight : Number,
+    height : Number
 });
 
 // password encrypted

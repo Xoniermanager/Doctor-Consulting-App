@@ -15,7 +15,7 @@ import VideoConference from './components/vchat/VideoConference';
 import PatientFeedback from './components/PatientFeedback';
 import Pathology from './components/Pathology';
 
-import { loadUser } from './Actions/User';
+import { loadUser, toggleMenus } from './Actions/User';
 
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from 'react';
@@ -28,22 +28,43 @@ import Signup from './components/Signup';
 import Forgetpassword from './components/Forgetpassword';
 import ResetPassword from './components/ResetPassword';
 
-const App = () => {
 
-  const dispatch = useDispatch();
+// for doctors
+import Profile from './doctor/components/Profile/Profile';
+import DoctorDashboard from './doctor/components/Dashboard/DoctorDashboard';
+import NewPatient from './doctor/components/Patient/NewPatient';
+import Patients from './doctor/components/Patient/Patients';
+import NewPrescription from './doctor/components/Prescription/NewPrescription';
+import Prescriptions from './doctor/components/Prescription/Prescriptions';
+import NewDrug from './doctor/components/Drugs/NewDrug';
+import Drugs from './doctor/components/Drugs/Drugs';
+import NewTest from './doctor/components/Diagnosis/NewTest';
+import AllTests from './doctor/components/Diagnosis/AllTests';
+import ViewPrescription from './doctor/components/Prescription/ViewPrescription';
+import AddSlot from './doctor/components/Appointment/AddSlot';
+import AppointmentSlot from './doctor/components/Appointment/AppointmentSlot';
+import CreateAppointment from './doctor/components/Appointment/CreateAppointment';
+import DateSlot from './doctor/components/Appointment/DateSlot';
+import Appointments from './doctor/components/Appointment/Appointments';
+
+
+const App = () => {
+ const dispatch = useDispatch();
  useEffect(()=>{
    dispatch(loadUser());
    connectWithWebSocket();
+   dispatch(toggleMenus());
  },[dispatch]);
 
- const {isAuthenticated} = useSelector((state)=>state.user);
+ const {menuToggle} = useSelector((state)=>state.menuToggle);
 
-
+ const {user} = useSelector((state)=>state.user);
+ 
   return (
-    <>
+    <div id='main-wrapper' className={`shows ${menuToggle ? menuToggle.isToggle : ''}`}>
        <Router>
            <Routes>
-             <Route exact path="/video-chat" element={<Dashboard/>} />
+              <Route exact path="/video-chat" element={ user && user.role ==='patient' ? <Dashboard/> : ''} />
               <Route exact path="/" element={<Home/>} />
               <Route exact path="/about-us" element={<AboutUs/>} />
               <Route exact path="/team" element={<Team/>} />
@@ -59,12 +80,38 @@ const App = () => {
               <Route exact path="/signup" element={<Signup />} />
               <Route exact path="/forget-password" element={<Forgetpassword />} />
               <Route exact path="/reset-password" element={<ResetPassword />} />
-
               <Route exact path="/join-meeting" element={<JoinMeeting />} />
+
+              {/* for doctors */}
+              <Route exact path='/doctor/profile' element={<Profile />} />
+              <Route exact path='/doctor' element={ user &&  user.role ==='doctor' ? <DoctorDashboard/> : ''} />
+              <Route exact path='/patient/create' element={<NewPatient />} />
+              <Route exact path='/patients' element={<Patients />} />
+
+              <Route exact path='/create-prescription' element={<NewPrescription/>} />
+              <Route exact path='/edit-prescription/:presId' element={<NewPrescription/>} />
+              <Route exact path='/all-prescription' element={ <Prescriptions/>} />
+              <Route exact path='/view-prescription/:presId' element= { <ViewPrescription/> } />
+
+              <Route exact path='/create-drug' element={<NewDrug />} />
+              <Route exact path='/drug-edit/:drugId' element={<NewDrug />} />
+              <Route exact path='/all-drugs' element={<Drugs />} />
+
+              <Route exact path='/create-test' element={<NewTest/>} />
+              <Route exact path='/test-edit/:testId' element={<NewTest />} />
+              <Route exact path='/all-tests' element={ <AllTests/>} />
+
+              <Route exact path='/create-slot' element={<AddSlot/>} />
+              <Route exact path='/my-slots' element={<AppointmentSlot/>} />
+              <Route exact path='/edit-slot/:slotId' element={<AddSlot/>} />
+              <Route exact path='/date-slot' element={<DateSlot/>} />
+
+              <Route exact path='/create-appointment' element={<CreateAppointment/>} />
+              <Route exact path='/doctor-appointments' element={<Appointments/>} />
            </Routes>
 
        </Router>
-    </>
+    </div>
   );
 };
 export default App;

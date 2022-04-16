@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { forgetPasswordReducer, userReducer } from './Reducers/User';
+import { appointmentsReducer, dateSlotReducer, drugDataReducer, editDataReducer, forgetPasswordReducer, patientsReducer, prescriptionReducer, slotsReducer, testsReducer, toggleReducer, userReducer } from './Reducers/User';
 import dashboardReducer from './Reducers/dashboardReducer';
 import callReducer from './Reducers/callReducer';
 
@@ -8,7 +8,16 @@ const store = configureStore({
       dashboard : dashboardReducer,
       call : callReducer,
       user : userReducer,
-      forgetPassword : forgetPasswordReducer
+      patients : patientsReducer,
+      drugs : drugDataReducer,
+      tests : testsReducer,
+      apiStatus : forgetPasswordReducer,
+      prescriptions : prescriptionReducer,
+      editData : editDataReducer,
+      menuToggle : toggleReducer,
+      slots : slotsReducer,
+      dateSlots : dateSlotReducer,
+      doctorAppointments : appointmentsReducer
     }
 })
 

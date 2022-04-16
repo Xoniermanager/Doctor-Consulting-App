@@ -37,7 +37,7 @@ const Login = () => {
     setIsSubmit(true);
     let {name, email, password} = formValues;
     await dispatch(registerUser(name, email, password));
-	history('/login');
+   	history('/login');
   };
  
 
@@ -47,11 +47,13 @@ const Login = () => {
     setIsSubmit(true);
     let {password, email} = loginValues;
     await dispatch(loginUser(email, password));
-	let token = localStorage.getItem('token');
-    if(token){
+
+    if(user.role === 'patient'){
 		registerNewUser(user.name);
 		history('/join-meeting');
-	}
+	}else if(user.role === 'doctor'){
+    history('/doctor');
+  }
 	return false;
   };
 
