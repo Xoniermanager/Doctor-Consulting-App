@@ -13,7 +13,9 @@ const Login = () => {
   let history = useNavigate();
   const dispatch = useDispatch();
   const alert = useAlert();
-  const { loading, error, message, user} = useSelector((state) => state.user);
+  const { user} = useSelector((state) => state.user);
+
+  const { error, message, loading } = useSelector((state) => state.apiStatus);
 
   // login 
   const loginInitialValue = { email:"", password:""};

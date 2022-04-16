@@ -9,7 +9,7 @@ const Signup = () => {
   let history = useNavigate();
   const dispatch = useDispatch();
   const alert = useAlert();
-  const { error, message } = useSelector((state) => state.user);
+  const { error, message } = useSelector((state) => state.apiStatus);
   // register
   const initialValue = { name: "", email: "", password: "", conf_password: "", role :"" };
   const [formValues, setFormValues] = useState(initialValue);

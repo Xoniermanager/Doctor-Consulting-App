@@ -20,7 +20,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next)=>{
 
     const resetUrl = `${req.protocol}://${req.get(
         "host"
-      )}/api/verify/email/${user._id}`;
+      )}/api/v1/verify/email/${user._id}`;
   
       const message = `Verify Your account by clicking on the link below: \n\n ${resetUrl}`;
   
@@ -38,7 +38,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next)=>{
       }
     res.status(201).json({
         success : true,
-        user
+        message : 'Registration successfully. Please check and verify your email.'
     })
    }catch (error) {
     res.status(500).json({
