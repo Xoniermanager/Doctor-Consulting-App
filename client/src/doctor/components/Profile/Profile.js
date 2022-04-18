@@ -13,6 +13,8 @@ import DoctorDetails from "./DoctorDetails";
 const Profile = () => {
   const dispatch = useDispatch();
   const {user} = useSelector((state)=>state.user);
+
+  const [about, setAbout] = useState({});
    // profile data update
   const intialValue = { name : user.name, academic: user.academic, specialist : user.specialist, about : user.about};
   const [profileValue, setProfileValue] = useState(intialValue);
@@ -74,6 +76,19 @@ const [expValue, setExpValue] = useState(user.experiences?user.experiences : [{e
   const handleAwardClick = () => {
     awardModel.current.click();
   }
+
+  const handleAboutImage = (e) => {
+    const file = e.target.files[0];
+    const Reader = new FileReader();
+
+    Reader.readAsDataURL(file);
+
+    Reader.onload = () => {
+      if (Reader.readyState === 2) {
+        setAbout({ ...about, avatar: Reader.result });
+      }
+    };
+  };
 
   return (
     <>
@@ -137,6 +152,18 @@ const [expValue, setExpValue] = useState(user.experiences?user.experiences : [{e
                         value={profileValue.about}
                         onChange={handleChange}
                       ></textarea>
+                    </div>
+
+
+                    <div className="form-group col-md-6">
+                      <label>Profile Image</label>
+                      <input
+                          type="file"
+                          onChange={handleAboutImage}
+                          className="adminPanelFileUpload"
+                          placeholder="Choose Avatar"
+                          accept="image/*"
+                        />
                     </div>
                   </div>
                   <button type="submit" className="btn btn-primary">
