@@ -82,6 +82,18 @@ const userSchema = new mongoose.Schema({
             ref : 'Prescription'  
         }
     ],
+    patients : [
+        {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : 'User'  
+        }
+    ],
+   doctors : [
+        {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : 'User'  
+        }
+    ],
     resetPasswordToken : String,
     resetPasswordExpire : Date,
     //patients

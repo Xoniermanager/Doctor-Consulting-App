@@ -42,7 +42,7 @@ const AddMoreDrug = ({drugValue, setDrugValue, drugs}) => {
               className="form-control multiselect-drug"
               name="drugId"
               tabindex="-1"
-              value={drugId}
+              value={drugId._id}
               onChange={(evnt) => handleOnChange(index, evnt)}
               aria-hidden="true"
               required=""

@@ -24,7 +24,7 @@ const AddMoreTest = ({ testValue, setTestValue, tests }) => {
               <select
                 className="form-control multiselect-doctorino"
                 name="testId"
-                value={testId}
+                value={testId._id}
                 onChange={(evnt) => handleOnTChange(index, evnt)}
                 tabindex="-1"
                 aria-hidden="true"

@@ -1,22 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getSlotByDate } from "../../../Actions/User";
 import DoctSideBar from "../Layout/DoctSideBar";
 import Footer from "../Layout/Footer";
 import Header from "../Layout/Header";
+import Moment from 'moment';
 
 const DateSlot = () => {
   const dispatch = useDispatch();
+
+  let dt =  Moment(new Date()).format('YYYY-MM-DD');
+  const [selectDate, setSelectDate] = useState(dt);
+
+  useEffect(() => {
+    dispatch(getSlotByDate(dt));
+  }, []);
 
   const handleChange = async (e) => {
     e.preventDefault();
     let date = e.target.value;
     if (date) {
+      setSelectDate(date);
       await dispatch(getSlotByDate(date));
     }
   };
   const { dateSlots } = useSelector((state) => state.dateSlots);
-  let bookedSlot = dateSlots.bookedSlots;
+  let bookedSlot = dateSlots && dateSlots.bookedSlots ? dateSlots.bookedSlots : [];
   let bookedData = bookedSlot && bookedSlot.map((book) => book.slotId);
   
   return (
@@ -40,13 +49,15 @@ const DateSlot = () => {
                         <div role="wrapper" class="input-group">
                           <input
                             type="date"
+                            value={selectDate}
+                            min={dt}
                             onChange={handleChange}
                             class="form-control"
                           />
                         </div>
                       </div>
                       <div class="row mb-2 myorders">
-                         {dateSlots.allSlots && 
+                          {dateSlots &&  dateSlots.allSlots &&
                           dateSlots.allSlots.slots.map((slt, index) => (
                             <div key={index} class="col-sm-6 col-md-4 mb-2">
                                { bookedData.includes(slt._id) ? (<button class="btn btn-danger btn-block">{slt.slot}</button>) : (<button
@@ -59,7 +70,7 @@ const DateSlot = () => {
                                 data-rdv_time_end={slt.slot.split('-')[1].trim()}
                               > {slt.slot}</button>) }
                              </div>
-                          )) } 
+                          )) }  
                       </div>
                       <div
                         role="alert"

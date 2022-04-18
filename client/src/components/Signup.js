@@ -11,7 +11,7 @@ const Signup = () => {
   const alert = useAlert();
   const { error, message } = useSelector((state) => state.apiStatus);
   // register
-  const initialValue = { name: "", email: "", password: "", conf_password: "", role :"" };
+  const initialValue = { name: "", email: "", password: "", conf_password: "", role :"patient" };
   const [formValues, setFormValues] = useState(initialValue);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);

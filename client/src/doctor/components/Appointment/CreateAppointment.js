@@ -6,11 +6,15 @@ import { createDoctorAppointment, getPatient, getSlotByDate } from "../../../Act
 import DoctSideBar from "../Layout/DoctSideBar";
 import Footer from "../Layout/Footer";
 import Header from "../Layout/Header";
+import Moment from 'moment';
 
 const CreateAppointment = () => {
 
   const dispatch = useDispatch();
   const history = useNavigate();
+
+  let dt =  Moment(new Date()).format('YYYY-MM-DD');
+  const [selectDate, setSelectDate] = useState(dt);
 
   const [patientDetail, setPatientDetail] = useState({patientId : '', patientName :''});
   const [formData, setFormData] = useState({ slotId : '', appointmentTime : '', appointmentDate : '', appointmentStartTime : '',  appointmentEndTime : '' });
@@ -31,6 +35,7 @@ const CreateAppointment = () => {
 
   useEffect(() => {
     dispatch(getPatient());
+    dispatch(getSlotByDate(dt));
   }, []);
 
   let { patients } = useSelector((state) => state.patients);
@@ -58,11 +63,12 @@ const CreateAppointment = () => {
     e.preventDefault();
     let date = e.target.value;
     if (date) {
+      setSelectDate(date);
       await dispatch(getSlotByDate(date));
     }
   };
   const { dateSlots } = useSelector((state) => state.dateSlots);
-  let bookedSlot = dateSlots.bookedSlots;
+  let bookedSlot = dateSlots && dateSlots.bookedSlots ? dateSlots.bookedSlots : [];
   let bookedData = bookedSlot && bookedSlot.map((book) => book.slotId);
 
   return (
@@ -105,7 +111,7 @@ const CreateAppointment = () => {
                       <div className="form-group">
                         <label for="rdvdate">Date</label>
                         <div role="wrapper" className="input-group">
-                          <input type="date" onChange={handleChange} className="form-control" />
+                          <input type="date"  onChange={handleChange} min={dt} value={selectDate} className="form-control" />
                         </div>
                       </div>
                       <div className="form-check">
@@ -123,7 +129,7 @@ const CreateAppointment = () => {
                       <label for="date">Available Time Slots</label>
                       <hr />
                       <div className="row mb-2 myorders">
-                      {dateSlots.allSlots && 
+                      {dateSlots &&  dateSlots.allSlots && 
                           dateSlots.allSlots.slots.map((slt, index) => (
                         <>
                             <div key={index} className="col-sm-6 col-md-4 mb-2">

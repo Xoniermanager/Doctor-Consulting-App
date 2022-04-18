@@ -10,6 +10,9 @@ const { sendEmail } = require('../middleware/sendEmail');
         patientData.password = password;
         const patient = await User.create(patientData);
 
+        user.patients.push(patient._id);
+        await user.save();
+
       const message = `Your login credential is given below: \n\n Email : ${patientData.email} \n\n Password : ${patientData.password}`;
       try {
         await sendEmail({
@@ -40,7 +43,10 @@ const { sendEmail } = require('../middleware/sendEmail');
     // add update language details
     exports.getPatient = catchAsyncErrors(async( req, res) => {
       try {
-         const patient = await User.find({role:'patient'});
+         const patient = await User.find({ $and: [
+            {role:'patient'},
+            { doctors: { $in: [ req.user._id ] } }
+        ]});
          res.status(200).json({
              success : true,
              patient
