@@ -25,18 +25,18 @@ exports.registerUser = catchAsyncErrors(async (req, res, next)=>{
   
       const message = `Verify Your account by clicking on the link below: \n\n ${resetUrl}`;
   
-      // try {
-      //   await sendEmail({
-      //     email: user.email,
-      //     subject: "Verify email",
-      //     message,
-      //   });
-      // } catch (error) {
-      //   res.status(500).json({
-      //     success: false,
-      //     message: error.message,
-      //   });
-      // }
+      try {
+        await sendEmail({
+          email: user.email,
+          subject: "Verify email",
+          message,
+        });
+      } catch (error) {
+        res.status(500).json({
+          success: false,
+          message: error.message,
+        });
+      }
     res.status(201).json({
         success : true,
         message : 'Registration successfully. Please check and verify your email.'
