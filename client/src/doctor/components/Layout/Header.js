@@ -71,7 +71,7 @@ const Header = () => {
 							{ token && token !=='' ? (<ul className="navbar-nav header-right">
             					<li className="nav-item dropdown header-profile">
             						<Link className="nav-link" to="#" role="button" data-toggle="dropdown">
-            							<img src={require('../../../images/profile/12.png')} width="20" alt=""/>
+            							<img  src={user.profileImage ? user.profileImage.url : 'require("../../../images/profile/12.png")'} width="20" alt=""/>
             							<div className="header-info">
             								<span>Hello,<strong> {user.name.split(' ')[0]}</strong></span>
             							</div>

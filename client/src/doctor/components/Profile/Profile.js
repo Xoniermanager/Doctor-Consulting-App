@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateDoctorProfile, loadUser, updateDoctorLanguage, updateDoctorExperience, updateClinicAwards } from "../../../Actions/User";
 import DoctSideBar from "../Layout/DoctSideBar";
@@ -14,7 +14,8 @@ const Profile = () => {
   const dispatch = useDispatch();
   const {user} = useSelector((state)=>state.user);
 
-  const [about, setAbout] = useState({});
+  const [profileImage, setProfileImage] = useState({});
+
    // profile data update
   const intialValue = { name : user.name, academic: user.academic, specialist : user.specialist, about : user.about};
   const [profileValue, setProfileValue] = useState(intialValue);
@@ -24,7 +25,7 @@ const Profile = () => {
   const handleProfileSubmit = async (e) =>{
     e.preventDefault();
     let { name, academic, specialist, about } = profileValue;
-   await dispatch(updateDoctorProfile(name, academic, specialist, about));
+   await dispatch(updateDoctorProfile(name, academic, specialist, about, profileImage));
     dispatch(loadUser());
     handleLanguageClick();
   }
@@ -80,15 +81,15 @@ const [expValue, setExpValue] = useState(user.experiences?user.experiences : [{e
   const handleAboutImage = (e) => {
     const file = e.target.files[0];
     const Reader = new FileReader();
-
     Reader.readAsDataURL(file);
-
     Reader.onload = () => {
       if (Reader.readyState === 2) {
-        setAbout({ ...about, avatar: Reader.result });
+        setProfileImage({ ...profileImage, avatar: Reader.result });
       }
     };
   };
+  
+  
 
   return (
     <>
@@ -154,17 +155,17 @@ const [expValue, setExpValue] = useState(user.experiences?user.experiences : [{e
                       ></textarea>
                     </div>
 
+                  <div className="form-group col-md-6">
+                    <label>Prifile Image</label>
+                    <input
+                      type="file"
+                      onChange={handleAboutImage}
+                      className="adminPanelFileUpload"
+                      placeholder="Choose Avatar"
+                      accept="image/*"
+                    />
+                  </div>
 
-                    <div className="form-group col-md-6">
-                      <label>Profile Image</label>
-                      <input
-                          type="file"
-                          onChange={handleAboutImage}
-                          className="adminPanelFileUpload"
-                          placeholder="Choose Avatar"
-                          accept="image/*"
-                        />
-                    </div>
                   </div>
                   <button type="submit" className="btn btn-primary">
                     Save

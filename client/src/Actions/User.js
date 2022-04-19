@@ -171,14 +171,14 @@ export const resetPassword = (otp, password) => async (dispatch) => {
 
 // update doctor profile
 export const updateDoctorProfile =
-  (name, academic, specialist, about) => async (dispatch) => {
+  (name, academic, specialist, about, profileImage) => async (dispatch) => {
     try {
       dispatch({
         type: "UpdateDoctorRequest",
       });
       const { data } = await axios.put(
         "/api/v1/doctor/update",
-        { name, academic, specialist, about },
+        { name, academic, specialist, about,profileImage },
         {
           headers: {
             "Content-Type": "application/json",

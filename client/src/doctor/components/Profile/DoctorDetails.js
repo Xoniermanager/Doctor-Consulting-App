@@ -17,7 +17,7 @@ const DoctorDetails = ({ user }) => {
                       alt="image"
                       className="rounded mr-sm-4 mr-0"
                       width="130"
-                      src={require("../../../images/profile/12.png")}
+                      src={user.profileImage ? user.profileImage.url : 'require("../../../images/profile/12.png")'}
                     />
                     <div className="media-body align-items-center">
                       <div className="d-sm-flex d-block justify-content-between my-3 my-sm-0">

@@ -7,6 +7,7 @@ const Slot = require('../models/slotsModel');
 const Appointment = require('../models/appointmentModel');
 const Prescription = require('../models/prescriptionModel');
 const { sendEmail } = require('../middleware/sendEmail');
+const cloudinary = require('cloudinary');
 
 const mongoose  = require('mongoose');
 
@@ -234,7 +235,7 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
  exports.updateProfile = catchAsyncErrors(async( req, res) => {
    try {
       const user = await User.findById(req.user._id);
-      const { name, academic, specialist, about } = req.body;
+      const { name, academic, specialist, about, profileImage} = req.body;
       if(name){
         user.name = name;
       }
@@ -246,6 +247,17 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
       }
       if(about){
         user.about = about;
+      }
+      if(profileImage){
+          if(user.profileImage)
+          await cloudinary.v2.uploader.destroy('mymedia/'+user.profileImage.public_id);
+          const myCloud = await cloudinary.v2.uploader.upload(profileImage.avatar, {
+            folder: "mymedia",
+          });
+          user.profileImage = {
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+          };
       }
       await user.save();
       res.status(200).json({
@@ -317,11 +329,25 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
          if(docterAcademic){
           user.academic_details = docterAcademic;
          }
+
          if(doctorAward){
-          user.awards = doctorAward;
-         }
-         await user.save();
-         res.status(200).json({
+           doctorAward.forEach(async (dai, index) => {
+            let row = {};
+            row.name = dai.awardName;
+            if(dai.awardImage){
+              let myCloud = await cloudinary.v2.uploader.upload(dai.awardImage, {
+                folder: "mymedia",
+              });
+              row.image = {
+                public_id: myCloud.public_id,
+                url: myCloud.secure_url,
+              }
+            }
+            user.awards.push(row);
+          });
+        }
+       await user.save();
+        res.status(200).json({
              success : true,
              message : 'Experience updated'
          });

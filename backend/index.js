@@ -3,11 +3,19 @@ const socket = require('socket.io');
 const { ExpressPeerServer } = require('peer');
 const groupCallHandler = require('./groupCallHandler');
 const { v4: uuidv4 } = require('uuid');
+const cloudinary = require('cloudinary');
 
 // connect database
 const connectDatabase = require('./config/database');
 connectDatabase(); 
 const PORT = process.env.PORT;
+
+
+cloudinary.v2.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 
 // Handling Uncaught error

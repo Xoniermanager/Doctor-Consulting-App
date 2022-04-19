@@ -10,7 +10,14 @@ const AddRemoveAward = ({doctorAward, setDoctorAward}) => {
       const { name } = evnt.target;
       const list = [...doctorAward];
       if(evnt.target.name === 'awardImage'){
-        list[index][name] = evnt.target.files[0];
+        const file = evnt.target.files[0];
+        const Reader = new FileReader();
+        Reader.readAsDataURL(file);
+        Reader.onload = () => {
+          if (Reader.readyState === 2) {
+            list[index]['awardImage'] = Reader.result;
+          }
+        };
       }else{
         list[index][name] = evnt.target.value;
       }
@@ -28,10 +35,9 @@ const AddRemoveAward = ({doctorAward, setDoctorAward}) => {
                       <input
                         onChange={(evnt) => handleChange(index, evnt)}
                         type="file"
-                        className="form-control"
                         name="awardImage"
+                        className="form-control"
                         accept="image/*"
-                        placeholder=""
                       />
                     </div>
                   <div className="form-group col-md-5">

@@ -20,9 +20,13 @@ const userSchema = new mongoose.Schema({
     password : {
         type : String,
         required : [true, 'Please enter your password'],
-        minlength : [6, 'Password should have more than 6 character'],
+        minlength : [5, 'Password should have more than 6 character'],
         maxlength : [12, 'Password can not exceed 12 characters'],
         select : false
+    },
+    profileImage: {
+        public_id: String,
+        url: String,
     },
     role : {
         type : String,
@@ -48,7 +52,11 @@ const userSchema = new mongoose.Schema({
     ],
     awards : [
         {
-            awardName : String 
+            name : String, 
+            image : {
+                public_id: String,
+                url: String, 
+            } 
         }
     ],
     experiences : [
