@@ -9,10 +9,9 @@ exports.sendEmail = async (options) => {
         user : process.env.SMTP_EMAIL,
         pass : process.env.SMTP_PASSWORD,
     },
-    service : process.env.SMTP_SERVICE,
   });
   const mailOptions = {
-    from : process.env.SMTP_EMAIL,
+    from : process.env.FROM_EMAIL,
     to : options.email,
     subject : options.subject,
     text : options.message,
