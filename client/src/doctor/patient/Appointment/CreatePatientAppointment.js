@@ -115,7 +115,7 @@ const CreatePatientAppointment = () => {
                           <input type="date"  onChange={handleChange} min={dt} value={selectDate} className="form-control" />
                         </div>
                       </div>
-                      <div className="form-check">
+                      {/* <div className="form-check">
                         <input
                           type="checkbox"
                           name="sms"
@@ -124,7 +124,7 @@ const CreatePatientAppointment = () => {
                         <label for="sms" className="form-check-label">
                           Notify patient by SMS
                         </label>
-                      </div>
+                      </div> */}
                     </div>
                     <div className="col-md-8 col-sm-12">
                       <label for="date">Available Time Slots</label>
