@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import logo from '../images/logo.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
-import { loginUser, registerUser, forgetPassword } from '../Actions/User';
+import { loginUser, registerUser, forgetPassword, loadUser } from '../Actions/User';
 import ReCAPTCHA from "react-google-recaptcha";
 import Loader from './Loader';
 
@@ -23,39 +23,21 @@ const Login = () => {
   const handleLoginChange = (e) => {
     setLoginValues({...loginValues, [e.target.name] : e.target.value});
   }
- // register
-  const initialValue = { name : "", email :"", password:"", conf_password:"" };
-  const [formValues, setFormValues] = useState(initialValue); 
+
   const [formErrors, setFormErrors] = useState({});
-  const [isSubmit, setIsSubmit] = useState(false);
-
-  const handleChange = (e) => {
-    setFormValues({...formValues, [e.target.name] : e.target.value});
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setFormErrors(validate(formValues));
-    setIsSubmit(true);
-    let {name, email, password} = formValues;
-    await dispatch(registerUser(name, email, password));
-   	history('/login');
-  };
- 
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setFormErrors(validate_login(loginValues));
-    setIsSubmit(true);
     let {password, email} = loginValues;
     await dispatch(loginUser(email, password));
-
-    if(user.role === 'patient'){
+    dispatch(loadUser());
+    if(user != undefined && user.role === 'patient'){
 		registerNewUser(user.name);
 		history('/patient');
-	}else if(user.role === 'doctor'){
-    history('/doctor');
-  }
+    }else if(user != undefined && user.role === 'doctor'){
+      history('/doctor');
+    }
 	return false;
   };
 
@@ -70,29 +52,6 @@ const Login = () => {
     }
   }, [formErrors, alert, error, dispatch, message]);
 
-
-  const validate = (values) => {
-    const errors = {};
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-	const passwordRegex =  /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
-    if (!values.name) {
-      errors.name = "Name is required!";
-    }
-    if (!values.email) {
-      errors.email = "Email is required!";
-    } else if (!regex.test(values.email)) {
-      errors.email = "This is not a valid email format!";
-    }
-    if (!values.password) {
-      errors.password = "Password is required";
-    }  
-	if(!passwordRegex.test(values.password)){
-		errors.password = "Password should be strong and min 6 characters";
-	}if(values.password !== values.conf_password){
-		errors.conf_password = "Password and confirm password should be matched.";
-	}
-    return errors;
-  };
 
   const validate_login = (values) => {
     const errors = {};
@@ -113,29 +72,6 @@ const Login = () => {
 	setIsGoogleValidate(true);
   }
  
-
-  // forget password
-  const forgetInitialValue = { forget_email:""};
-  const [forgetValues, setForgetValues] = useState(forgetInitialValue); 
-  const handleForgetChange = (e) => {
-    setForgetValues({...forgetValues, [e.target.name] : e.target.value});
-  }
-  const handleForgetPassword = async (e) => {
-    e.preventDefault();
-    setFormErrors(validate_forget(forgetValues));
-    setIsSubmit(true);
-    let { forget_email } = forgetValues;
-    await dispatch(forgetPassword(forget_email));
-  };
-
-  const validate_forget = (values) => {
-	  console.log(values);
-    const errors = {};
-    if (!values.forget_email) {
-      errors.forget_email = "Email is required!";
-    }
-    return errors;
-  };
 
   return (
     <>

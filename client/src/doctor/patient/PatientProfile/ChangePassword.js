@@ -19,13 +19,15 @@ const ChangePassword = () => {
   const handleOnChange = (e) => {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
   };
+
+  const { error, message } = useSelector((state) => state.apiStatus);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormErrors(validate(formValues));
     let { oldPassword, newPassword } = formValues;
     await dispatch(updatePassword(oldPassword, newPassword));
   };
-  const { error, message } = useSelector((state) => state.apiStatus);
 
   useEffect(() => {
     if (error) {
@@ -75,7 +77,7 @@ const ChangePassword = () => {
                             <div className="form-group">
                               <label for="">Old Password </label>
                               <input
-                                type="text"
+                                type="password"
                                 onChange={handleOnChange}
                                 className="form-control"
                                 placeholder="Old Password"
@@ -90,7 +92,7 @@ const ChangePassword = () => {
                             <div className="form-group">
                               <label for="">New Password </label>
                               <input
-                                type="text"
+                                type="password"
                                 className="form-control"
                                 onChange={handleOnChange}
                                 placeholder="New Password"
@@ -104,7 +106,7 @@ const ChangePassword = () => {
                             <div className="form-group">
                               <label for="">Confirm Password</label>
                               <input
-                                type="text"
+                                type="password"
                                 className="form-control"
                                 onChange={handleOnChange}
                                 placeholder="Confirm Password"
