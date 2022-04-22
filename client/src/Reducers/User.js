@@ -117,6 +117,17 @@ export const forgetPasswordReducer = createReducer(initialState, {
     state.loading = false;
     state.error = action.payload;
   },
+  UpdatePatientRequest: (state) => {
+    state.loading = true;
+  },
+  UpdatePatientSuccess: (state, action) => {
+    state.loading = false;
+    state.message = action.payload;
+  },
+  UpdatePatientFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  },
   CreateDrugRequest : (state) =>{
     state.loading = true;
   },
@@ -246,6 +257,17 @@ export const forgetPasswordReducer = createReducer(initialState, {
       state.message = action.payload;
   },
   DeleteAppointmentFailure : (state, action) =>{
+      state.loading = false;
+      state.error = action.payload;
+  },
+  CreateReportRequest : (state) =>{
+    state.loading = true;
+  },
+  CreateReportSuccess : (state, action) =>{
+      state.loading = false;
+      state.message = action.payload;
+  },
+  CreateReportFailure : (state, action) =>{
       state.loading = false;
       state.error = action.payload;
   },
@@ -396,7 +418,17 @@ export const editDataReducer = createReducer(initialState, {
       state.loading = false;
       state.error = action.payload;
   },
-
+  GetPatientPrescriptionByIdRequest : (state) =>{
+    state.loading = true;
+  },
+  GetPatientPrescriptionByIdSuccess : (state, action) =>{
+      state.loading = false;
+      state.editData = action.payload;
+  },
+  GetPatientPrescriptionByIdFailure : (state, action) =>{
+      state.loading = false;
+      state.error = action.payload;
+  },
   clearErrors: (state) => {
     state.error = null;
   },
@@ -478,3 +510,109 @@ export const appointmentsReducer = createReducer(initialState, {
     state.message = null;
   },
 });
+
+export const doctorsReducer = createReducer(initialState, {
+  GetDoctorsRequest : (state) => {
+    state.loading = true;
+  },
+  GetDoctorsSuccess : (state, action) =>{
+    state.loading = false;
+    state.doctors = action.payload;
+  },
+  GetDoctorsFailure : (state, action) =>{
+      state.loading = false;
+      state.error = action.payload;
+  },
+  clearErrors: (state) => {
+    state.error = null;
+  },
+  clearMessage: (state) => {
+    state.message = null;
+  },
+});
+
+
+export const patientAppointmentReducer = createReducer(initialState, {
+  GetPatientAppointmentsRequest : (state) => {
+    state.loading = true;
+  },
+  GetPatientAppointmentsSuccess : (state, action) =>{
+    state.loading = false;
+    state.patientAppointments = action.payload;
+  },
+  GetPatientAppointmentsFailure : (state, action) =>{
+      state.loading = false;
+      state.error = action.payload;
+  },
+  clearErrors: (state) => {
+    state.error = null;
+  },
+  clearMessage: (state) => {
+    state.message = null;
+  },
+});
+
+
+export const patientPrescriptionReducer = createReducer(initialState, {
+  GetPatientPrescriptionRequest : (state) => {
+    state.loading = true;
+  },
+  GetPatientPrescriptionSuccess : (state, action) =>{
+    state.loading = false;
+    state.patientAllPrescription = action.payload;
+  },
+  GetPatientPrescriptionFailure : (state, action) =>{
+      state.loading = false;
+      state.error = action.payload;
+  },
+  clearErrors: (state) => {
+    state.error = null;
+  },
+  clearMessage: (state) => {
+    state.message = null;
+  },
+});
+
+export const patientReportReducer = createReducer(initialState, {
+  GetPatientReportRequest : (state) => {
+    state.loading = true;
+  },
+  GetPatientReportSuccess : (state, action) =>{
+    state.loading = false;
+    state.patientReports = action.payload;
+  },
+  GetPatientReportFailure : (state, action) =>{
+      state.loading = false;
+      state.error = action.payload;
+  },
+  clearErrors: (state) => {
+    state.error = null;
+  },
+  clearMessage: (state) => {
+    state.message = null;
+  },
+});
+
+
+export const patientDashboardReducer = createReducer(initialState, {
+  GetPatientDashboardDataRequest : (state) => {
+    state.loading = true;
+  },
+  GetPatientDashboardDataSuccess : (state, action) =>{
+    state.loading = false;
+    state.patientDashBoard = action.payload;
+  },
+  GetPatientDashboardDataFailure : (state, action) =>{
+      state.loading = false;
+      state.error = action.payload;
+  },
+  clearErrors: (state) => {
+    state.error = null;
+  },
+  clearMessage: (state) => {
+    state.message = null;
+  },
+});
+
+
+

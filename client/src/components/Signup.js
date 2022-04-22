@@ -60,7 +60,7 @@ const Signup = () => {
       errors.password = "Password is required";
     }
     if (!passwordRegex.test(values.password)) {
-      errors.password = "Password should be strong and min 6 characters";
+      errors.password = "Password should be alpha-numeric and min 6 characters";
     }
     if (values.password !== values.conf_password) {
       errors.conf_password = "Password and confirm password should be matched.";

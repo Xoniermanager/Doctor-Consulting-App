@@ -91,7 +91,7 @@ const Appointments = () => {
     },
     {
       cell:(row) => <div className="d-flex">
-      <button type='button' id={row._id} onClick={handleDeleteClick} class="btn btn-danger shadow btn-xs sharp mr-1"><i class="fa fa-trash"></i></button></div>,
+      <button type='button' id={row._id} onClick={handleDeleteClick} class="btn btn-danger shadow btn-sm sharp mr-1"><i class="fa fa-trash"></i></button></div>,
       name: "ACTIONS",
     },
   ];

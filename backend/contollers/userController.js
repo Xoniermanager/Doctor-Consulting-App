@@ -248,7 +248,7 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
       if(about){
         user.about = about;
       }
-      if(profileImage){
+      if(profileImage && Object.keys(profileImage).length !== 0){
           if(user.profileImage)
           await cloudinary.v2.uploader.destroy('mymedia/'+user.profileImage.public_id);
           const myCloud = await cloudinary.v2.uploader.upload(profileImage.avatar, {
@@ -329,24 +329,25 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
          if(docterAcademic){
           user.academic_details = docterAcademic;
          }
-
+        let arr = [];
          if(doctorAward){
-           doctorAward.forEach(async (dai, index) => {
-            let row = {};
-            row.name = dai.awardName;
-            if(dai.awardImage){
-              let myCloud = await cloudinary.v2.uploader.upload(dai.awardImage, {
+          let row = {};
+          for(let i=0; i<doctorAward.length; i++) {
+            row.awardName = doctorAward[i].awardName;
+            if(doctorAward[i].awardImage){
+              const myCloud = await cloudinary.v2.uploader.upload(doctorAward[i].awardImage, {
                 folder: "mymedia",
               });
-              row.image = {
+              row.awardImage = {
                 public_id: myCloud.public_id,
                 url: myCloud.secure_url,
               }
+              arr.push({...row});
             }
-            user.awards.push(row);
-          });
+          }
         }
-       await user.save();
+      user.awards = arr;
+      await user.save();
         res.status(200).json({
              success : true,
              message : 'Experience updated'
@@ -788,7 +789,6 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
               message : 'No prescription found'
           });
         }
-        console.log(prescriptions[0]);
         res.status(200).json({
             success : true,
             prescription : prescriptions[0]
@@ -1156,3 +1156,16 @@ exports.createDoctorAppointment = catchAsyncErrors(async( req, res) => {
       }
   });
   
+
+
+  const cloudinaryImageUploadMethod = async file => {
+    return new Promise(resolve => {
+        cloudinary.uploader.upload( file , (err, res) => {
+          if (err) return res.status(500).send("upload image error")
+            resolve({
+              res: res.secure_url
+            }) 
+          }
+        ) 
+    })
+  }

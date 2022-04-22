@@ -50,7 +50,15 @@ const [expValue, setExpValue] = useState(user.experiences?user.experiences : [{e
   // academic awards
   const [clinicAddr, setClinicAddr] = useState(user.clinic_details ? user.clinic_details : '');
   const [docterAcademic, setDocterAcademic] = useState(user.academic_details ? user.academic_details : [{academic : null}]);
-  const [doctorAward, setDoctorAward] = useState(user.awards ? user.awards : [{awardImage : null, awardName : null}]);
+
+  let list = user.awards && user.awards.map((element)=>{
+    element = {
+      ...element,
+      awardImage : element.awardImage.url
+    }
+    return element;
+  })
+  const [doctorAward, setDoctorAward] = useState(list ? list : [{awardImage : null, awardName : null}]);
   const handleAccClinicSubmit = async (e) =>{
     e.preventDefault();
     await dispatch(updateClinicAwards(clinicAddr, docterAcademic, doctorAward));
@@ -89,8 +97,6 @@ const [expValue, setExpValue] = useState(user.experiences?user.experiences : [{e
     };
   };
   
-  
-
   return (
     <>
       <Header />

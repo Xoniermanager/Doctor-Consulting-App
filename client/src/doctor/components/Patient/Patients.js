@@ -63,9 +63,9 @@ const Patients = () => {
       name: "PRESCRIPTIONS",
     },
     {
-      cell:(row) => <div className="d-flex"> <Link to="view-patient.html" className="btn btn-success shadow btn-xs sharp mr-1"><i className="fa fa-eye"></i></Link>
-      <button type="button" className="btn btn-primary shadow btn-xs sharp mr-1"><i className="fa fa-edit"></i></button>
-      <button type="button" className="btn btn-danger shadow btn-xs sharp mr-1"><i className="fa fa-trash"></i></button></div>,
+      cell:(row) => <div className="d-flex"> <Link to="view-patient.html" className="btn btn-success shadow btn-sm sharp mr-1"><i className="fa fa-eye"></i></Link>
+      <button type="button" className="btn btn-primary shadow btn-sm sharp mr-1"><i className="fa fa-edit"></i></button>
+      <button type="button" className="btn btn-danger shadow btn-sm sharp mr-1"><i className="fa fa-trash"></i></button></div>,
       name: "ACTIONS",
     },
   ];

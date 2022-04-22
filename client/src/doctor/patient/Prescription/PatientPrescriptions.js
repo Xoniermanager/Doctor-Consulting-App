@@ -1,26 +1,26 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { deletePrescription, getPrescription } from '../../../Actions/User';
+import { deletePrescription, getPatientPrescription } from '../../../Actions/User';
 import Moment from 'moment';
 import Header from '../Layout/Header';
-import DoctSideBar from '../Layout/DoctSideBar';
 import Footer from '../Layout/Footer';
 import DataTable from "react-data-table-component";
 import { Paper, Checkbox } from "@material-ui/core";
 import { Link } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 import { confirm } from "react-confirm-box";
+import PatientSideBar from '../Layout/PatientSideBar';
 
-const Prescriptions = () => {
+const PatientPrescriptions = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getPrescription());
+    dispatch(getPatientPrescription());
   }, [dispatch]);
 
-  let { prescriptions } = useSelector((state) => state.prescriptions);
+  let { patientAllPrescription } = useSelector((state) => state.patientAllPrescription);
 
-  console.log(prescriptions);
+  console.log(patientAllPrescription);
 
   const options = {
     labels: {
@@ -36,12 +36,12 @@ const Prescriptions = () => {
     const result = await confirm("Do you want to delete this?",options);
     if (result) {
       await dispatch(deletePrescription(id));
-      dispatch(getPrescription());
+      dispatch(getPatientPrescription());
       alert.success("Prescription deleted successfully");
     }
   }
 
-  let allPrescriptions = prescriptions && prescriptions.map((element)=>{
+  let allPrescriptions = patientAllPrescription && patientAllPrescription.map((element)=>{
     let cdate = Moment(element.createdAt).format('DD MMMM YYYY HH:mm');
     let contents = `${element.drugs.length} Drugs ${element.drugs.length} Tests`;
     element = {
@@ -59,8 +59,8 @@ const Prescriptions = () => {
       sortable: true,
     },
     {
-      name: "PATIENT",
-      selector: "patientDetail[0].name",
+      name: "Doctor Name",
+      selector: "doctorDetail[0].name",
       sortable: true,
     },
     {
@@ -81,10 +81,7 @@ const Prescriptions = () => {
     {
       cell:(row) => 
       <div className="d-flex">
-        <Link to={`/view-prescription/${row._id}`} className="btn btn-success shadow btn-sm sharp mr-1"><i className="fa fa-eye"></i></Link>
-        {/* <Link to={`/print-prescription/${row._id}`} className="btn btn-info shadow btn-sm sharp"><i className="fa fa-print"></i></Link> */}
-        <Link to={`/edit-prescription/${row._id}`} className="btn btn-primary shadow btn-sm sharp mr-1"><i className="fa fa-pencil"></i></Link>
-        <button type='button' id={row._id} onClick={handleDeleteClick} className="btn btn-danger shadow btn-sm sharp"><i className="fa fa-trash"></i></button>
+        <Link to={`/patient/view-prescription/${row._id}`} className="btn btn-success shadow btn-sm"><i className="fa fa-eye"></i></Link>
       </div>,
       name: "ACTIONS",
       selector: "actions",
@@ -97,7 +94,7 @@ const Prescriptions = () => {
   return (
      <> 
       <Header />
-      <DoctSideBar />
+      <PatientSideBar />
       <div className="content-body">
         <div className="container-fluid">
           {/* <!-- row --> */}
@@ -136,4 +133,4 @@ const Prescriptions = () => {
   )
 }
 
-export default Prescriptions
+export default PatientPrescriptions

@@ -33,7 +33,7 @@ const Header = () => {
     <>
      {/* ******************* Nav header start ****************** */}
             <div className="nav-header">
-            	<Link to="/doctor" className="brand-logo">
+            	<Link to="/patient" className="brand-logo">
             		<img className="logo-abbr" src={logo} alt="Logo"/>
             	</Link>
 
@@ -50,24 +50,10 @@ const Header = () => {
             		<nav className="navbar navbar-expand">
             			<div className="collapse navbar-collapse justify-content-between">
             				<div className="header-left ml-6">
-            					<div className="dropdown shortcut-menu mr-4">
-            						<button type="button" data-toggle="dropdown" aria-expanded="false" className="btn btn-primary dropdown-toggle">
-            							Create as new
-            						</button>
-            						<div className="dropdown-menu shadow">
-            							<Link to="/all-prescription" className="dropdown-item">Prescription</Link>
-            							<Link to="/patients" className="dropdown-item">Patient</Link>
-            							<Link to="/doctor-appointments" className="dropdown-item">Appointment</Link> 
-            							<Link to="/all-drugs" className="dropdown-item">Drug</Link>
-            							<Link to="/all-tests" className="dropdown-item">Diagnosis Test</Link>
-            						</div>
-            					</div>
-
             					<div className="dashboard_bar">
             						Dashboard
             					</div>
             				</div>
-
 							{ token && token !=='' ? (<ul className="navbar-nav header-right">
             					<li className="nav-item dropdown header-profile">
             						<Link className="nav-link" to="#" role="button" data-toggle="dropdown">

@@ -3,23 +3,23 @@ import { useDispatch, useSelector } from 'react-redux'
 import Moment from 'moment';
 import Footer from '../Layout/Footer';
 import Header from '../Layout/Header';
-import DoctSideBar from '../Layout/DoctSideBar';
 import DataTable from "react-data-table-component";
 import { Paper, Checkbox } from "@material-ui/core";
 
 import { Link } from "react-router-dom";
 import { useAlert } from 'react-alert';
 import { confirm } from "react-confirm-box";
-import { deleteSlot, getSlots } from '../../../Actions/User';
+import { deleteAppointmentById, getPatientAppointments,  } from '../../../Actions/User';
+import PatientSideBar from '../Layout/PatientSideBar';
 
-const AppointmentSlot = () => {
+const PatientAppointments = () => {
 
   const dispatch = useDispatch();
   
   const alert = useAlert();
   const { error, message } = useSelector((state) => state.apiStatus);
   useEffect(() => {
-    dispatch(getSlots());
+    dispatch(getPatientAppointments());
     if (error) {
       alert.error(error);
       dispatch({ type: "clearErrors" });
@@ -30,19 +30,17 @@ const AppointmentSlot = () => {
     }
   }, [alert, error, dispatch, message]);
 
-  let { slots } = useSelector((state) => state.slots);
+  let { patientAppointments } = useSelector((state) => state.patientAppointments);
 
-  let allSlots = slots && slots.map((element)=>{
+  let allDoctorAppointments = patientAppointments && patientAppointments.map((element)=>{
     let cdate = Moment(element.createdAt).format('DD-MM-YYYY');
-    let slotStartDate = Moment(element.slotStartDate).format('DD-MM-YYYY');
-    let slotEndDate = Moment(element.slotEndDate).format('DD-MM-YYYY');
-    let interval = element.interval+' min';
+    let appDate = Moment(element.appointmentDate).format('DD-MM-YYYY');
+    let doctorName = element.doctors[0].name
     element = {
       ...element,
-      slotStartDate : slotStartDate,
-      slotEndDate : slotEndDate,
-      interval : interval,
-      cdate : cdate
+      cdate : cdate,
+      appDate : appDate,
+      doctorName
     }
     return element;
   })
@@ -59,9 +57,9 @@ const AppointmentSlot = () => {
     let id = e.target.id;
     const result = await confirm("Do you want to delete this?",options);
     if (result) {
-      await dispatch(deleteSlot(id));
-      alert.success("Slot deleted successfully");
-      dispatch(getSlots());
+      await dispatch(deleteAppointmentById(id));
+      alert.success("Appointment deleted successfully");
+      dispatch(allDoctorAppointments());
       dispatch({ type: "clearErrors" });
       dispatch({ type: "clearMessage" });
     }
@@ -75,22 +73,26 @@ const AppointmentSlot = () => {
       sortable: true,
     },
     {
-      name: "Start Date",
-      selector: "slotStartDate",
+      name: "DOCTOR NAME",
+      selector: "doctorName",
       sortable: true,
     },
     {
-      name: "End Date",
-      selector: "slotEndDate",
+      name: "DATE",
+      selector: "appDate",
       sortable: true,
     },
     {
-      name: "Slot Interval",
-      selector: "interval",
-      sortable: true,
+        name: "Slot Time",
+        selector: "appointmentTime",
+        sortable: true,
     },
     {
-      cell:(row) => <div className="d-flex"><Link to={`/edit-slot/${row._id}`}  class="btn btn-primary shadow btn-sm sharp mr-1"><i class="fa fa-edit"></i></Link>
+      name: "Created Date",
+      selector: "cdate"
+    },
+    {
+      cell:(row) => <div className="d-flex">
       <button type='button' id={row._id} onClick={handleDeleteClick} class="btn btn-danger shadow btn-sm sharp mr-1"><i class="fa fa-trash"></i></button></div>,
       name: "ACTIONS",
     },
@@ -103,7 +105,7 @@ const AppointmentSlot = () => {
   return (
     <>
     <Header />
-    <DoctSideBar/>
+    <PatientSideBar/>
     <div className="content-body">
         <div className="container-fluid">
           {/* <!-- row --> */}
@@ -113,14 +115,14 @@ const AppointmentSlot = () => {
                 <div className="card-header d-block">
                   <div className="row">
                     <div className="col-md-6">
-                      <h4 className="card-title">All Slots</h4>
+                      <h4 className="card-title">All Appointments</h4>
                     </div>
                     <div className="col-md-6 text-right">
                       <Link
-                        to="/create-slot"
+                        to="/patient/create-appointment"
                         className="btn btn-primary btn-sm"
                       >
-                        <i className="fa fa-plus"></i> Create Slot
+                        <i className="fa fa-plus"></i> Create Appointment
                       </Link>
                     </div>
                   </div>
@@ -129,8 +131,8 @@ const AppointmentSlot = () => {
                   <Paper>
                     <DataTable
                       columns={columns}
-                      data={allSlots}
-                      defaultSortField="name"
+                      data={allDoctorAppointments}
+                      defaultSortField="patientName"
                       pagination
                       selectableRows
                       selectableRowsComponent={Checkbox}
@@ -150,4 +152,4 @@ const AppointmentSlot = () => {
   );
 };
 
-export default AppointmentSlot;
+export default PatientAppointments;

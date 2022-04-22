@@ -1,19 +1,19 @@
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { editPrescription } from "../../../Actions/User";
-import DoctSideBar from "../Layout/DoctSideBar";
+import { getPatientPrescriptionDetails } from "../../../Actions/User";
 import Footer from "../Layout/Footer";
 import Header from "../Layout/Header";
 import Moment from 'moment';
 import { useReactToPrint } from 'react-to-print';
+import PatientSideBar from "../Layout/PatientSideBar";
 
-const ViewPrescription = () => {
+const ViewPatientPrescription = () => {
 
   const { presId } = useParams();
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(editPrescription(presId));
+    dispatch(getPatientPrescriptionDetails(presId));
   }, []);
 
   const componentRef = useRef();
@@ -24,18 +24,18 @@ const ViewPrescription = () => {
 
   let { editData } = useSelector((state) => state.editData);
    const diffInMs = Math.abs(new Date() - new Date(editData.patientDetail[0].birthday));
-    const age = Math.ceil(diffInMs / (1000 * 60 * 60 * 24 * 365));
+   const age = Math.ceil(diffInMs / (1000 * 60 * 60 * 24 * 365));
 
   return (
     <>
      <Header />
-      <DoctSideBar />
+      <PatientSideBar />
       
       <div  className="content-body">
         <div className="container-fluid">
         <div ref={componentRef} className="row">
             <div className="col-lg-12 text-right">
-              <button className="text-right btn btn-md btn-info" onClick={handlePrint}>Print!</button>
+            <button className="text-right btn btn-md btn-info" onClick={handlePrint}>Print!</button>
             </div>
         </div>
           {/* <!-- row --> */}
@@ -84,4 +84,4 @@ const ViewPrescription = () => {
   );
 };
 
-export default ViewPrescription;
+export default ViewPatientPrescription;

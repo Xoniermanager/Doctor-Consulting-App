@@ -1,6 +1,12 @@
 const catchAsyncErrors = require('../middleware/catchAsyncErrors');
 const User = require('../models/userModel');
 const { sendEmail } = require('../middleware/sendEmail');
+const cloudinary = require('cloudinary');
+const Appointment = require('../models/appointmentModel');
+const Prescription = require('../models/prescriptionModel');
+const mongoose = require('mongoose');
+const Report = require('../models/reportModel');
+ 
   // add create patient
   exports.createPatient = catchAsyncErrors(async( req, res) => {
     try {
@@ -40,6 +46,60 @@ const { sendEmail } = require('../middleware/sendEmail');
       }
   });
 
+
+    // update patient
+    exports.updatePatient = catchAsyncErrors(async( req, res) => {
+      try {
+        const {userValue, patientId, profileImage} = req.body;
+        const user = await User.findById(patientId);
+         if(user.name){
+          user.name = userValue.name
+         }
+         if(user.birthday){
+          user.birthday = userValue.birthday
+         }
+         if(user.phone){
+          user.phone = userValue.phone
+         }
+         if(user.gender){
+          user.gender = userValue.gender
+         }
+         if(user.bloodgroup){
+          user.bloodgroup = userValue.bloodgroup
+         }
+         if(user.address){
+          user.address = userValue.address
+         }
+         if(user.weight){
+          user.weight = userValue.weight
+         }
+         if(user.height){
+          user.height = userValue.height
+         }
+         if(profileImage && Object.keys(profileImage).length !== 0){
+          if(user.profileImage)
+          await cloudinary.v2.uploader.destroy('mymedia/'+user.profileImage.public_id);
+          const myCloud = await cloudinary.v2.uploader.upload(profileImage.avatar, {
+            folder: "mymedia",
+          });
+          user.profileImage = {
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+          };
+      }
+         await user.save();
+         res.status(200).json({
+              success : true,
+              message : 'Patient updated successfully.'
+          });
+        } catch (error) {
+          res.status(500).json({
+            success : false,
+            message : error.message
+        })
+        }
+    });
+
     // add update language details
     exports.getPatient = catchAsyncErrors(async( req, res) => {
       try {
@@ -50,6 +110,217 @@ const { sendEmail } = require('../middleware/sendEmail');
          res.status(200).json({
              success : true,
              patient
+         });
+       } catch (error) {
+         res.status(500).json({
+           success : false,
+           message : error.message
+        })
+       }
+    });
+
+  
+   // doctor list
+      exports.getDoctors = catchAsyncErrors(async( req, res) => {
+        try {
+           const doctors = await User.find({ role : 'doctor'}).select('_id name');
+           res.status(200).json({
+               success : true,
+               doctors
+           });
+         } catch (error) {
+           res.status(500).json({
+             success : false,
+             message : error.message
+          })
+         }
+      });
+
+      
+   // appointments list
+   exports.getAppointments = catchAsyncErrors(async( req, res) => {
+    try {
+       const patientAppointments = await Appointment.aggregate([
+        { $match: {  patientId : req.user._id} },
+        {
+          $lookup: {
+            from: "users",
+            localField: "doctorId",
+            foreignField: "_id",
+            as: "doctors"
+          }
+        }
+      ])
+
+       res.status(200).json({
+           success : true,
+           patientAppointments
+       });
+     } catch (error) {
+       res.status(500).json({
+         success : false,
+         message : error.message
+      })
+     }
+  });
+
+    // get Prescriptions details
+    exports.getPrescriptions = catchAsyncErrors(async( req, res) => {
+    try {
+      const patientAllPrescription =  await Prescription.aggregate([
+        { $match : { $and: [{patientId : req.user._id}]}},
+        {
+          $lookup: {
+            from: "users",
+            localField: "doctorId",
+            foreignField: "_id",
+            as: "doctorDetail"
+          }
+        }
+      ])
+
+      await Prescription.populate(patientAllPrescription, {path: "drugs.drugId tests.testId"});
+
+        if(!patientAllPrescription){
+          return res.status(404).json({
+              success : false,
+              message : 'No prescriptions found'
+          });
+        }
+        res.status(200).json({
+            success : true,
+            patientAllPrescription
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+
+   // get prescription details by id
+   exports.getPrescriptionDetails = catchAsyncErrors(async( req, res) => {
+    try {
+        const ObjectId = mongoose.Types.ObjectId;
+        const prescriptions = await Prescription.aggregate([
+          { $match : { $and: [{patientId : req.user._id}, {_id : ObjectId(req.params.presId) }]}},
+          {
+            $lookup: {
+              from: "users",
+              localField: "doctorId",
+              foreignField: "_id",
+              as: "doctorDetail"
+            }
+          },
+          {
+            $lookup: {
+              from: "users",
+              localField: "patientId",
+              foreignField: "_id",
+              as: "patientDetail"
+            }
+          },
+        ])
+
+        await Prescription.populate(prescriptions, {path: "drugs.drugId tests.testId"});
+        if(!prescriptions){
+          return res.status(404).json({
+              success : false,
+              message : 'No prescription found'
+          });
+        }
+        res.status(200).json({
+            success : true,
+            prescription : prescriptions[0]
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+  // create report
+  exports.createReport = catchAsyncErrors(async( req, res) => {
+    try {
+      let {formData, reportDocument} = req.body;
+        let document = {};
+        if(reportDocument && Object.keys(reportDocument).length !== 0){
+          const myCloud = await cloudinary.v2.uploader.upload(reportDocument.document, {
+            folder: "mymedia",
+          });
+          document = {
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+          };
+      }
+      const reportData = {
+        ...formData,
+        patientId : req.user._id,
+        document
+      }
+      await Report.create(reportData);
+      res.status(200).json({
+        success : true,
+        message : 'Report created successfully.'
+    });
+    } catch (error) {
+       res.status(500).json({
+        success : false,
+        message : error.message
+       })
+    }
+  });
+
+   // reports list
+   exports.getReports = catchAsyncErrors(async( req, res) => {
+    try {
+       const patientReports = await Report.find({patientId : req.user._id});
+       res.status(200).json({
+           success : true,
+           patientReports
+       });
+     } catch (error) {
+       res.status(500).json({
+         success : false,
+         message : error.message
+      })
+     }
+  });
+
+     // dashboard data
+     exports.getDashboard = catchAsyncErrors(async( req, res) => {
+      try {
+         let dt = new Date(req.body.selectedDate);
+         const todayApp = await Appointment.aggregate([
+          { $match:{patientId : req.user._id, appointmentDate : dt}},
+          {
+            $lookup: {
+              from: "users",
+              localField: "doctorId",
+              foreignField: "_id",
+              as: "doctors"
+            }
+          }
+        ]);
+
+        const allApp = await Appointment.find({patientId : req.user._id});
+        const allDoct = await User.find({_id : req.user._id}).select('doctors');
+        const allPres = await Prescription.find({patientId : req.user._id});
+      
+        let patientDashBoard = {
+          allApp : allApp.length,
+          allDoctors : allDoct.length,
+          allPres : allPres.length,
+          todayApp
+        }
+
+         res.status(200).json({
+             success : true,
+             patientDashBoard
          });
        } catch (error) {
          res.status(500).json({

@@ -68,8 +68,8 @@ const AllTests = () => {
       sortable: true,
     },
     {
-      cell:(row) => <div className="d-flex"><Link to={`/test-edit/${row._id}`} className="btn btn-primary shadow btn-xs sharp mr-1"><i className="fa fa-edit"></i></Link>
-      <button type='button' id={row._id} onClick={handleDeleteClick} className="btn btn-danger shadow btn-xs sharp mr-1"><i className="fa fa-trash"></i></button></div>,
+      cell:(row) => <div className="d-flex"><Link to={`/test-edit/${row._id}`} className="btn btn-primary shadow btn-sm sharp mr-1"><i className="fa fa-edit"></i></Link>
+      <button type='button' id={row._id} onClick={handleDeleteClick} className="btn btn-danger shadow btn-sm sharp mr-1"><i className="fa fa-trash"></i></button></div>,
       name: "ACTIONS"
     },
   ];

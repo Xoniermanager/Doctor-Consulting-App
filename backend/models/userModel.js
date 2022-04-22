@@ -52,8 +52,8 @@ const userSchema = new mongoose.Schema({
     ],
     awards : [
         {
-            name : String, 
-            image : {
+            awardName : String, 
+            awardImage : {
                 public_id: String,
                 url: String, 
             } 

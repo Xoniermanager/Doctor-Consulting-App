@@ -46,6 +46,14 @@ import AppointmentSlot from './doctor/components/Appointment/AppointmentSlot';
 import CreateAppointment from './doctor/components/Appointment/CreateAppointment';
 import DateSlot from './doctor/components/Appointment/DateSlot';
 import Appointments from './doctor/components/Appointment/Appointments';
+import PatientDashboard from './doctor/patient/Dashboard/PatientDashboard';
+import PatientProfile from './doctor/patient/PatientProfile/PatientProfile';
+import PatientPrescriptions from './doctor/patient/Prescription/PatientPrescriptions';
+import CreatePatientAppointment from './doctor/patient/Appointment/CreatePatientAppointment';
+import PatientAppointments from './doctor/patient/Appointment/PatientAppointments';
+import ChangePassword from './doctor/patient/PatientProfile/ChangePassword';
+import ViewPatientPrescription from './doctor/patient/Prescription/ViewPatientPrescription';
+import PatientReport from './doctor/patient/Reports/PatientReport';
 
 
 const App = () => {
@@ -108,6 +116,16 @@ const App = () => {
 
               <Route exact path='/create-appointment' element={<CreateAppointment/>} />
               <Route exact path='/doctor-appointments' element={<Appointments/>} />
+
+              {/* Patient module */}
+              <Route exact path='/patient' element={ user &&  user.role ==='patient' ? <PatientDashboard/> : ''} />
+              <Route exact path='/patient/profile' element={ user &&  user.role ==='patient' ? <PatientProfile/> : ''} />
+              <Route exact path='/patient/create-appointment' element={ user &&  user.role ==='patient' ? <CreatePatientAppointment/> : ''} />
+              <Route exact path='/patient/appointments' element={ user &&  user.role ==='patient' ? <PatientAppointments/> : ''} />
+              <Route exact path='/patient/change-password' element={ user &&  user.role ==='patient' ? <ChangePassword/> : ''} />
+              <Route exact path='/patient/all-prescription' element={ user &&  user.role ==='patient' ? <PatientPrescriptions/> : ''} />
+              <Route exact path='/patient/view-prescription/:presId' element= {  user &&  user.role ==='patient' ? <ViewPatientPrescription/> : '' } />
+              <Route exact path='/patient/reports' element= { user &&  user.role ==='patient' ? <PatientReport/> : '' } />
            </Routes>
 
        </Router>

@@ -4,7 +4,7 @@ import * as dashboardActions from '../../Actions/dashboardActions';
 import * as webRTCHandler from '../webRTC/webRTCHandler';
 import * as webRTCGroupCallHandler from '../webRTC/webRTCGroupCallHandler';
 
-const SERVER = 'https://xoniertechnologies.com';
+const SERVER = 'https://xoniertest.herokuapp.com';
 
 const broadcastEventTypes = {
   ACTIVE_USERS: 'ACTIVE_USERS',

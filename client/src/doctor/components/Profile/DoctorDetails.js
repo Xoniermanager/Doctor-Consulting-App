@@ -227,7 +227,7 @@ const DoctorDetails = ({ user }) => {
                             <div key={item._id} className="row mb-2">
                               <div className="col-2">
                                 <img
-                                  src={require("../../../images/profile/award.jpg")}
+                                  src={ item.awardImage ? item.awardImage.url : require("../../../images/profile/award.jpg")}
                                   className="img-fluid"
                                   alt=""
                                 />

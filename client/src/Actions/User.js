@@ -126,7 +126,6 @@ export const updatePassword =
           },
         }
       );
-
       dispatch({
         type: "updatePasswordSuccess",
         payload: data.message,
@@ -311,6 +310,36 @@ export const createPatient = (userValue) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "CreatePatientFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+
+// create patient
+export const updatePatient = (patientId, userValue, profileImage) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "UpdatePatientRequest",
+    });
+    const { data } = await axios.post(
+      "/api/v1/patient/update",
+      { userValue, patientId, profileImage },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+
+    dispatch({
+      type: "UpdatePatientSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "UpdatePatientFailure",
       payload: error.response.data.message,
     });
   }
@@ -897,13 +926,13 @@ export const deleteSlot = (slotId) => async (dispatch) => {
 };
 
 // get slots by date
-export const getSlotByDate = (selectedDate) => async (dispatch) => {
+export const getSlotByDate = (selectedDate, doctorId) => async (dispatch) => {
   try {
     dispatch({
       type: "DateWiseSlotRequest",
     });
     const { data } = await axios.post(`/api/v1/my-slot`,  
-    { selectedDate, doctorId : '' },
+    { selectedDate, doctorId : doctorId },
     {
       headers: {
         "Content-Type": "application/json",
@@ -1018,6 +1047,184 @@ export const deleteAppointmentById = (appId) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "DeleteAppointmentFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+////Patients 
+
+// get all doctors
+export const getDoctors = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "GetDoctorsRequest",
+    });
+    const { data } = await axios.get("/api/v1/patient/doctors", {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "GetDoctorsSuccess",
+      payload: data.doctors,
+    });
+  } catch (error) {
+    dispatch({
+      type: "GetDoctorsFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// get all patient appointments
+export const getPatientAppointments = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "GetPatientAppointmentsRequest",
+    });
+    const { data } = await axios.get("/api/v1/patient/appointments", {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "GetPatientAppointmentsSuccess",
+      payload: data.patientAppointments,
+    });
+  } catch (error) {
+    dispatch({
+      type: "GetPatientAppointmentsFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+
+// get Patient prescriptions
+export const getPatientPrescription = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "GetPatientPrescriptionRequest",
+    });
+    const { data } = await axios.get("/api/v1/patient/prescriptions", {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "GetPatientPrescriptionSuccess",
+      payload: data.patientAllPrescription,
+    });
+  } catch (error) {
+    dispatch({
+      type: "GetPatientPrescriptionFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+
+// get Patient prescription details By Id
+export const getPatientPrescriptionDetails = (presId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "GetPatientPrescriptionByIdRequest",
+    });
+    const { data } = await axios.get(`/api/v1/patient/prescription/${presId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "GetPatientPrescriptionByIdSuccess",
+      payload: data.prescription,
+    });
+  } catch (error) {
+    dispatch({
+      type: "GetPatientPrescriptionByIdFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+
+
+// report creation by patient
+export const createReport =  (formData, reportDocument) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "CreateReportRequest",
+    });
+    const { data } = await axios.post(
+      "/api/v1/patient/create-report",
+      { formData, reportDocument },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+    dispatch({
+      type: "CreateReportSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "CreateReportFailure",
+      payload: error.response.data.message,
+    });
+  }
+}
+
+
+// get all doctor appointments
+export const getPatientReports = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "GetPatientReportRequest",
+    });
+    const { data } = await axios.get("/api/v1/patient/reports", {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "GetPatientReportSuccess",
+      payload: data.patientReports,
+    });
+  } catch (error) {
+    dispatch({
+      type: "GetPatientReportFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+
+
+// get all doctor appointments
+export const getPatientDashboard = (selectedDate) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "GetPatientDashboardDataRequest",
+    });
+    const { data } = await axios.post("/api/v1/patient/dashboard",
+    { selectedDate },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "GetPatientDashboardDataSuccess",
+      payload: data.patientDashBoard,
+    });
+  } catch (error) {
+    dispatch({
+      type: "GetPatientDashboardDataFailure",
       payload: error.response.data.message,
     });
   }

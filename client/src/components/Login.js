@@ -52,7 +52,7 @@ const Login = () => {
 
     if(user.role === 'patient'){
 		registerNewUser(user.name);
-		history('/join-meeting');
+		history('/patient');
 	}else if(user.role === 'doctor'){
     history('/doctor');
   }
