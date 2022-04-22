@@ -10,8 +10,6 @@ import ServiceDetail from './components/ServiceDetail';
 import AboutUs from './components/AboutUs';
 import BlogGrid from './components/BlogGrid';
 import Login from './components/Login';
-
-import VideoConference from './components/vchat/VideoConference';
 import PatientFeedback from './components/PatientFeedback';
 import Pathology from './components/Pathology';
 
@@ -22,7 +20,6 @@ import { useEffect } from 'react';
 
 import { connectWithWebSocket } from './utils/wssConnection/wssConnection';
 import Dashboard from './Dashboard/Dashboard';
-import LoginPage from './LoginPage/LoginPage';
 import JoinMeeting from './components/Meeting/JoinMeeting';
 import Signup from './components/Signup';
 import Forgetpassword from './components/Forgetpassword';
@@ -54,6 +51,7 @@ import PatientAppointments from './doctor/patient/Appointment/PatientAppointment
 import ChangePassword from './doctor/patient/PatientProfile/ChangePassword';
 import ViewPatientPrescription from './doctor/patient/Prescription/ViewPatientPrescription';
 import PatientReport from './doctor/patient/Reports/PatientReport';
+import Error404 from './components/Error404/Error404';
 
 
 const App = () => {
@@ -72,6 +70,7 @@ const App = () => {
     <div id='main-wrapper' className={`shows ${menuToggle ? menuToggle.isToggle : ''}`}>
        <Router>
            <Routes>
+              <Route path="*" element={<Error404 />} />
               <Route exact path="/video-chat" element={ user && user.role ==='patient' ? <Dashboard/> : ''} />
               <Route exact path="/" element={<Home/>} />
               <Route exact path="/about-us" element={<AboutUs/>} />
@@ -124,9 +123,10 @@ const App = () => {
               <Route exact path='/patient/appointments' element={ user &&  user.role ==='patient' ? <PatientAppointments/> : ''} />
               <Route exact path='/patient/change-password' element={ user &&  user.role ==='patient' ? <ChangePassword/> : ''} />
               <Route exact path='/patient/all-prescription' element={ user &&  user.role ==='patient' ? <PatientPrescriptions/> : ''} />
-              <Route exact path='/patient/view-prescription/:presId' element= {  user &&  user.role ==='patient' ? <ViewPatientPrescription/> : '' } />
-              <Route exact path='/patient/reports' element= { user &&  user.role ==='patient' ? <PatientReport/> : '' } />
-           </Routes>
+              <Route exact path='/patient/view-prescription/:presId' element={  user &&  user.role ==='patient' ? <ViewPatientPrescription/> : '' } />
+              <Route exact path='/patient/reports' element={ user &&  user.role ==='patient' ? <PatientReport/> : '' } />
+
+            </Routes>
 
        </Router>
     </div>
