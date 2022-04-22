@@ -16,7 +16,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next)=>{
     try{
     const {name, email,  password, role} = req.body;
     const user = await User.create({
-        name, email, password, role, isVerify : 1
+        name, email, password, role, isVerify : 0
     })
 
     const resetUrl = `${req.protocol}://${req.get(
