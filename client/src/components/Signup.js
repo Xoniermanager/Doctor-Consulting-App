@@ -23,11 +23,13 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormErrors(validate(formValues));
-    setIsSubmit(true);
-    let { name, email, password, role } = formValues;
-    await dispatch(registerUser(name, email, password, role));
-    if (error) {
-      history("/login");
+    if(formErrors  && Object.keys(formErrors).length === 0 && Object.getPrototypeOf(formErrors) === Object.prototype){
+      setIsSubmit(true);
+      let { name, email, password, role } = formValues;
+      await dispatch(registerUser(name, email, password, role));
+      if (error) {
+        history("/login");
+      }
     }
     return false;
   };
@@ -46,6 +48,8 @@ const Signup = () => {
   const validate = (values) => {
     const errors = {};
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    const passwordRegex =
+      /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
     if (!values.name) {
       errors.name = "Name is required!";
     }
@@ -57,7 +61,7 @@ const Signup = () => {
     if (!values.password) {
       errors.password = "Password is required";
     }
-    if (values.password.length <=5) {
+    if (!passwordRegex.test(values.password)) {
       errors.password = "Password should be min 6 characters";
     }
     if (values.password !== values.conf_password) {
