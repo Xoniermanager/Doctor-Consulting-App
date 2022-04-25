@@ -100,10 +100,7 @@ exports.myProfile = catchAsyncErrors(async (req, res, next)=>{
 exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
     try {
         const user = await User.findByIdAndUpdate(req.params.id, {$set : {'isVerify':1}});
-        res.status(200).json({
-         success: true,
-         message: 'Email is verified'
-       });     
+        res.redirect(`${req.protocol}://${req.get("host")}`);
     } catch (error) {
        res.status(500).json({
          success: false,
