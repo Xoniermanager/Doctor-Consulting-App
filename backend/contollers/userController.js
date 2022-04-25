@@ -8,6 +8,7 @@ const Appointment = require('../models/appointmentModel');
 const Prescription = require('../models/prescriptionModel');
 const { sendEmail } = require('../middleware/sendEmail');
 const cloudinary = require('cloudinary');
+var popup = require('popups');
 
 const mongoose  = require('mongoose');
 
@@ -100,6 +101,7 @@ exports.myProfile = catchAsyncErrors(async (req, res, next)=>{
 exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
     try {
         const user = await User.findByIdAndUpdate(req.params.id, {$set : {'isVerify':1}});
+        popup.alert({content: 'Email verified.'});
         res.redirect(`${req.protocol}://${req.get("host")}`);
     } catch (error) {
        res.status(500).json({
