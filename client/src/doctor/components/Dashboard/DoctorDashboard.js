@@ -102,7 +102,7 @@ const DoctorDashboard = () => {
                     </div>
                     <div className="col-5">
                       <a
-                        href="create-appointment.html"
+                        href="/create-appointment"
                         className="btn btn-primary float-right mr-2"
                       >
                         <i className="fa fa-plus"></i> New Appointment
