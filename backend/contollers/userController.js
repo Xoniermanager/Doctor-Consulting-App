@@ -1156,16 +1156,3 @@ exports.createDoctorAppointment = catchAsyncErrors(async( req, res) => {
       }
   });
   
-
-
-  const cloudinaryImageUploadMethod = async file => {
-    return new Promise(resolve => {
-        cloudinary.uploader.upload( file , (err, res) => {
-          if (err) return res.status(500).send("upload image error")
-            resolve({
-              res: res.secure_url
-            }) 
-          }
-        ) 
-    })
-  }

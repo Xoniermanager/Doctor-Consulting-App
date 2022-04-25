@@ -46,8 +46,6 @@ const Signup = () => {
   const validate = (values) => {
     const errors = {};
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-    const passwordRegex =
-      /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
     if (!values.name) {
       errors.name = "Name is required!";
     }
@@ -59,8 +57,8 @@ const Signup = () => {
     if (!values.password) {
       errors.password = "Password is required";
     }
-    if (!passwordRegex.test(values.password)) {
-      errors.password = "Password should be alpha-numeric and min 6 characters";
+    if (values.password.length <=5) {
+      errors.password = "Password should be min 6 characters";
     }
     if (values.password !== values.conf_password) {
       errors.conf_password = "Password and confirm password should be matched.";
