@@ -44,9 +44,14 @@ const CreatePatientAppointment = () => {
   const [formData, setFormData] = useState({ slotId : '', appointmentTime : '', appointmentDate : '', appointmentStartTime : '',  appointmentEndTime : '' });
 
   const handleOnChange = async (e) => {
+    e.preventDefault();
     let index = e.nativeEvent.target.selectedIndex;
     setDoctorId(e.target.value);
     setDoctorDetail({ ...doctorDetail, doctorId : e.target.value, doctorName :  e.nativeEvent.target[index].text, patientId : user._id, patientName : user.name });
+
+    if (selectDate && e.target.value) {
+      await dispatch(getSlotByDate(selectDate, e.target.value));
+    }
   };
 
   const submitData = async (e) => {
@@ -72,6 +77,7 @@ const CreatePatientAppointment = () => {
   const { dateSlots } = useSelector((state) => state.dateSlots);
   let bookedSlot = dateSlots && dateSlots.bookedSlots ? dateSlots.bookedSlots : [];
   let bookedData = bookedSlot && bookedSlot.map((book) => book.slotId);
+
   return (
     <>
       <Header />
@@ -134,7 +140,7 @@ const CreatePatientAppointment = () => {
                           dateSlots.allSlots.slots.map((slt, index) => (
                         <>
                             <div key={index} className="col-sm-6 col-md-4 mb-2">
-                            { bookedData.includes(slt._id) ? (<button class="btn btn-danger btn-block">{slt.slot}</button>) : (<button type="button"
+                            { bookedData && bookedData.includes(slt._id) ? (<button class="btn btn-danger btn-block">{slt.slot}</button>) : (<button type="button"
                                 onClick={getSlotDetails}
                                 className="btn btn-primary btn-block"
                                 data-toggle="modal"

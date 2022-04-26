@@ -68,12 +68,15 @@ exports.loginUser = catchAsyncErrors(async (req, res, next)=>{
     const isPasswordMatch = await user.comparePassword(password);
 
     if(!isPasswordMatch){
-        return next(new ErrorHandler("Invalid entered email or password", 401));
+     return res.status(200).json({
+        success : true,
+        message: 'Invalid entered email or password'
+    })
+       // return next(new ErrorHandler("Invalid entered email or password", 401));
     }
     const authToken  = user.getJWTToken();
     res.status(200).json({
         success : true,
-        user,
         message: 'Login successfully',
         authToken
     })
@@ -1009,7 +1012,6 @@ exports.getSlotsByDate = catchAsyncErrors(async( req, res) => {
     }else{
       doctorId = req.user._id;
     }
-
      const bookedSlots = await Appointment.find({doctorId : doctorId, appointmentDate : req.body.selectedDate}, {_id : 0 , slotId : 1});
 
       const slot = await Slot.findOne({doctorId : doctorId,
@@ -1025,16 +1027,23 @@ exports.getSlotsByDate = catchAsyncErrors(async( req, res) => {
       });
 
       if(!slot){
-        return res.status(404).json({
-            success : false,
-            message : 'No slot found'
+        let arr = {
+          allSlots : {
+            slotDate : req.body.selectedDate,
+            slots : []
+          },
+          bookedSlots : []
+        }
+
+       return res.status(200).json({
+          success : true,
+          slot : arr
         });
       }
 
-    
         let index = slot.manageSlots.findIndex( x =>{
          let dts = new Date(x.slotDate);
-         let date = dts.getFullYear()+'-'+ (dts.getUTCMonth()  > 10 ? dts.getUTCMonth() + 1 : '0'+(dts.getUTCMonth() + 1))   +'-'+dts.getDate();
+         let date = dts.getFullYear()+'-'+ (dts.getUTCMonth()  > 10 ? dts.getUTCMonth() + 1 : '0'+(dts.getUTCMonth() + 1))   +'-'+(dts.getDate() > 10 ? dts.getDate() : '0'+dts.getDate());
          if(date == req.body.selectedDate){
              return true;
            }

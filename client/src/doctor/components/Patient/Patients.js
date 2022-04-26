@@ -101,7 +101,6 @@ const Patients = () => {
                 <div className="card-body">
                   <Paper>
                     <DataTable
-                      title="Patients"
                       columns={columns}
                       data={patiens}
                       defaultSortField="name"

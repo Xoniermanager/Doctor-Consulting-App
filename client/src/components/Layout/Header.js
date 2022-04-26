@@ -9,7 +9,7 @@ const Header = () => {
 	const token = localStorage.getItem('token');
 	const history = useNavigate();
 
-	let { error, user } = useSelector((state) => state.user);
+	let { user } = useSelector((state) => state.user);
 	const alert = useAlert();
 
 	const logoutHandler = () => {
@@ -40,7 +40,13 @@ const Header = () => {
 
 					<div class="secondary-menu">
 						<ul>
-							{ token && token !=='' ? (<li class="btn-area"> <Button onClick={logoutHandler} className="btn btn-primary shadow" variant="contained">Logout</Button> </li>) : (	<li class="btn-area"><Link to="/login" className="btn btn-primary shadow">Login / Register <i class="btn-icon-bx fas fa-chevron-right"></i></Link></li>)
+						{/* <li class="btn-area"> <Button onClick={logoutHandler} className="btn btn-primary shadow" variant="contained">Logout</Button> </li> */}
+							{ token && token !=='' ? (<li><Link to="#!"> User <i className="fas fa-plus"></i></Link>
+								<ul className="sub-menu left">
+								{ user && user.role === 'patient' ? (<li><Link to="/patient"><span>Profile</span></Link></li>) : (<li><Link to="/doctor"><span>Profile</span></Link></li>)}	
+									<li><Link to="#" onClick={logoutHandler}><span>Logout</span></Link></li>
+								</ul>
+							</li>) : (	<li class="btn-area"><Link to="/login" className="btn btn-primary shadow">Login / Register <i class="btn-icon-bx fas fa-chevron-right"></i></Link></li>)
 							}	
 						</ul>
 					</div>
@@ -59,8 +65,6 @@ const Header = () => {
 											<li><Link to="/about-us"><span>About Us</span></Link></li>
 											<li><Link to="/team"><span>Our Team</span></Link></li>
 											<li><Link to="/patient-feedback"><span>Patient Feedback</span></Link></li>
-											{ token && token !=='' ? (<li> <Button onClick={logoutHandler} className="btn btn-primary shadow" variant="contained">Logout</Button> </li>)  : ''
-											}
 										</ul>
 									</li>
 								</ul>

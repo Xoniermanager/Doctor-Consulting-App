@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import DoctSideBar from "../Layout/DoctSideBar";
 import Footer from "../Layout/Footer";
 import Header from "../Layout/Header";
@@ -101,12 +102,12 @@ const DoctorDashboard = () => {
                       </h6>
                     </div>
                     <div className="col-5">
-                      <a
-                        href="/create-appointment"
+                      <Link
+                        to="/create-appointment"
                         className="btn btn-primary float-right mr-2"
                       >
                         <i className="fa fa-plus"></i> New Appointment
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>

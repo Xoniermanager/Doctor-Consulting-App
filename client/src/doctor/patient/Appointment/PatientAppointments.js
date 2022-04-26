@@ -91,11 +91,11 @@ const PatientAppointments = () => {
       name: "Created Date",
       selector: "cdate"
     },
-    {
-      cell:(row) => <div className="d-flex">
-      <button type='button' id={row._id} onClick={handleDeleteClick} class="btn btn-danger shadow btn-sm sharp mr-1"><i class="fa fa-trash"></i></button></div>,
-      name: "ACTIONS",
-    },
+    // {
+    //   cell:(row) => <div className="d-flex">
+    //   <button type='button' id={row._id} onClick={handleDeleteClick} class="btn btn-danger shadow btn-sm sharp mr-1"><i class="fa fa-trash"></i></button></div>,
+    //   name: "ACTIONS",
+    // },
   ];
 
   const isIndeterminate = (indeterminate) => indeterminate;

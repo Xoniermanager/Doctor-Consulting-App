@@ -71,6 +71,8 @@ const CreateAppointment = () => {
   let bookedSlot = dateSlots && dateSlots.bookedSlots ? dateSlots.bookedSlots : [];
   let bookedData = bookedSlot && bookedSlot.map((book) => book.slotId);
 
+  console.log('asas', dateSlots);
+
   return (
     <>
       <Header />
@@ -133,7 +135,7 @@ const CreateAppointment = () => {
                           dateSlots.allSlots.slots.map((slt, index) => (
                         <>
                             <div key={index} className="col-sm-6 col-md-4 mb-2">
-                            { bookedData.includes(slt._id) ? (<button class="btn btn-danger btn-block">{slt.slot}</button>) : (<button type="button"
+                            {bookedData && bookedData.includes(slt._id) ? (<button class="btn btn-danger btn-block">{slt.slot}</button>) : (<button type="button"
                                 onClick={getSlotDetails}
                                 className="btn btn-primary btn-block"
                                 data-toggle="modal"

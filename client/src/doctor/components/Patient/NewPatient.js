@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { createPatient } from '../../../Actions/User'
 import DoctSideBar from '../Layout/DoctSideBar'
 import Footer from '../Layout/Footer'
 import Header from '../Layout/Header'
 
 const NewPatient = () => {
+  const history = useNavigate();
   const dispatch = useDispatch();
   const initialValue = { name : '', email : '', birthday : '', phone : '', gender:'', bloodgroup : '', address : '', weight :'', height : '', isVerify:1, role:'patient' };
   const [userValue, setUserValue] = useState(initialValue);
@@ -25,6 +27,9 @@ const NewPatient = () => {
     setFormErrors(validate(userValue));
     setIsSubmit(true);
     await dispatch(createPatient(userValue));
+    if(!error){
+      history('/patients');
+    }
   }
 
   useEffect(() => {

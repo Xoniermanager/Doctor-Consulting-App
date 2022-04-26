@@ -10,15 +10,16 @@ const Report = require('../models/reportModel');
   // add create patient
   exports.createPatient = catchAsyncErrors(async( req, res) => {
     try {
+        let docts = [];
         const user = await User.findById(req.user._id);
         const password = 'Xonier@'+Math.floor(1000 + Math.random() * 9000);
         const patientData = req.body;
         patientData.password = password;
+        docts.push(req.user._id);
+        patientData.doctors = docts;
         const patient = await User.create(patientData);
-
         user.patients.push(patient._id);
         await user.save();
-
       const message = `Your login credential is given below: \n\n Email : ${patientData.email} \n\n Password : ${patientData.password}`;
       try {
         await sendEmail({
@@ -35,7 +36,6 @@ const Report = require('../models/reportModel');
 
         res.status(200).json({
             success : true,
-            patient,
             message : 'Patient added successfully.'
         });
       } catch (error) {
@@ -52,31 +52,31 @@ const Report = require('../models/reportModel');
       try {
         const {userValue, patientId, profileImage} = req.body;
         const user = await User.findById(patientId);
-         if(user.name){
+         if(userValue.name){
           user.name = userValue.name
          }
-         if(user.birthday){
+         if(userValue.birthday){
           user.birthday = userValue.birthday
          }
-         if(user.phone){
+         if(userValue.phone){
           user.phone = userValue.phone
          }
-         if(user.gender){
+         if(userValue.gender){
           user.gender = userValue.gender
          }
-         if(user.bloodgroup){
+         if(userValue.bloodgroup){
           user.bloodgroup = userValue.bloodgroup
          }
-         if(user.address){
+         if(userValue.address){
           user.address = userValue.address
          }
-         if(user.weight){
+         if(userValue.weight){
           user.weight = userValue.weight
          }
-         if(user.height){
+         if(userValue.height){
           user.height = userValue.height
          }
-         if(profileImage && Object.keys(profileImage).length !== 0){
+        if(profileImage && Object.keys(profileImage).length !== 0){
           if(user.profileImage)
           await cloudinary.v2.uploader.destroy('mymedia/'+user.profileImage.public_id);
           const myCloud = await cloudinary.v2.uploader.upload(profileImage.avatar, {
