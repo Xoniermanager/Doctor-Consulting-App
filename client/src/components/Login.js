@@ -39,7 +39,7 @@ const Login = () => {
       history('/doctor');
     }
 	return false;
-  };
+  }; 
 
   useEffect(() => {
     if (error) {

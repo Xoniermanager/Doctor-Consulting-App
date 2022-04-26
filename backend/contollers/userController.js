@@ -1034,7 +1034,6 @@ exports.getSlotsByDate = catchAsyncErrors(async( req, res) => {
           },
           bookedSlots : []
         }
-
        return res.status(200).json({
           success : true,
           slot : arr
