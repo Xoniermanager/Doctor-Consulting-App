@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const registerUser =
-  (name, email, password, role, certificate) => async (dispatch) => {
+  (name, email, password, role, phone, certificate) => async (dispatch) => {
     try {
       dispatch({
         type: "RegisterRequest",
