@@ -13,6 +13,7 @@ const Faqs = () => {
       dispatch(getFaqs());
     }, [dispatch]);
 	let { loading, faqs } = useSelector((state) => state.faqs);
+	let half = [];
   return (
     <>
       <Header />
