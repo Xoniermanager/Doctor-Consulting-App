@@ -8,7 +8,7 @@ export const registerUser =
       });
       const { data } = await axios.post(
         "/api/v1/register",
-        { name, email, password, role, certificate },
+        { name, email, password, role, phone, certificate },
         {
           headers: {
             "Content-Type": "application/json",

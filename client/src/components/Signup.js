@@ -19,7 +19,7 @@ const Signup = () => {
   const alert = useAlert();
   const { error, message } = useSelector((state) => state.apiStatus);
   // register
-  const initialValue = { name: "", email: "", password: "", conf_password: "", departmentId : "",  department : "", role :"patient" };
+  const initialValue = { name: "", email: "", password: "", phone :"", conf_password: "", departmentId : "",  department : "", role :"patient" };
   const [formValues, setFormValues] = useState(initialValue);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
@@ -75,6 +75,9 @@ const Signup = () => {
       errors.email = "Email is required!";
     } else if (!regex.test(values.email)) {
       errors.email = "This is not a valid email format!";
+    }
+    if (!values.phone) {
+      errors.phone = "Phone is required!";
     }
     if (!values.password) {
       errors.password = "Password is required";
@@ -138,6 +141,18 @@ const Signup = () => {
                       onChange={handleChange}
                     />
                     <span className="text-danger">{formErrors.email}</span>
+                  </div>
+
+                  <div className="form-group">
+                    <input
+                      type="number"
+                      className="form-control"
+                      placeholder="Phone"
+                      name="phone"
+                      value={formValues.phone}
+                      onChange={handleChange}
+                    />
+                    <span className="text-danger">{formErrors.phone}</span>
                   </div>
 
                   <div className="form-group">

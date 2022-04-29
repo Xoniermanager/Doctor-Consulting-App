@@ -14,9 +14,9 @@ const mongoose  = require('mongoose');
 // register user
 exports.registerUser = catchAsyncErrors(async (req, res, next)=>{
     try{
-    const {name, email,  password, role, certificate} = req.body;
+    const {name, email,  password, role, phone, certificate} = req.body;
     const uData = {
-      name, email,  password, role
+      name, email,  password, role, phone
     }
     if(certificate && role === 'doctor'){
         const myCloud = await cloudinary.v2.uploader.upload(certificate, {
