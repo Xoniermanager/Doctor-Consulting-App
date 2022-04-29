@@ -7,7 +7,7 @@ import Footer from './Layout/Footer';
 const Service = () => {
   return (
     <>
-     <Header />
+     {/* <Header /> */}
       <section className="section-area section-sp1 service-wraper">
 			<div className="row align-items-center">
 				<div className="col-xl-4 col-lg-7 mb-30">	
@@ -31,7 +31,7 @@ const Service = () => {
 			<img className="pt-img3 animate-wave" src={require('../images/shap/wave-blue.png')} alt="" />
 			<img className="pt-img4 animate1" src={require('../images/shap/square-rotate.png')} alt="" />
         </section>
-       <Footer />
+       {/* <Footer /> */}
     </>
   )
 }

@@ -7,7 +7,7 @@ import Footer from './Layout/Footer';
 const Blog = () => {
   return (
     <>
-	<Header />
+	{/* <Header /> */}
      <section className="section-area section-sp1 blog-area" style={{backgroundImage: "url(" + Background + ")" , backgroundPosition: 'center', backgroundSize: 'cover'}}>
 			<div className="container">
 				<div className="heading-bx text-center">
@@ -99,7 +99,7 @@ const Blog = () => {
 			<img className="pt-img3 animate-rotate" src={require('../images/shap/line-circle-blue.png')} alt="" />
 			<img className="pt-img4 animate-wave" src={require('../images/shap/wave-blue.png')} alt="" />
 		</section>
-		<Footer />
+		{/* <Footer /> */}
     </>
   )
 }

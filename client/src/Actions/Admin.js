@@ -345,3 +345,134 @@ export const deleteDepartment = (departmentId) => async (dispatch) => {
   }
 };
 
+
+// create Faq
+export const createFaq = (faqValue) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "CreateFaqRequest",
+    });
+    const { data } = await axios.post(
+      "/api/v1/admin/create-faq",
+      { ...faqValue },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+
+    dispatch({
+      type: "CreateFaqSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "CreateFaqFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+
+// update faq
+export const updateFaq = (faqId, faqValue) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "UpdateFaqRequest",
+    });
+    const { data } = await axios.put(
+      `/api/v1/admin/update-faq/${faqId}`,
+      { ...faqValue },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+
+    dispatch({
+      type: "UpdateFaqSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "UpdateFaqFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// get Faqs
+export const getFaqs = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "GetFaqsRequest",
+    });
+    const { data } = await axios.get("/api/v1/admin/all-faqs", {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "GetFaqsSuccess",
+      payload: data.faqs,
+    });
+  } catch (error) {
+    dispatch({
+      type: "GetFaqsFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// edit disease data
+export const editFaq = (diseaseId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "EditFaqRequest",
+    });
+    const { data } = await axios.get(`/api/v1/admin/edit-faq/${diseaseId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "EditFaqSuccess",
+      payload: data.faq,
+    });
+  } catch (error) {
+    dispatch({
+      type: "EditFaqFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// delete faq
+export const deleteFaq = (diseaseId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "DeleteFaqRequest",
+    });
+    const { data } = await axios.delete(
+      `/api/v1/admin/delete-faq/${diseaseId}`,
+      {
+        headers: {
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+    dispatch({
+      type: "DeleteFaqSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "DeleteFaqFailure",
+      payload: error.response.data.message,
+    });
+  }
+};

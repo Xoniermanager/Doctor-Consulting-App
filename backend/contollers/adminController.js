@@ -1,6 +1,7 @@
 const catchAsyncErrors = require('../middleware/catchAsyncErrors');
 const User = require('../models/userModel');
 const Disease = require('../models/diseaseModel');
+const Faq = require("../models/faqModel")
 const Department = require('../models/departmentModel');
 const cloudinary = require('cloudinary');
 const { sendEmail } = require('../middleware/sendEmail');
@@ -374,3 +375,126 @@ const { sendEmail } = require('../middleware/sendEmail');
   });
 
  
+
+
+   // create Faq
+   exports.createFaq = catchAsyncErrors(async( req, res) => {
+    try {
+        const faqData = {
+          ...req.body              
+        }
+        const newFaq =  await Faq.create(faqData);
+        res.status(201).json({
+            success : true,
+            newFaq,
+            message : 'Faq added successfully.'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+
+    // Update faq
+    exports.updateFaq = catchAsyncErrors(async( req, res) => {
+      try {
+        const faq = await Faq.findById(req.params.id);
+          
+        if(!faq){
+            return res.status(404).json({
+                success : false,
+                message : 'Faq not found'
+            })
+        }
+        if(req.body.faqQues){
+          faq.faqQues = req.body.faqQues;
+        }
+        if(req.body.faqDescription){
+          faq.faqDescription = req.body.faqDescription;
+        }        
+        await faq.save();
+  
+          res.status(201).json({
+              success : true,
+              message : 'Faq updated successfully.'
+          });
+        } catch (error) {
+          res.status(500).json({
+            success : false,
+            message : error.message
+        })
+        }
+    });
+
+    // get faqs details
+    exports.getFaqs = catchAsyncErrors(async( req, res) => {
+      try {
+         const faqs = await Faq.find();
+         if(!faqs){
+            return res.status(404).json({
+                success : false,
+                message : 'No faqs found'
+            });
+         }
+         res.status(200).json({
+             success : true,
+             faqs
+         });
+       } catch (error) {
+         res.status(500).json({
+           success : false,
+           message : error.message
+        })
+       }
+    });
+
+
+  // get faq details by id
+  exports.getFaqDetails = catchAsyncErrors(async( req, res) => {
+    try {
+        //owner : req.user._id,
+        const faq = await Faq.findOne({ _id : req.params.id});
+        if(!faq){
+          return res.status(404).json({
+              success : false,
+              message : 'No faq found'
+          });
+        }
+        res.status(200).json({
+            success : true,
+            faq
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+  // detele faq
+    exports.deletefaq = catchAsyncErrors(async( req, res) => {
+    try {
+      const faq = await Faq.findById(req.params.id);
+        if(!faq){
+            return res.status(404).json({
+                success : false,
+                message : 'faq not found'
+            })
+        }
+      await faq.remove();
+        res.status(200).json({
+            success : true,
+            message : 'Faq deleted successfully.'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+

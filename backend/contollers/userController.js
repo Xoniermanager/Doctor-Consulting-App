@@ -84,7 +84,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next)=>{
 
     if(!isPasswordMatch){
      return res.status(200).json({
-        success : true,
+        success : false,
         message: 'Invalid entered email or password'
      })
     }

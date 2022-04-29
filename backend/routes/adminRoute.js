@@ -1,5 +1,5 @@
 const express = require('express');
-const { getPatients, createDisease, getDiseases, deleteDisease, getDiseaseDetails, updateDisease, updateUserStatus, createDepartment, getDepartments, deleteDepartment, getDepartmentDetails, updateDepartment, createDoctor } = require('../contollers/adminController');
+const { getPatients, createDisease, getDiseases, deleteDisease, getDiseaseDetails, updateDisease, updateUserStatus, createDepartment, getDepartments, deleteDepartment, getDepartmentDetails, updateDepartment, createDoctor, createFaq, getFaqs, getFaqDetails, updateFaq, deletefaq } = require('../contollers/adminController');
 const { isAuthenticatedUser } = require('../middleware/auth');
 
 const router = express.Router();
@@ -18,5 +18,11 @@ router.route('/all-departments').get(getDepartments);
 router.route('/delete-department/:id').delete(isAuthenticatedUser, deleteDepartment);
 router.route('/edit-department/:id').get(isAuthenticatedUser, getDepartmentDetails);
 router.route('/update-department/:id').put(isAuthenticatedUser, updateDepartment);
+
+router.route('/create-faq').post(isAuthenticatedUser, createFaq);
+router.route('/all-faqs').get(isAuthenticatedUser, getFaqs);
+router.route('/delete-faq/:id').delete(isAuthenticatedUser, deletefaq);
+router.route('/edit-faq/:id').get(isAuthenticatedUser, getFaqDetails);
+router.route('/update-faq/:id').put(isAuthenticatedUser, updateFaq);
 
 module.exports = router;

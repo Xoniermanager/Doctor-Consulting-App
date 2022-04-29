@@ -58,12 +58,14 @@ const Header = () => {
 						<ul className="nav navbar-nav">	
 							<li className="active"><Link to="/">Home</Link></li>
 							<li>
-								<Link to="#!">About<i className="fas fa-plus"></i></Link>
+								<Link to="#!">Pages<i className="fas fa-plus"></i></Link>
 								<ul className="sub-menu">
 									<li className="add-menu-left">
 										<ul>
 											<li><Link to="/about-us"><span>About Us</span></Link></li>
 											<li><Link to="/team"><span>Our Team</span></Link></li>
+											<li><Link to="/faqs"><span>FAQ's</span></Link></li>
+											<li><Link to="/book-appointment"><span>Booking</span></Link></li>
 											<li><Link to="/patient-feedback"><span>Patient Feedback</span></Link></li>
 										</ul>
 									</li>

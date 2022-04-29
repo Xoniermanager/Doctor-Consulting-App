@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { appointmentsReducer, dateSlotReducer, doctorsReducer, drugDataReducer, editDataReducer, forgetPasswordReducer, patientAppointmentReducer, patientPrescriptionReducer, patientReportReducer, patientsReducer, prescriptionReducer, slotsReducer, testsReducer, toggleReducer, userReducer, patientDashboardReducer } from './Reducers/User';
 import dashboardReducer from './Reducers/dashboardReducer';
 import callReducer from './Reducers/callReducer';
-import { adminAPIReducer, adminDataDetailsReducer, adminDepartmentsReducer, adminDiseasesReducer, adminPatientsReducer } from './Reducers/Admin';
+import { adminAPIReducer, adminDataDetailsReducer, adminDepartmentsReducer, adminDiseasesReducer, adminFaqsReducer, adminPatientsReducer } from './Reducers/Admin';
 
 const store = configureStore({
     reducer : {
@@ -29,7 +29,8 @@ const store = configureStore({
       adminPatients : adminPatientsReducer,
       dataDetails : adminDataDetailsReducer,
       diseases : adminDiseasesReducer,
-      departments : adminDepartmentsReducer
+      departments : adminDepartmentsReducer,
+      faqs : adminFaqsReducer
     }
 })
 

@@ -69,6 +69,9 @@ import Loader from './components/Loader';
 import NewDepartment from './doctor/admin/Department/NewDepartment';
 import AllDepartment from './doctor/admin/Department/AllDepartment';
 import AddDoctor from './doctor/admin/Patient/AddDoctor';
+import Faqs from './components/Faqs';
+import NewFaq from './doctor/admin/Faq/NewFaq';
+import AllFaqs from './doctor/admin/Faq/AllFaqs';
 
 const App = () => {
  const dispatch = useDispatch();
@@ -104,6 +107,7 @@ const App = () => {
               <Route exact path="/forget-password" element={<Forgetpassword />} />
               <Route exact path="/reset-password" element={<ResetPassword />} />
               <Route exact path="/join-meeting" element={<JoinMeeting />} />
+              <Route exact path="/faqs" element={<Faqs />} />
 
               {/* for doctors */}
               <Route exact path='/doctor/profile' element={<Profile />} />
@@ -164,6 +168,10 @@ const App = () => {
                <Route exact path="/admin/create-department" element={user &&  user.role ==='admin' ? <NewDepartment />: ''} />
                <Route exact path="/admin/department-edit/:departmentId" element={user &&  user.role ==='admin' ? <NewDepartment />: ''} />
                <Route exact path="/admin/all-departments" element={user &&  user.role ==='admin' ? <AllDepartment />: ''} />
+              {/* CMS */}
+              <Route exact path="/admin/create-faq" element={user &&  user.role ==='admin' ? <NewFaq />: ''} />
+               <Route exact path="/admin/faq-edit/:faqId" element={user &&  user.role ==='admin' ? <NewFaq />: ''} />
+               <Route exact path="/admin/all-faqs" element={user &&  user.role ==='admin' ? <AllFaqs />: ''} />
             </Routes>
 
        </Router>)}

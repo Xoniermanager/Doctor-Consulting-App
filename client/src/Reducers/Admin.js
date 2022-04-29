@@ -69,7 +69,39 @@ export const adminAPIReducer = createReducer(initialState, {
     state.loading = false;
     state.error = action.payload;
   },
-
+  CreateFaqRequest: (state) => {
+    state.loading = true;
+  },
+  CreateFaqSuccess: (state, action) => {
+    state.loading = false;
+    state.message = action.payload;
+  },
+  CreateFaqFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  },
+  UpdateFaqRequest: (state) => {
+    state.loading = true;
+  },
+  UpdateFaqSuccess: (state, action) => {
+    state.loading = false;
+    state.message = action.payload;
+  },
+  UpdateFaqFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  },
+  DeleteFaqRequest: (state) => {
+    state.loading = true;
+  },
+  DeleteFaqSuccess: (state, action) => {
+    state.loading = false;
+    state.message = action.payload;
+  },
+  DeleteFaqFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  },
   clearErrors: (state) => {
     state.error = null;
   },
@@ -122,6 +154,17 @@ export const adminDataDetailsReducer = createReducer(initialState, {
     state.loading = false;
     state.error = action.payload;
   },
+  EditFaqRequest: (state) => {
+    state.loading = true;
+  },
+  EditFaqSuccess: (state, action) => {
+    state.loading = false;
+    state.dataDetails = action.payload;
+  },
+  EditFaqFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  },
   clearErrors: (state) => {
     state.error = null;
   },
@@ -159,6 +202,27 @@ export const adminDepartmentsReducer = createReducer(initialState, {
     state.departments = action.payload;
   },
   GetDepartmentsFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  },
+  clearErrors: (state) => {
+    state.error = null;
+  },
+  clearMessage: (state) => {
+    state.message = null;
+  },
+});
+
+
+export const adminFaqsReducer = createReducer(initialState, {
+  GetFaqsRequest: (state) => {
+    state.loading = true;
+  },
+  GetFaqsSuccess: (state, action) => {
+    state.loading = false;
+    state.faqs = action.payload;
+  },
+  GetFaqsFailure: (state, action) => {
     state.loading = false;
     state.error = action.payload;
   },
