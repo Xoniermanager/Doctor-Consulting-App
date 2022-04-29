@@ -1,14 +1,14 @@
 import axios from "axios";
 
 export const registerUser =
-  (name, email, password, role) => async (dispatch) => {
+  (name, email, password, role, certificate) => async (dispatch) => {
     try {
       dispatch({
         type: "RegisterRequest",
       });
       const { data } = await axios.post(
         "/api/v1/register",
-        { name, email, password, role },
+        { name, email, password, role, certificate },
         {
           headers: {
             "Content-Type": "application/json",

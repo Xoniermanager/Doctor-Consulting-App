@@ -8,13 +8,14 @@ import DoctSideBar from "../Layout/DoctSideBar";
 import Footer from "../Layout/Footer";
 import Moment from 'moment';
 import { Link } from "react-router-dom";
+import Loader from "../Layout/Loader";
 const Patients = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getPatient());
   }, [dispatch]);
   
-  let { patients } = useSelector((state) => state.patients);
+  let { loading, patients } = useSelector((state) => state.patients);
   
   const getDifferenceInDays = (date1, date2) => {
     const diffInMs = Math.abs(date2 - date1);
@@ -75,9 +76,9 @@ const Patients = () => {
 
   return (
     <>
-      <Header />
+      <Header title={'Patients'}/>
       <DoctSideBar />
-      <div className="content-body">
+     { loading === true ? <Loader /> : (<div className="content-body">
         <div className="container-fluid">
           {/* <!-- row --> */}
           <div className="row">
@@ -117,7 +118,7 @@ const Patients = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>)}
       <Footer />
     </>
   );

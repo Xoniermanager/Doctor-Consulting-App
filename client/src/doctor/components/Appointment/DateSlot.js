@@ -5,6 +5,7 @@ import DoctSideBar from "../Layout/DoctSideBar";
 import Footer from "../Layout/Footer";
 import Header from "../Layout/Header";
 import Moment from 'moment';
+import Loader from "../Layout/Loader";
 
 const DateSlot = () => {
   const dispatch = useDispatch();
@@ -24,15 +25,16 @@ const DateSlot = () => {
       await dispatch(getSlotByDate(date));
     }
   };
-  const { dateSlots } = useSelector((state) => state.dateSlots);
+  const { loading, dateSlots } = useSelector((state) => state.dateSlots);
   let bookedSlot = dateSlots && dateSlots.bookedSlots ? dateSlots.bookedSlots : [];
   let bookedData = bookedSlot && bookedSlot.map((book) => book.slotId);
   
+  
   return (
     <>
-      <Header />
+      <Header title={'Datewise Slots'}/>
       <DoctSideBar />
-      <div class="content-body">
+     { loading === true ? <Loader /> : (<div class="content-body">
         <div class="container-fluid">
           {/* <!-- row --> */}
           <div class="row">
@@ -88,7 +90,7 @@ const DateSlot = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>)}
       <Footer />
     </>
   );

@@ -20,8 +20,10 @@ const errorMiddleware = require('./middleware/error');
 // routes import 
 const user = require('./routes/userRoute');
 const patient = require('./routes/patientRoute');
+const admin = require('./routes/adminRoute');
 app.use('/api/v1',user);
 app.use('/api/v1/patient',patient);
+app.use('/api/v1/admin',admin);
 
 
 app.use(express.static(path.join(__dirname, "../client/build")));

@@ -2,6 +2,7 @@
 import PatientSideBar from "../Layout/PatientSideBar";
 import Footer from "../Layout/Footer";
 import Header from "../Layout/Header";
+import Loader from "../Layout/Loader";
 import MediaItem from "./MediaItem";
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,8 +11,7 @@ import DataTable from "react-data-table-component";
 import { Paper, Checkbox } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { useAlert } from 'react-alert';
-import { confirm } from "react-confirm-box";
-import { deleteAppointmentById, getPatientDashboard, getPatientAppointments } from '../../../Actions/User';
+import { getPatientDashboard} from '../../../Actions/User';
 
 const PatientDashboard = () => {
 
@@ -31,7 +31,7 @@ const PatientDashboard = () => {
     }
   }, [alert, error, dispatch, message]);
 
-   let {patientDashBoard } = useSelector((state) => state.patientDashBoard);
+   let {loading, patientDashBoard } = useSelector((state) => state.patientDashBoard);
    let allDoctorAppointments = [];
    if(patientDashBoard != undefined) {
       allDoctorAppointments = patientDashBoard.todayApp.map((element)=>{
@@ -93,9 +93,9 @@ const PatientDashboard = () => {
 
   return (
     <>
-      <Header />
+      <Header title={'Dashboard'}/>
       <PatientSideBar />
-      <div className="content-body">
+      { loading === true ? <Loader /> : (<div className="content-body">
         {/* <!-- row --> */}
         <div className="container-fluid">
           <div className="row">
@@ -179,7 +179,7 @@ const PatientDashboard = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>)}
       <Footer />
     </>
   );

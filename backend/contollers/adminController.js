@@ -1,0 +1,376 @@
+const catchAsyncErrors = require('../middleware/catchAsyncErrors');
+const User = require('../models/userModel');
+const Disease = require('../models/diseaseModel');
+const Department = require('../models/departmentModel');
+const cloudinary = require('cloudinary');
+const { sendEmail } = require('../middleware/sendEmail');
+
+ // all users
+ exports.getPatients = catchAsyncErrors(async( req, res) => {
+  try {
+     const adminPatients = await User.find({ role: req.params.userType});
+     res.status(200).json({
+         success : true,
+         adminPatients
+     });
+   } catch (error) {
+     res.status(500).json({
+       success : false,
+       message : error.message
+    })
+   }
+});
+
+
+  // add create patient
+  exports.createDoctor = catchAsyncErrors(async( req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        const {userValue, certificate} = req.body;
+        const password = 'Xonier@'+Math.floor(1000 + Math.random() * 9000);
+        const doctorData = userValue;
+        doctorData.password = password;
+        if(certificate){
+          const myCloud = await cloudinary.v2.uploader.upload(certificate, {
+            folder: "certificate",
+          });
+          doctorData.certificate = {
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+          };
+          doctorData.status = 0;
+       }
+        const doctor = await User.create(doctorData);
+        await user.save();
+      const message = `Your login credential is given below: \n\n Email : ${doctorData.email} \n\n Password : ${doctorData.password}`;
+      try {
+        await sendEmail({
+          email: doctorData.email,
+          subject: "Login creadential",
+          message,
+        });
+      } catch (error) {
+        res.status(500).json({
+          success: false,
+          message: error.message,
+        });
+      }
+        res.status(200).json({
+            success : true,
+            message : 'Doctor added successfully.'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+  // create disease
+  exports.createDisease = catchAsyncErrors(async( req, res) => {
+    try {
+        const diseaseData = {
+          ...req.body,
+          owner : req.user._id,                
+        }
+        const newDisease =  await Disease.create(diseaseData);
+        res.status(201).json({
+            success : true,
+            newDisease,
+            message : 'Disease added successfully.'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+
+    // Update disease
+    exports.updateDisease = catchAsyncErrors(async( req, res) => {
+      try {
+        const disease = await Disease.findById(req.params.id);
+          
+        if(!disease){
+            return res.status(404).json({
+                success : false,
+                message : 'Disease not found'
+            })
+        }
+  
+        if(disease.owner.toString() !== req.user._id.toString()){
+            return res.status(401).json({
+                success : false,
+                message : 'Unauthorised'
+            })
+        }
+        
+        if(req.body.diseaseName){
+          disease.diseaseName = req.body.diseaseName;
+        }
+        if(req.body.diseaseDescription){
+          disease.diseaseDescription = req.body.diseaseDescription;
+        }        
+        await disease.save();
+  
+          res.status(201).json({
+              success : true,
+              message : 'Disease updated successfully.'
+          });
+        } catch (error) {
+          res.status(500).json({
+            success : false,
+            message : error.message
+        })
+        }
+    });
+
+    // get diseases details
+    exports.getDiseases = catchAsyncErrors(async( req, res) => {
+      try {
+        //{owner : req.user._id}
+         const diseases = await Disease.find();
+         if(!diseases){
+            return res.status(404).json({
+                success : false,
+                message : 'No diseases found'
+            });
+         }
+         res.status(200).json({
+             success : true,
+             diseases
+         });
+       } catch (error) {
+         res.status(500).json({
+           success : false,
+           message : error.message
+        })
+       }
+    });
+
+
+  // get disease details by id
+  exports.getDiseaseDetails = catchAsyncErrors(async( req, res) => {
+    try {
+        //owner : req.user._id,
+        const disease = await Disease.findOne({ _id : req.params.id});
+        if(!disease){
+          return res.status(404).json({
+              success : false,
+              message : 'No disease found'
+          });
+        }
+        res.status(200).json({
+            success : true,
+            disease
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+  // detele disease
+    exports.deleteDisease = catchAsyncErrors(async( req, res) => {
+    try {
+      const disease = await Disease.findById(req.params.id);
+        if(!disease){
+            return res.status(404).json({
+                success : false,
+                message : 'Disease not found'
+            })
+        }
+
+        if(disease.owner.toString() !== req.user._id.toString()){
+            return res.status(401).json({
+                success : false,
+                message : 'Unauthorised'
+            })
+        }
+      await disease.remove();
+        res.status(200).json({
+            success : true,
+            message : 'Disease deleted successfully.'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+
+     // Update user status
+     exports.updateUserStatus = catchAsyncErrors(async( req, res) => {
+      try {
+        const user = await User.findById(req.params.userId);
+        if(!user){
+            return res.status(404).json({
+                success : false,
+                message : 'User not found'
+            })
+        }
+        user.status = !user.status;
+         await user.save();
+          res.status(201).json({
+              success : true,
+              message : 'Status updated successfully.'
+          });
+        } catch (error) {
+          res.status(500).json({
+            success : false,
+            message : error.message
+        })
+        }
+    });
+
+    // create Department
+  exports.createDepartment = catchAsyncErrors(async( req, res) => {
+    try {
+      const {departmentName, departmentDescription, deptIcon} = req.body;
+        const departmentData = {
+          departmentName,
+          departmentDescription,
+        }
+        if(deptIcon && Object.keys(deptIcon).length !== 0){
+          const myCloud = await cloudinary.v2.uploader.upload(deptIcon.icon, {
+            folder: "department",
+          });
+          departmentData.icon = {
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+          };
+      }
+      const newDepartment =  await Department.create(departmentData);
+      res.status(201).json({
+            success : true,
+            newDepartment,
+            message : 'Department added successfully.'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+       })
+      }
+  });
+
+
+    // Update Department
+    exports.updateDepartment = catchAsyncErrors(async( req, res) => {
+      try {
+        const department = await Department.findById(req.params.id);
+        const {departmentName, departmentDescription, deptIcon} = req.body;
+        if(!department){
+            return res.status(404).json({
+                success : false,
+                message : 'Department not found'
+            })
+        }
+        if(departmentName){
+          department.departmentName = departmentName;
+        }
+        if(departmentDescription){
+          department.departmentDescription = departmentDescription;
+        }   
+        if(deptIcon && Object.keys(deptIcon).length !== 0){
+           if(department)
+           await cloudinary.v2.uploader.destroy('department/'+department.icon.public_id);
+          const myCloud = await cloudinary.v2.uploader.upload(deptIcon.icon, {
+            folder: "department",
+          });
+          department.icon = {
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+          };
+      }    
+
+        await department.save();
+          res.status(201).json({
+              success : true,
+              message : 'Department updated successfully.'
+          });
+        } catch (error) {
+          res.status(500).json({
+            success : false,
+            message : error.message
+        })
+        }
+    });
+
+    // get departments details
+    exports.getDepartments = catchAsyncErrors(async( req, res) => {
+      try {
+        //{owner : req.user._id}
+         const departments = await Department.find();
+         if(!departments){
+            return res.status(404).json({
+                success : false,
+                message : 'No departments found'
+            });
+         }
+         res.status(200).json({
+             success : true,
+             departments
+         });
+       } catch (error) {
+         res.status(500).json({
+           success : false,
+           message : error.message
+        })
+       }
+    });
+
+
+  // get department details by id
+  exports.getDepartmentDetails = catchAsyncErrors(async( req, res) => {
+    try {
+        const department = await Department.findOne({ _id : req.params.id});
+        if(!department){
+          return res.status(404).json({
+              success : false,
+              message : 'No department found'
+          });
+        }
+        res.status(200).json({
+            success : true,
+            department
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+  // detele department
+    exports.deleteDepartment = catchAsyncErrors(async( req, res) => {
+    try {
+      const department = await Department.findById(req.params.id);
+        if(!department){
+            return res.status(404).json({
+                success : false,
+                message : 'Department not found'
+            })
+        }
+      await department.remove();
+        res.status(200).json({
+            success : true,
+            message : 'Department deleted successfully.'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+ 

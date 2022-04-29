@@ -11,13 +11,14 @@ import { Link } from "react-router-dom";
 import { useAlert } from 'react-alert';
 import { confirm } from "react-confirm-box";
 import { deleteSlot, getSlots } from '../../../Actions/User';
+import Loader from '../Layout/Loader';
 
 const AppointmentSlot = () => {
 
   const dispatch = useDispatch();
   
   const alert = useAlert();
-  const { error, message } = useSelector((state) => state.apiStatus);
+  const { loading, error, message } = useSelector((state) => state.apiStatus);
   useEffect(() => {
     dispatch(getSlots());
     if (error) {
@@ -102,9 +103,9 @@ const AppointmentSlot = () => {
 
   return (
     <>
-    <Header />
+    <Header title={'Appointments Slots'}/>
     <DoctSideBar/>
-    <div className="content-body">
+    { loading === true ? <Loader /> : (<div className="content-body">
         <div className="container-fluid">
           {/* <!-- row --> */}
           <div className="row">
@@ -144,7 +145,7 @@ const AppointmentSlot = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>)}
       <Footer/>
     </>
   );

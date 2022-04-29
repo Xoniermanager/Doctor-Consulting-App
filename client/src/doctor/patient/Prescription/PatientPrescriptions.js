@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 import { confirm } from "react-confirm-box";
 import PatientSideBar from '../Layout/PatientSideBar';
+import Loader from '../Layout/Loader';
 
 const PatientPrescriptions = () => {
 
@@ -18,7 +19,7 @@ const PatientPrescriptions = () => {
     dispatch(getPatientPrescription());
   }, [dispatch]);
 
-  let { patientAllPrescription } = useSelector((state) => state.patientAllPrescription);
+  let { loading, patientAllPrescription } = useSelector((state) => state.patientAllPrescription);
 
   console.log(patientAllPrescription);
 
@@ -93,9 +94,9 @@ const PatientPrescriptions = () => {
 
   return (
      <> 
-      <Header />
+      <Header title={'Prescriptions'}/>
       <PatientSideBar />
-      <div className="content-body">
+      { loading === true ? <Loader /> : (<div className="content-body">
         <div className="container-fluid">
           {/* <!-- row --> */}
           <div className="row">
@@ -127,7 +128,7 @@ const PatientPrescriptions = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>)}
       <Footer />
     </>
   )

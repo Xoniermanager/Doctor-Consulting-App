@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { updatePassword } from "../../../Actions/User";
 import Footer from "../Layout/Footer";
 import Header from "../Layout/Header";
+import Loader from "../Layout/Loader";
 import PatientSideBar from "../Layout/PatientSideBar";
 
 const ChangePassword = () => {
@@ -20,13 +21,16 @@ const ChangePassword = () => {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
   };
 
-  const { error, message } = useSelector((state) => state.apiStatus);
+  const {loading, error, message } = useSelector((state) => state.apiStatus);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormErrors(validate(formValues));
     let { oldPassword, newPassword } = formValues;
     await dispatch(updatePassword(oldPassword, newPassword));
+    if(!error){
+      history('/patient');
+    }
   };
 
   useEffect(() => {
@@ -58,9 +62,9 @@ const ChangePassword = () => {
 
   return (
     <>
-      <Header />
+      <Header title={'Change Password'}/>
       <PatientSideBar />
-      <div className="content-body">
+      {loading === true ? <Loader /> : (<div className="content-body">
         <div className="container-fluid">
           <div className="card">
             <div className="card-body">
@@ -131,7 +135,7 @@ const ChangePassword = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>)}
       <Footer />
     </>
   );

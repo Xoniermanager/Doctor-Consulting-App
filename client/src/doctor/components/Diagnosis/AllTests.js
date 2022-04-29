@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteTest, getTests } from '../../../Actions/User';
 import Moment from 'moment';
@@ -10,6 +10,7 @@ import { Paper, Checkbox } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { confirm } from "react-confirm-box";
 import { useAlert } from 'react-alert';
+import Loader from '../Layout/Loader';
 
 const AllTests = () => {
 
@@ -18,7 +19,7 @@ const AllTests = () => {
     dispatch(getTests());
   }, [dispatch]);
 
-  let { tests } = useSelector((state) => state.tests);
+  let { loading, tests } = useSelector((state) => state.tests);
 
   let allTests = tests && tests.map((element)=>{
     let cdate = Moment(element.createdAt).format('DD MMMM YYYY HH:mm');
@@ -77,11 +78,22 @@ const AllTests = () => {
   const isIndeterminate = (indeterminate) => indeterminate;
   const selectableRowsComponentProps = { indeterminate: isIndeterminate };
 
+  useEffect(() => {
+    if (error) {
+      alert.error(error);
+      dispatch({ type: "clearErrors" });
+    }
+    if (message) {
+      alert.success(message);
+      dispatch({ type: "clearMessage" });
+    }
+  }, [alert, error, dispatch, message]);
+
   return (
     <> 
-    <Header />
+    <Header title={'Tests'}/>
     <DoctSideBar />
-    <div className="content-body">
+    {loading === true ? <Loader /> : (<div className="content-body">
       <div className="container-fluid">
         {/* <!-- row --> */}
         <div className="row">
@@ -121,7 +133,7 @@ const AllTests = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div>)}
     <Footer />
   </>
   )

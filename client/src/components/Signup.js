@@ -4,20 +4,40 @@ import logo from "../images/logo.png";
 import { useDispatch, useSelector } from "react-redux";
 import { useAlert } from "react-alert";
 import { registerUser } from "../Actions/User";
+import { getDepartments } from "../Actions/Admin";
 
 const Signup = () => {
   let history = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getDepartments());
+  }, [dispatch]);
+  let { departments } = useSelector((state) => state.departments);
+
+
   const alert = useAlert();
   const { error, message } = useSelector((state) => state.apiStatus);
   // register
-  const initialValue = { name: "", email: "", password: "", conf_password: "", role :"patient" };
+  const initialValue = { name: "", email: "", password: "", conf_password: "", departmentId : "",  department : "", role :"patient" };
   const [formValues, setFormValues] = useState(initialValue);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
+  const [isDoctor, setIsDoctor] = useState(false);
+  const [certificate, setCertificate] = useState('');
 
   const handleChange = (e) => {
-    setFormValues({ ...formValues, [e.target.name]: e.target.value });
+    
+    if(e.target.name === 'role'){
+      setIsDoctor(!isDoctor);
+    }
+    if(e.target.name == 'department'){
+      let index = e.nativeEvent.target.selectedIndex;
+      formValues.departmentId = e.target.value;
+      formValues.department =  e.nativeEvent.target[index].text;
+    }else{
+      setFormValues({ ...formValues, [e.target.name]: e.target.value });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -26,8 +46,8 @@ const Signup = () => {
     let { name, email, password, role, conf_password } = formValues;
     setIsSubmit(true);
     if(password.length >5 && password === conf_password){
-       await dispatch(registerUser(name, email, password, role));
-      if (error) {
+       await dispatch(registerUser(name, email, password, role , certificate));
+      if (!error ) {
         history("/login");
       }
     }
@@ -66,6 +86,16 @@ const Signup = () => {
       errors.conf_password = "Password and confirm password should be matched.";
     }
     return errors;
+  };
+  const handleCertificationChange = (e) => {
+    const file = e.target.files[0];
+    const Reader = new FileReader();
+    Reader.readAsDataURL(file);
+    Reader.onload = () => {
+      if (Reader.readyState === 2) {
+        setCertificate(Reader.result);
+      }
+    };
   };
 
   return (
@@ -117,6 +147,26 @@ const Signup = () => {
                     <option value="doctor">Doctor</option>
                   </select>
                   </div>
+
+                 { isDoctor ? (<><div className="form-group">
+                    <input
+                      type="file"
+                      className="form-control"
+                      placeholder="MCI Certificate Upload"
+                      name="certificate"
+                      accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps"
+                      onChange={handleCertificationChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                  <select className="form-control" name="department" onChange={handleChange}>
+                     <option value="">Select Department</option>
+                      { departments && departments.map((depat)=> (
+                        <option value={depat._id}>{depat.departmentName}</option>
+                        ))}
+                  </select>
+                  </div>
+                  </> ) : '' }
 
                   <div className="form-group">
                     <input

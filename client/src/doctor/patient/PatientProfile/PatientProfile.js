@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Footer from "../Layout/Footer";
 import Header from "../Layout/Header";
+import Loader from "../Layout/Loader";
 import PatientSideBar from "../Layout/PatientSideBar";
 import moment from "moment";
 import { useAlert } from "react-alert";
@@ -19,7 +20,7 @@ const PatientProfile = () => {
     handleModalClick();
   }
 
-  const {user} = useSelector((state)=>state.user);
+  const {loading, user} = useSelector((state)=>state.user);
 
   const diffInMs = Math.abs(new Date() - new Date(user.birthday));
   const age = Math.ceil(diffInMs / (1000 * 60 * 60 * 24 * 365));
@@ -83,9 +84,9 @@ const PatientProfile = () => {
 
   return (
     <>
-      <Header />
+      <Header title={'Profile'}/>
       <PatientSideBar />
-      <div className="content-body">
+      { loading === true ? <Loader /> : (<div className="content-body">
         <div className="container-fluid">
           <div className="card">
             <div className="card-body">
@@ -138,7 +139,7 @@ const PatientProfile = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>)}
 
       {/* Modal */}
       <div className="modal fade" id="exampleModal">

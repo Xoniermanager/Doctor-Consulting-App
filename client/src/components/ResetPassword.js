@@ -4,12 +4,13 @@ import logo from '../images/logo.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 import { resetPassword } from '../Actions/User';
+import Loader from './Loader';
 
 const ResetPassword = () => {
   let history = useNavigate();
   const dispatch = useDispatch();
   const alert = useAlert();
-  const { error, message} = useSelector((state) => state.user);
+  const { error, message, loading } = useSelector((state) => state.apiStatus);
 
   const initialValue = { otp: "", password:"", conf_password:"" };
   const [formValues, setFormValues] = useState(initialValue); 
@@ -26,7 +27,7 @@ const ResetPassword = () => {
     setIsSubmit(true);
     let { otp, password} = formValues;
     await dispatch(resetPassword(otp, password));
-    if(error) {
+    if(!error) {
 	  history('/login');
     }
     return false;
@@ -42,7 +43,7 @@ const ResetPassword = () => {
       alert.success(message);
       dispatch({ type: "clearMessage" });
     }
-  }, [formErrors, alert, error, dispatch, message]);
+  }, [alert, error, dispatch, message]);
 
 
   const validate = (values) => {
@@ -62,11 +63,9 @@ const ResetPassword = () => {
     return errors;
   };
 
-  
-  
   return (
     <>
-   <div className="section-area account-wraper2">
+   {loading === true ? <Loader /> : (<div className="section-area account-wraper2">
 		<div className="container">
 			<div className="row justify-content-center">
 				<div className="col-xl-5 col-lg-6 col-md-8">
@@ -96,7 +95,7 @@ const ResetPassword = () => {
 				</div>
 			</div>					
 		</div>
-	</div>
+	</div>)}
     </>
   )
 }

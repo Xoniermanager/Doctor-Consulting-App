@@ -10,6 +10,7 @@ import Header from "../Layout/Header";
 import AddMoreDrug from "./AddMoreDrug";
 import AddMoreTest from "./AddMoreTest";
 import Select from 'react-select';
+import Loader from "../Layout/Loader";
 
 const NewPrescription = () => {
   
@@ -19,7 +20,7 @@ const NewPrescription = () => {
   const dispatch = useDispatch();
   const alert = useAlert();
   let { error, message } = useSelector((state) => state.apiStatus);
-  let { editData } = useSelector((state) => state.editData);
+  let { loading, editData } = useSelector((state) => state.editData);
 
   useEffect(() => {
     dispatch(getDrug());
@@ -71,9 +72,9 @@ const NewPrescription = () => {
  
   return (
     <>
-      <Header />
+      <Header title={'Create Prescription'}/>
       <DoctSideBar />
-      <div className="content-body">
+     { loading === true ? <Loader /> : (<div className="content-body">
         <div className="container-fluid">
           {/* <!-- row --> */}
          <form onSubmit={handleSubmit}>
@@ -155,7 +156,7 @@ const NewPrescription = () => {
           </div>
           </form>
         </div>
-      </div>
+      </div>)}
       <Footer />
     </>
   );

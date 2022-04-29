@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import logo from '../images/logo.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
-import { loginUser, registerUser, forgetPassword, loadUser } from '../Actions/User';
+import { loginUser, loadUser } from '../Actions/User';
 import ReCAPTCHA from "react-google-recaptcha";
 import Loader from './Loader';
 
@@ -13,10 +13,6 @@ const Login = () => {
   let history = useNavigate();
   const dispatch = useDispatch();
   const alert = useAlert();
-  const { user} = useSelector((state) => state.user);
-
-  const { error, message, loading } = useSelector((state) => state.apiStatus);
-
   // login 
   const loginInitialValue = { email:"", password:""};
   const [loginValues, setLoginValues] = useState(loginInitialValue); 
@@ -26,19 +22,22 @@ const Login = () => {
 
   const [formErrors, setFormErrors] = useState({});
 
+  const { user} = useSelector((state) => state.user);
+  const { error, message, loading } = useSelector((state) => state.apiStatus);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setFormErrors(validate_login(loginValues));
     let {password, email} = loginValues;
-    await dispatch(loginUser(email, password));
+    await dispatch(loginUser(email, password)); 
+    await dispatch(loadUser());
     dispatch(loadUser());
-    if(user != undefined && user.role === 'patient'){
-		registerNewUser(user.name);
-		history('/patient');
-    }else if(user != undefined && user.role === 'doctor'){
-      history('/doctor');
-    }
-	return false;
+    if(!error && user != undefined && user.role === 'patient'){
+      registerNewUser(user.name);
+        history('/patient');
+      }else if(!error && user != undefined && user.role === 'doctor'){
+        history('/doctor');
+      }
   }; 
 
   useEffect(() => {
@@ -75,7 +74,7 @@ const Login = () => {
 
   return (
     <>
-   <div className="section-area account-wraper2">
+   { loading === true ? <Loader /> : (<div className="section-area account-wraper2">
 		<div className="container">
 			<div className="row justify-content-center">
 				<div className="col-xl-5 col-lg-6 col-md-8">
@@ -120,7 +119,7 @@ const Login = () => {
 				</div>
 			</div>					
 		</div>
-	</div>
+	</div>)}
     </>
   )
 }

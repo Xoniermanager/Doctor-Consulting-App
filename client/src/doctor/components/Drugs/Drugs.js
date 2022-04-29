@@ -11,6 +11,7 @@ import { Paper, Checkbox } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { useAlert } from 'react-alert';
 import { confirm } from "react-confirm-box";
+import Loader from '../Layout/Loader';
 
 const Drugs = () => {
 
@@ -19,7 +20,7 @@ const Drugs = () => {
     dispatch(getDrug());
   }, [dispatch]);
 
-  let { drugs } = useSelector((state) => state.drugs);
+  let { loading, drugs } = useSelector((state) => state.drugs);
 
   let allDrugs = drugs && drugs.map((element)=>{
     let cdate = Moment(element.createdAt).format('DD MMMM YYYY HH:mm');
@@ -96,9 +97,9 @@ const Drugs = () => {
 
   return (
     <> 
-      <Header />
+      <Header title={'Drugs'}/>
       <DoctSideBar />
-      <div className="content-body">
+      { loading === true ? <Loader /> : (<div className="content-body">
         <div className="container-fluid">
           {/* <!-- row --> */}
           <div className="row">
@@ -138,7 +139,7 @@ const Drugs = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>)}
       <Footer />
     </>
   )

@@ -40,11 +40,17 @@ const userSchema = new mongoose.Schema({
         type : Date,
         default : Date.now
     },
+    department : String,
+    departmentId : String,
     specialist : String,
     videoIntroUrl : String,
     about : String,
     clinic_details : String,
     academic : String,
+    certificate : {
+        public_id : String,
+        url : String
+    },
     academic_details : [
         {
         academic : String
@@ -102,6 +108,10 @@ const userSchema = new mongoose.Schema({
             ref : 'User'  
         }
     ],
+    status : {
+        type : Number,
+        default : 1
+    },
     resetPasswordToken : String,
     resetPasswordExpire : Date,
     //patients
@@ -111,7 +121,7 @@ const userSchema = new mongoose.Schema({
     bloodgroup : String,
     address : String,
     weight : Number,
-    height : Number
+    height : Number   
 });
 
 // password encrypted

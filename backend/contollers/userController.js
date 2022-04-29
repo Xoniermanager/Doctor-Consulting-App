@@ -14,10 +14,22 @@ const mongoose  = require('mongoose');
 // register user
 exports.registerUser = catchAsyncErrors(async (req, res, next)=>{
     try{
-    const {name, email,  password, role} = req.body;
-    const user = await User.create({
-        name, email, password, role, isVerify : 0
-    })
+    const {name, email,  password, role, certificate} = req.body;
+    const uData = {
+      name, email,  password, role
+    }
+    if(certificate && role === 'doctor'){
+        const myCloud = await cloudinary.v2.uploader.upload(certificate, {
+          folder: "certificate",
+        });
+        uData.certificate = {
+          public_id: myCloud.public_id,
+          url: myCloud.secure_url,
+        };
+        uData.status = 0;
+    }
+
+    const user = await User.create(uData);
 
     const resetUrl = `${req.protocol}://${req.get(
         "host"
@@ -64,6 +76,9 @@ exports.loginUser = catchAsyncErrors(async (req, res, next)=>{
     if(!user.isVerify){
         return next(new ErrorHandler("Please verify your email first", 401));
     }
+    if(!user.status){
+      return next(new ErrorHandler("Your account is not activated by admin", 401));
+    }
 
     const isPasswordMatch = await user.comparePassword(password);
 
@@ -71,17 +86,36 @@ exports.loginUser = catchAsyncErrors(async (req, res, next)=>{
      return res.status(200).json({
         success : true,
         message: 'Invalid entered email or password'
-    })
-       // return next(new ErrorHandler("Invalid entered email or password", 401));
+     })
     }
     const authToken  = user.getJWTToken();
     res.status(200).json({
         success : true,
         message: 'Login successfully',
+        user,
         authToken
     })
 })
 
+
+ // filter doctors
+ exports.searchDoctors = catchAsyncErrors(async( req, res) => {
+  try {
+    const doctors = await User.find({ role : 'doctor', $or:[
+      {name:{'$regex' : `^${req.params.key}`, '$options' : 'i'}},
+      {specialist:{'$regex' : `^${req.params.key}`, '$options' : 'i'}}
+   ]});
+     res.status(200).json({
+         success : true,
+         doctors
+     });
+   } catch (error) {
+     res.status(500).json({
+       success : false,
+       message : error.message
+    })
+   }
+});
 
 //  user profile
 exports.myProfile = catchAsyncErrors(async (req, res, next)=>{
@@ -465,7 +499,8 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
     // get drug details by id
     exports.getDrugDetails = catchAsyncErrors(async( req, res) => {
       try {
-         const drug = await Drug.findOne({owner : req.user._id, _id : req.params.id});
+        //owner : req.user._id,
+         const drug = await Drug.findOne({ _id : req.params.id});
 
          if(!drug){
           return res.status(404).json({
@@ -488,7 +523,8 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
     // get drugs details
     exports.getDrugs = catchAsyncErrors(async( req, res) => {
       try {
-         const drug = await Drug.find({owner : req.user._id});
+        //{owner : req.user._id}
+         const drug = await Drug.find();
          res.status(200).json({
              success : true,
              drug
@@ -569,7 +605,8 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
     // get tests details
     exports.getTests = catchAsyncErrors(async( req, res) => {
       try {
-         const tests = await Test.find({owner : req.user._id});
+        //{owner : req.user._id}
+         const tests = await Test.find();
          if(!tests){
             return res.status(404).json({
                 success : false,
@@ -592,7 +629,8 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
   // get test details by id
   exports.getTestDetails = catchAsyncErrors(async( req, res) => {
     try {
-        const test = await Test.findOne({owner : req.user._id, _id : req.params.id});
+      ///owner : req.user._id,
+        const test = await Test.findOne({_id : req.params.id});
         if(!test){
           return res.status(404).json({
               success : false,

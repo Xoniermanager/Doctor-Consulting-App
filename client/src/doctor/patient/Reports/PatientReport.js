@@ -10,6 +10,7 @@ import { confirm } from "react-confirm-box";
 import Moment from 'moment';
 import {Link} from 'react-router-dom';
 import { createReport, deleteAppointmentById, getPatientReports,  } from '../../../Actions/User';
+import Loader from '../Layout/Loader';
 
 const PatientReport = () => {
   const dispatch = useDispatch();  
@@ -31,7 +32,7 @@ const PatientReport = () => {
     }
   }, [alert, error, dispatch, message]);
 
-  let { patientReports } = useSelector((state) => state.patientReports);
+  let { loading, patientReports } = useSelector((state) => state.patientReports);
 
   let allReports = patientReports && patientReports.map((element)=>{
     let cdate = Moment(element.createdAt).format('DD-MM-YYYY');
@@ -133,9 +134,9 @@ const PatientReport = () => {
 
   return (
     <>
-      <Header />
+      <Header title={'Reports'}/>
       <PatientSideBar />
-      <div className="content-body">
+      {loading === true ? <Loader /> : (<div className="content-body">
         <div className="container-fluid">
           {/* <!-- row --> */}
           <div className="row">
@@ -177,7 +178,7 @@ const PatientReport = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>)}
 
       {/* Models */}
       <div className="modal fade" id="exampleModal">

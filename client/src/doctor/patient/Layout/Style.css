@@ -9812,7 +9812,7 @@ svg.pulse-svg {
   top: 0;
   width: 100%; }
 [data-header-position="fixed"] .content-body {
-  padding-top: 4.5rem; }
+  padding-top: 0rem; }
   @media only screen and (max-width: 1199px) {
     [data-header-position="fixed"] .content-body {
       padding-top: 3rem; } }

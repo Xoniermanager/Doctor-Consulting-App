@@ -6,6 +6,7 @@ import { createDrug, editDrug, updateDrug } from "../../../Actions/User";
 import DoctSideBar from "../Layout/DoctSideBar";
 import Footer from "../Layout/Footer";
 import Header from "../Layout/Header";
+import Loader from "../Layout/Loader";
 
 const NewDrug = () => {
 
@@ -13,7 +14,7 @@ const NewDrug = () => {
     const { drugId } = useParams();
     const dispatch = useDispatch();
 
-    const { editData } = useSelector((state) => state.editData);
+    const { loading, editData } = useSelector((state) => state.editData);
     useEffect(() => {
       dispatch(editDrug(drugId));
     }, [dispatch]);
@@ -74,9 +75,9 @@ const NewDrug = () => {
 
   return (
     <>
-      <Header />
+      <Header title={'Create Drug'}/>
       <DoctSideBar />
-      <div className="content-body">
+      { loading === true ? <Loader /> : (<div className="content-body">
         <div className="container-fluid">
           {/* <!-- row --> */}
           <div className="row justify-content-center">
@@ -131,7 +132,7 @@ const NewDrug = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>)}
       <Footer />
     </>
   );

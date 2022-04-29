@@ -4,6 +4,7 @@ import { updateDoctorProfile, loadUser, updateDoctorLanguage, updateDoctorExperi
 import DoctSideBar from "../Layout/DoctSideBar";
 import Footer from "../Layout/Footer";
 import Header from "../Layout/Header";
+import Loader from "../Layout/Loader";
 import AddRemoveAcad from "./AddRemoveAcad";
 import AddRemoveAward from "./AddRemoveAward";
 import AddRemoveExp from "./AddRemoveExp";
@@ -12,7 +13,7 @@ import DoctorDetails from "./DoctorDetails";
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const {user} = useSelector((state)=>state.user);
+  const { loading, user} = useSelector((state)=>state.user);
 
   const [profileImage, setProfileImage] = useState({});
 
@@ -99,11 +100,10 @@ const [expValue, setExpValue] = useState(user.experiences?user.experiences : [{e
   
   return (
     <>
-      <Header />
+      <Header title={'Profile'}/>
       <DoctSideBar />
-      <DoctorDetails user={user} />
+      { loading === true ? <Loader />  : (<DoctorDetails user={user} />)}
       <Footer />
-      {/* <!-- Modal --> */}
       <div className="modal fade" id="basicModal">
         <div className="modal-dialog modal-lg" role="document">
           <div className="modal-content">
@@ -162,11 +162,11 @@ const [expValue, setExpValue] = useState(user.experiences?user.experiences : [{e
                     </div>
 
                   <div className="form-group col-md-6">
-                    <label>Prifile Image</label>
+                    <label>Profile Image</label>
                     <input
                       type="file"
                       onChange={handleAboutImage}
-                      className="adminPanelFileUpload"
+                      className="form-control"
                       placeholder="Choose Avatar"
                       accept="image/*"
                     />

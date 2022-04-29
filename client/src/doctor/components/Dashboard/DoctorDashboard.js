@@ -8,7 +8,7 @@ import MediaItem from "./MediaItem";
 const DoctorDashboard = () => {
   return (
     <>
-      <Header />
+      <Header title={'Dashboard'}/>
       <DoctSideBar />
       <div className="content-body">
         {/* <!-- row --> */}

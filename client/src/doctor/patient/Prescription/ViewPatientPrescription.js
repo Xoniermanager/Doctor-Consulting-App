@@ -7,6 +7,7 @@ import Header from "../Layout/Header";
 import Moment from 'moment';
 import { useReactToPrint } from 'react-to-print';
 import PatientSideBar from "../Layout/PatientSideBar";
+import Loader from "../Layout/Loader";
 
 const ViewPatientPrescription = () => {
 
@@ -22,16 +23,15 @@ const ViewPatientPrescription = () => {
   });
 
 
-  let { editData } = useSelector((state) => state.editData);
+  let { loading, editData } = useSelector((state) => state.editData);
    const diffInMs = Math.abs(new Date() - new Date(editData.patientDetail[0].birthday));
    const age = Math.ceil(diffInMs / (1000 * 60 * 60 * 24 * 365));
 
   return (
     <>
-     <Header />
+     <Header title={'Prescription Details'}/>
       <PatientSideBar />
-      
-      <div  className="content-body">
+      {loading === true ? <Loader /> : (<div  className="content-body">
         <div className="container-fluid">
         <div ref={componentRef} className="row">
             <div className="col-lg-12 text-right">
@@ -78,7 +78,7 @@ const ViewPatientPrescription = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>)}
       <Footer/>
     </>
   );

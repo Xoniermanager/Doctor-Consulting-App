@@ -6,6 +6,7 @@ import { createPatient } from '../../../Actions/User'
 import DoctSideBar from '../Layout/DoctSideBar'
 import Footer from '../Layout/Footer'
 import Header from '../Layout/Header'
+import Loader from '../Layout/Loader'
 
 const NewPatient = () => {
   const history = useNavigate();
@@ -14,7 +15,7 @@ const NewPatient = () => {
   const [userValue, setUserValue] = useState(initialValue);
 
   const alert = useAlert();
-  const { error, message } = useSelector((state) => state.message ? state.message : '');
+  const { loading, error, message } = useSelector((state) => state.apiStatus);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
 
@@ -63,9 +64,9 @@ const NewPatient = () => {
 
   return (
     <>
-      <Header />
+      <Header title={'Add Patient'}/>
       <DoctSideBar />
-          <div className="content-body">
+         { loading === true ? <Loader /> : (<div className="content-body">
                 <div className="container-fluid">
                     {/* <!-- row --> */}
                     <div className="row">
@@ -157,7 +158,7 @@ const NewPatient = () => {
                     </div>                      
                 </div>
             </div>
-        </div>
+        </div>)}
      <Footer/>
     </>
   )

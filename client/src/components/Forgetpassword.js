@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import logo from '../images/logo.png';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { forgetPassword } from '../Actions/User';
+import Loader from './Loader';
 
 const Forgetpassword = () => {
   let history = useNavigate();
@@ -10,6 +11,8 @@ const Forgetpassword = () => {
   const [formErrors, setFormErrors] = useState({});
 
   const [isSubmit, setIsSubmit] = useState(false);
+
+  const { error, message, loading } = useSelector((state) => state.apiStatus);
 
   // forget password
   const forgetInitialValue = { forget_email:""};
@@ -23,7 +26,7 @@ const Forgetpassword = () => {
     setIsSubmit(true);
     let { forget_email } = forgetValues;
     await dispatch(forgetPassword(forget_email));
-    history('/reset-password');
+    window.location.href="/reset-password";
     return false;
   };
 
@@ -35,9 +38,20 @@ const Forgetpassword = () => {
     return errors;
   };
 
+  useEffect(() => {
+    if (error) {
+      alert.error(error);
+      dispatch({ type: "clearErrors" });
+    }
+    if (message) {
+      alert.success(message);
+      dispatch({ type: "clearMessage" });
+    }
+  }, [alert, error, dispatch, message]);
+
   return (
     <>
-   <div className="section-area account-wraper2">
+   {loading === true ? <Loader /> : (<div className="section-area account-wraper2">
 		<div className="container">
 			<div className="row justify-content-center">
 				<div className="col-xl-5 col-lg-6 col-md-8">
@@ -64,7 +78,7 @@ const Forgetpassword = () => {
 				</div>
 			</div>					
 		</div>
-	</div>
+	</div>)}
     </>
   )
 }

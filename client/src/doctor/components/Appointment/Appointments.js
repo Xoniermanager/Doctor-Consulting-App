@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { useAlert } from 'react-alert';
 import { confirm } from "react-confirm-box";
 import { deleteAppointmentById, getDoctorAppointments } from '../../../Actions/User';
+import Loader from '../Layout/Loader';
 
 const Appointments = () => {
 
@@ -30,7 +31,7 @@ const Appointments = () => {
     }
   }, [alert, error, dispatch, message]);
 
-  let { doctorAppointments } = useSelector((state) => state.doctorAppointments);
+  let { loading, doctorAppointments } = useSelector((state) => state.doctorAppointments);
 
   let allDoctorAppointments = doctorAppointments && doctorAppointments.map((element)=>{
     let cdate = Moment(element.createdAt).format('DD-MM-YYYY');
@@ -102,9 +103,9 @@ const Appointments = () => {
 
   return (
     <>
-    <Header />
+    <Header title={'Appointments'}/>
     <DoctSideBar/>
-    <div className="content-body">
+    {loading === true ? <Loader /> : (<div className="content-body">
         <div className="container-fluid">
           {/* <!-- row --> */}
           <div className="row">
@@ -144,7 +145,7 @@ const Appointments = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>)}
       <Footer/>
     </>
   );

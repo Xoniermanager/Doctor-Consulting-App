@@ -7,6 +7,7 @@ import Footer from "../Layout/Footer";
 import Header from "../Layout/Header";
 import Moment from 'moment';
 import PatientSideBar from "../Layout/PatientSideBar";
+import Loader from "../Layout/Loader";
 
 const CreatePatientAppointment = () => {
 
@@ -74,15 +75,15 @@ const CreatePatientAppointment = () => {
       await dispatch(getSlotByDate(date, doctorId));
     }
   };
-  const { dateSlots } = useSelector((state) => state.dateSlots);
+  const { loading, dateSlots } = useSelector((state) => state.dateSlots);
   let bookedSlot = dateSlots && dateSlots.bookedSlots ? dateSlots.bookedSlots : [];
   let bookedData = bookedSlot && bookedSlot.map((book) => book.slotId);
 
   return (
     <>
-      <Header />
+      <Header title={'New Appointment'} />
       <PatientSideBar />
-      <div className="content-body">
+      {loading === true ? <Loader /> : (<div className="content-body">
         <div className="container-fluid">
           {/* <!-- row --> */}
           <div className="row">
@@ -101,7 +102,8 @@ const CreatePatientAppointment = () => {
                       >
                         <label for="patient_name">Patient </label>
                         <select onChange={handleOnChange}
-                          name="patientId"
+                          name="doctorId"
+                          value={doctorId}
                           className="form-control patient_name multiselect-doctorino select2-hidden-accessible"
                           data-select2-id="select2-data-patient_name"
                           tabIndex="-1"
@@ -121,16 +123,7 @@ const CreatePatientAppointment = () => {
                           <input type="date"  onChange={handleChange} min={dt} value={selectDate} className="form-control" />
                         </div>
                       </div>
-                      {/* <div className="form-check">
-                        <input
-                          type="checkbox"
-                          name="sms"
-                          className="form-check-input"
-                        />
-                        <label for="sms" className="form-check-label">
-                          Notify patient by SMS
-                        </label>
-                      </div> */}
+                     
                     </div>
                     <div className="col-md-8 col-sm-12">
                       <label for="date">Available Time Slots</label>
@@ -189,7 +182,7 @@ const CreatePatientAppointment = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>)}
       <Footer />
     </>
   );

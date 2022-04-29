@@ -10,6 +10,7 @@ import { Paper, Checkbox } from "@material-ui/core";
 import { Link } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 import { confirm } from "react-confirm-box";
+import Loader from '../Layout/Loader';
 
 const Prescriptions = () => {
 
@@ -18,7 +19,7 @@ const Prescriptions = () => {
     dispatch(getPrescription());
   }, [dispatch]);
 
-  let { prescriptions } = useSelector((state) => state.prescriptions);
+  let { loading, prescriptions } = useSelector((state) => state.prescriptions);
 
   console.log(prescriptions);
 
@@ -96,9 +97,9 @@ const Prescriptions = () => {
 
   return (
      <> 
-      <Header />
+      <Header title={'Prescriptions'}/>
       <DoctSideBar />
-      <div className="content-body">
+     { loading === true ? <Loader /> : (<div className="content-body">
         <div className="container-fluid">
           {/* <!-- row --> */}
           <div className="row">
@@ -130,7 +131,7 @@ const Prescriptions = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>)}
       <Footer />
     </>
   )

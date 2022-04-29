@@ -7,6 +7,7 @@ import DoctSideBar from "../Layout/DoctSideBar";
 import Footer from "../Layout/Footer";
 import Header from "../Layout/Header";
 import Moment from 'moment';
+import Loader from "../Layout/Loader";
 
 const CreateAppointment = () => {
 
@@ -67,17 +68,16 @@ const CreateAppointment = () => {
       await dispatch(getSlotByDate(date));
     }
   };
-  const { dateSlots } = useSelector((state) => state.dateSlots);
+  const { loading, dateSlots } = useSelector((state) => state.dateSlots);
   let bookedSlot = dateSlots && dateSlots.bookedSlots ? dateSlots.bookedSlots : [];
   let bookedData = bookedSlot && bookedSlot.map((book) => book.slotId);
 
-  console.log('asas', dateSlots);
 
   return (
     <>
-      <Header />
+      <Header title={'Create Appointment'}/>
       <DoctSideBar />
-      <div className="content-body">
+     { loading === true ? <Loader /> : (<div className="content-body">
         <div className="container-fluid">
           {/* <!-- row --> */}
           <div className="row">
@@ -184,7 +184,7 @@ const CreateAppointment = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>)}
       <Footer />
     </>
   );

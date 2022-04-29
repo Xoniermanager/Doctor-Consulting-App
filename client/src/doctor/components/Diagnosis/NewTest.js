@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { createTest, editTest, updateTest } from "../../../Actions/User";
 import DoctSideBar from "../Layout/DoctSideBar";
 import Header from "../Layout/Header";
+import Loader from "../Layout/Loader";
 
 const NewTest = () => {
 
@@ -12,7 +13,7 @@ const NewTest = () => {
     const { testId } = useParams();
     const dispatch = useDispatch();
 
-    const { editData } = useSelector((state) => state.editData);
+    const { loading, editData } = useSelector((state) => state.editData);
 
     const initalValue = { testName : '', testDescription : ''};
     const [testValue, setTestValue] = useState(editData ? editData : initalValue);
@@ -66,9 +67,9 @@ const NewTest = () => {
 
   return (
     <>
-      <Header />
+      <Header title={'Create Test'}/>
       <DoctSideBar />
-      <div className="content-body">
+     {loading === true ? <Loader /> : (<div className="content-body">
         <div className="container-fluid">
           {/* <!-- row --> */}
           <div className="row justify-content-center">
@@ -113,7 +114,7 @@ const NewTest = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>)}
     </>
   );
 };

@@ -7,6 +7,7 @@ import Header from "../Layout/Header";
 import moment from 'moment';
 import { useAlert } from "react-alert";
 import { useNavigate, useParams } from "react-router-dom";
+import Loader from "../Layout/Loader";
 
 const AddSlot = () => {
 
@@ -19,7 +20,7 @@ const AddSlot = () => {
     dispatch(editSlot(slotId));
   }, [dispatch]);
 
-  const { editData } = useSelector((state) => state.editData);
+  const { loading, editData } = useSelector((state) => state.editData);
         
   let intial = { mon : 1, tue : 1, wed : 1, thu : 1, fri : 1, sat : 1, sun : 1};
   const [slotValue, setSlotValue] = useState(editData ? editData : intial);
@@ -101,9 +102,9 @@ const AddSlot = () => {
 
   return (
     <>
-    <Header />
+    <Header title={'Create Slots'}/>
     <DoctSideBar/>
-      <div className="content-body">
+     { loading === true ? <Loader /> : (<div className="content-body">
         <div className="container-fluid">
           {/* <!-- row --> */}
           <div className="row justify-content-center">
@@ -233,7 +234,7 @@ const AddSlot = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>)}
       <Footer/>
     </>
   )

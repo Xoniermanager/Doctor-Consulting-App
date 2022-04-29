@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 import { toggleMenus } from '../../../Actions/User';
 
-const Header = () => {
+const Header = ({title}) => {
 
 	const token = localStorage.getItem('token');
 	const [mebOpen, setMebOpen] = useState(false);
@@ -21,7 +21,7 @@ const Header = () => {
 	const logoutHandler = () => {
 		localStorage.setItem('token','');
 		alert.success("Logged out successfully");
-		history('/login');
+		window.location.href = '/login';
 	 };
 
 	const handleBurger = () =>{
@@ -51,7 +51,7 @@ const Header = () => {
             			<div className="collapse navbar-collapse justify-content-between">
             				<div className="header-left ml-6">
             					<div className="dashboard_bar">
-            						Dashboard
+            						{title}
             					</div>
             				</div>
 							{ token && token !=='' ? (<ul className="navbar-nav header-right">
