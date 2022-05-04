@@ -1162,12 +1162,23 @@ exports.getSlotsByDate = catchAsyncErrors(async( req, res) => {
 exports.createDoctorAppointment = catchAsyncErrors(async( req, res) => {
   try {
       const {formData, patientDetail} = req.body;
+
+      const doctor = await User.findById(formData.doctorId);
+      const user = await User.findById(req.user._id);
+
       const appointmentData = {
         ...formData,
         ...patientDetail,
         createdBy : req.user._id,                
     }
+
       await Appointment.create(appointmentData);
+      doctor.patients.includes(req.user._id) ? doctor.patients : doctor.patients.push(req.user._id);
+      user.doctors.includes(formData.doctorId) ? user.doctors : user.doctors.push(formData.doctorId);
+
+      await doctor.save();
+      await user.save();
+
       res.status(201).json({
           success : true,
           message : 'Appointment created successfully.'

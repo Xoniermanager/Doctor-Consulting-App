@@ -21,8 +21,6 @@ const Prescriptions = () => {
 
   let { loading, prescriptions } = useSelector((state) => state.prescriptions);
 
-  console.log(prescriptions);
-
   const options = {
     labels: {
       confirmable: "Confirm",

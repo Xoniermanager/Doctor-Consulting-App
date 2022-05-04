@@ -15,9 +15,11 @@ const Home = () => {
   let { loading, newses } = useSelector((state) => state.newses);
 
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getNewses());
-  }, [dispatch]);
+  useEffect(async() => {
+   await dispatch(getNewses());
+  }, []);
+
+  console.log('qweqwe',newses);
   
   return (
      <>
@@ -28,7 +30,7 @@ const Home = () => {
         <Appointment />
         <Service />
         <Testimonial />
-        <Blog news={newses && newses[0]} />
+       <Blog news={newses.length > 0 ? newses[0] : []} />
       <Footer/>
     </>
   )

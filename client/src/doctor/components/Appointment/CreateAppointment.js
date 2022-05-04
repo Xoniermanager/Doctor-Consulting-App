@@ -57,12 +57,13 @@ const CreateAppointment = () => {
   }; 
 
   const getSlotDetails = (e) =>{
-    setFormData({slotId :  e.target.dataset.rdv_slotid, appointmentTime :  e.target.dataset.rdv_slottime, appointmentDate : e.target.dataset.rdv_date , appointmentStartTime : e.target.dataset.rdv_time_start,   appointmentEndTime : e.target.dataset.rdv_time_end, doctorId: user._id});
+    setFormData({slotId :  e.target.dataset.rdv_slotid, appointmentTime :  e.target.dataset.rdv_slottime, appointmentDate : selectDate , appointmentStartTime : e.target.dataset.rdv_time_start,   appointmentEndTime : e.target.dataset.rdv_time_end, doctorId: user._id});
   }
   
   const handleChange = async (e) => {
     e.preventDefault();
     let date = e.target.value;
+    console.log(date);
     if (date) {
       setSelectDate(date);
       await dispatch(getSlotByDate(date));
@@ -116,16 +117,7 @@ const CreateAppointment = () => {
                           <input type="date"  onChange={handleChange} min={dt} value={selectDate} className="form-control" />
                         </div>
                       </div>
-                      {/* <div className="form-check">
-                        <input
-                          type="checkbox"
-                          name="sms"
-                          className="form-check-input"
-                        />
-                        <label for="sms" className="form-check-label">
-                          Notify patient by SMS
-                        </label>
-                      </div> */}
+                     
                     </div>
                     <div className="col-md-8 col-sm-12">
                       <label for="date">Available Time Slots</label>
@@ -135,7 +127,7 @@ const CreateAppointment = () => {
                           dateSlots.allSlots.slots.map((slt, index) => (
                         <>
                             <div key={index} className="col-sm-6 col-md-4 mb-2">
-                            {bookedData && bookedData.includes(slt._id) ? (<button class="btn btn-danger btn-block">{slt.slot}</button>) : (<button type="button"
+                            {Moment() > Moment(selectDate+' '+slt.slot.split('-')[0].trim()) ? (<button class="btn btn-warning btn-block" disabled>{slt.slot}</button>) : ( bookedData && bookedData.includes(slt._id) ? (<button class="btn btn-danger btn-block">{slt.slot}</button>) : (<button type="button"
                                 onClick={getSlotDetails}
                                 className="btn btn-primary btn-block"
                                 data-toggle="modal"
@@ -145,7 +137,7 @@ const CreateAppointment = () => {
                                 data-rdv_date={dateSlots.slotDate}
                                 data-rdv_time_start={slt.slot.split('-')[0].trim()}
                                 data-rdv_time_end={slt.slot.split('-')[1].trim()}
-                              > {slt.slot}</button>) }
+                              > {slt.slot}</button>) ) }
                              </div>
 
                              <div key={slt._id} className="modal fade" id={`RDVModalSubmit_${index}`}>
@@ -157,7 +149,7 @@ const CreateAppointment = () => {
                                         </div>
                                         <div className="modal-body">
                                         <p><b>Patient :</b> <span> {patientDetail.patientName} (ID : {patientDetail.patientId})</span></p>
-                                        <p><b>Date :</b> <label className="badge badge-primary-soft">{dateSlots.slotDate}</label></p>
+                                        <p><b>Date :</b> <label className="badge badge-primary-soft">{selectDate}</label></p>
                                         <p><b>Time Slot :</b> <label className="badge badge-primary-soft">{slt.slot}</label></p>
 
                                         <button className="btn btn-primary">Save</button>

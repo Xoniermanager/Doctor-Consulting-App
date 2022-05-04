@@ -133,7 +133,7 @@ const CreatePatientAppointment = () => {
                           dateSlots.allSlots.slots.map((slt, index) => (
                         <>
                             <div key={index} className="col-sm-6 col-md-4 mb-2">
-                            { bookedData && bookedData.includes(slt._id) ? (<button class="btn btn-danger btn-block">{slt.slot}</button>) : (<button type="button"
+                            {Moment() > Moment(selectDate+' '+slt.slot.split('-')[0].trim()) ? (<button class="btn btn-warning btn-block" disabled>{slt.slot}</button>) : ( bookedData && bookedData.includes(slt._id) ? (<button class="btn btn-danger btn-block">{slt.slot}</button>) : (<button type="button"
                                 onClick={getSlotDetails}
                                 className="btn btn-primary btn-block"
                                 data-toggle="modal"
@@ -143,7 +143,7 @@ const CreatePatientAppointment = () => {
                                 data-rdv_date={dateSlots.slotDate}
                                 data-rdv_time_start={slt.slot.split('-')[0].trim()}
                                 data-rdv_time_end={slt.slot.split('-')[1].trim()}
-                              > {slt.slot}</button>) }
+                              > {slt.slot}</button>) ) }
                              </div>
 
                              <div key={slt._id} className="modal fade" id={`RDVModalSubmit_${index}`}>
