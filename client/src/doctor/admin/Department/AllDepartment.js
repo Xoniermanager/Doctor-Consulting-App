@@ -21,9 +21,10 @@ const AllDepartment = () => {
 
   let { loading, departments } = useSelector((state) => state.departments);
 
-  let allDepartments = departments && departments.map((element)=>{
+  let allDepartments = departments && departments.map((element,index)=>{
     let cdate = Moment(element.createdAt).format('DD MMMM YYYY HH:mm');
     element = {
+      sn : index + 1,
       ...element,
       cdate : cdate
     }
@@ -54,14 +55,18 @@ const AllDepartment = () => {
 
   const columns = [
     {
-      name: "ID",
-      selector: "_id",
+      name: "S.No.",
+      selector: "sn",
       sortable: true,
     },
     {
-      name: "Department NAME",
+      name: "DEPARTMENT NAME",
       selector: "departmentName",
       sortable: true,
+    },
+    {
+      cell:(row) => <img style={{height:'50px'}} src={row.icon.url} alt={row.departmentName} />,
+      name: "DEPARTMENT ICON"
     },
     {
       name: "DATE",

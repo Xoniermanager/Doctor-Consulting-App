@@ -70,7 +70,7 @@ const NewDepartment = () => {
     };
 
     const [deptIcon, setDeptIcon] = useState(dataDetails && dataDetails.icon ? dataDetails.icon.url : '');
-    const [preview, setPreview] = useState();
+    const [preview, setPreview] = useState(dataDetails && dataDetails.icon ? dataDetails.icon.url : '');
 
     useEffect(() => {
       if (!deptIcon) {
