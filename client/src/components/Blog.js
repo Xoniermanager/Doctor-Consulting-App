@@ -16,10 +16,10 @@ const Blog = ({news}) => {
 						<div className="swiper-slide">
 							<div className="blog-card">
 								<div className="post-media">
-									<a href="/blog-details"><img src={news.image.url} alt=""/></a>
+									<a href="/blog-details"><img src="" alt=""/></a>
 								</div>
 								<div className="post-info">
-									<h5 className="post-title"><a href="/blog-details">{news.newsTitle}</a></h5>		
+									<h5 className="post-title"><a href="/blog-details"></a></h5>		
 									<a href="/blog-details" className="btn btn-outline-primary btn-sm">Read More <i className="btn-icon-bx fas fa-chevron-right"></i></a>		
 								</div>
 							</div>							

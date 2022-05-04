@@ -136,7 +136,7 @@ const SideBar = () => {
                   <Link to="/admin/create-faq">New Faq</Link>
                 </li>
                 <li>
-                  <Link to="/admin/faqs">Faqs</Link>
+                  <Link to="/admin/all-faqs">Faqs</Link>
                 </li>
               </ul>
             </li>

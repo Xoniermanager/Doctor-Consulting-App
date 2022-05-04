@@ -64,10 +64,10 @@ const AllDepartment = () => {
       selector: "departmentName",
       sortable: true,
     },
-    // {
-    //   cell:(row) => <img style={{height:'50px'}} src={row.icon.url} alt={row.departmentName} />,
-    //   name: "DEPARTMENT ICON"
-    // },
+    {
+      cell:(row) => <img style={{height:'50px'}} src={row.icon.url} alt={row.departmentName} />,
+      name: "DEPARTMENT ICON"
+    },
     {
       name: "DATE",
       selector: "cdate",

@@ -12,12 +12,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getNewses } from '../Actions/Admin';
 
 const Home = () => {
+  let { loading, newses } = useSelector((state) => state.newses);
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getNewses());
   }, [dispatch]);
 
-  let { loading, newses } = useSelector((state) => state.newses);
+
   
   return (
      <>
@@ -28,7 +30,7 @@ const Home = () => {
         <Appointment />
         <Service />
         <Testimonial />
-        <Blog news = {newses && newses[0]}/>
+        <Blog />
       <Footer/>
     </>
   )
