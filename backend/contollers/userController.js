@@ -224,8 +224,8 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
     }
   });
   
-  // Reset password
-  exports.resetPassword = catchAsyncErrors(async (req, res) => {
+  // validate otp
+  exports.resetOTP = catchAsyncErrors(async (req, res) => {
     try {
       const resetPasswordToken = req.body.otp;
       const user = await User.findOne({
@@ -239,16 +239,14 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
           message: "Token is invalid or has expired",
         });
       }
-  
-      user.password = req.body.password;
-  
       user.resetPasswordToken = undefined;
       user.resetPasswordExpire = undefined;
       await user.save();
   
       res.status(200).json({
         success: true,
-        message: "Password Updated",
+        user,
+        message: "Validated otp",
       });
     } catch (error) {
       res.status(500).json({
@@ -257,6 +255,32 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
       });
     }
   });
+
+
+    // Reset password
+    exports.resetPassword = catchAsyncErrors(async (req, res) => {
+      try {
+        const user = await User.findById(req.params.userId);
+        if (!user) {
+          return res.status(401).json({
+            success: false,
+            message: "User Id is invalid",
+          });
+        }
+        user.password = req.body.password;
+        await user.save();
+        res.status(200).json({
+          success: true,
+          user,
+          message: "Password Updated",
+        });
+      } catch (error) {
+        res.status(500).json({
+          success: false,
+          message: error.message,
+        });
+      }
+    });
 
 
   // update password

@@ -18,8 +18,6 @@ const Home = () => {
   useEffect(() => {
     dispatch(getNewses());
   }, [dispatch]);
-
-
   
   return (
      <>
@@ -30,7 +28,7 @@ const Home = () => {
         <Appointment />
         <Service />
         <Testimonial />
-        <Blog />
+        <Blog news={newses && newses[0]} />
       <Footer/>
     </>
   )

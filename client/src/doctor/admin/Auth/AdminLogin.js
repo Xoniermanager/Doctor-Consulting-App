@@ -29,8 +29,11 @@ const AdminLogin = () => {
     setFormErrors(validate_login(loginValues));
     let {password, email} = loginValues;
     await dispatch(loginUser(email, password));
-    await dispatch(loadUser());
-	  history('/admin');
+    dispatch(loadUser());
+    dispatch(loadUser());
+    if(!error && user.role === 'admin'){
+	  	history('/admin');
+    }
 	 return false;
   }; 
 

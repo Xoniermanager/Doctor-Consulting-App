@@ -77,8 +77,8 @@ import AddNews from './doctor/admin/News/AddNews';
 
 const App = () => {
  const dispatch = useDispatch();
- useEffect(()=>{
-   dispatch(loadUser());
+ useEffect(async()=>{
+  await dispatch(loadUser());
    connectWithWebSocket();
    dispatch(toggleMenus());
  },[dispatch]);
