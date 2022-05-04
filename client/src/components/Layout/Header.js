@@ -63,6 +63,7 @@ const Header = () => {
 									<li className="add-menu-left">
 										<ul>
 											<li><Link to="/about-us"><span>About Us</span></Link></li>
+											<li><Link to="/contact-us"><span>Contact Us</span></Link></li>
 											<li><Link to="/team"><span>Our Team</span></Link></li>
 											<li><Link to="/faqs"><span>FAQ's</span></Link></li>
 											<li><Link to="/book-appointment"><span>Booking</span></Link></li>

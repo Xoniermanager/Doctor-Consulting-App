@@ -476,3 +476,180 @@ export const deleteFaq = (diseaseId) => async (dispatch) => {
     });
   }
 };
+
+// create news
+export const createNews = (newsValue, newsImage) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "CreateNewsRequest",
+    });
+    const { data } = await axios.post(
+      "/api/v1/admin/create-news",
+      { newsValue, newsImage},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+
+    dispatch({
+      type: "CreateNewsSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "CreateNewsFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+// update news
+export const updateNews = (newsId, newsValue, newsImage) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "UpdateNewsRequest",
+    });
+    const { data } = await axios.put(
+      `/api/v1/admin/update-news/${newsId}`,
+      { newsValue, newsImage },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+
+    dispatch({
+      type: "UpdateNewsSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "UpdateNewsFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+// get newses
+export const getNewses = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "GetNewsRequest",
+    });
+    const { data } = await axios.get("/api/v1/admin/all-newses", {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "GetNewsSuccess",
+      payload: data.newses,
+    });
+  } catch (error) {
+    dispatch({
+      type: "GetNewsFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+// edit news data
+export const editNews = (newsId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "EditNewsRequest",
+    });
+    const { data } = await axios.get(`/api/v1/admin/edit-news/${newsId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "EditNewsSuccess",
+      payload: data.news,
+    });
+  } catch (error) {
+    dispatch({
+      type: "EditNewsFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+// delete news
+export const deleteNews = (newsId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "DeleteNewsRequest",
+    });
+    const { data } = await axios.delete(
+      `/api/v1/admin/delete-news/${newsId}`,
+      {
+        headers: {
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+    dispatch({
+      type: "DeleteNewsSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "DeleteNewsFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+
+
+// update Enquiry Status
+export const updateEnquiryStatus = (enqId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "EnquiryStatusRequest",
+    });
+    const { data } = await axios.get(
+      `/api/v1/admin/update-enquiry/${enqId}`,
+      {
+        headers: {
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+
+    dispatch({
+      type: "EnquiryStatusSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "EnquiryStatusFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+// get enquiries
+export const getEnquiries = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "GetEnquiriesRequest",
+    });
+    const { data } = await axios.get("/api/v1/admin/enquiries", {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "GetEnquiriesSuccess",
+      payload: data.enquiries,
+    });
+  } catch (error) {
+    dispatch({
+      type: "GetEnquiriesFailure",
+      payload: error.response.data.message,
+    });
+  }
+};

@@ -39,7 +39,7 @@ const AdminNewTest = () => {
         await dispatch(createTest(testValue));
       }
       if(!error){
-        history('/all-tests')
+        history('/admin/all-tests')
       }
     }
   

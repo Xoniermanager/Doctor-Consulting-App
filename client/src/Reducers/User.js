@@ -39,6 +39,17 @@ export const userReducer = createReducer(initialState,{
 })
 
 export const forgetPasswordReducer = createReducer(initialState, {
+  EnquiryRequest : (state) =>{
+    state.loading = true;
+  },
+  EnquirySuccess : (state, action) =>{
+      state.loading = false;
+      state.message = action.payload;
+  },
+  EnquiryFailure : (state, action) =>{
+      state.loading = false;
+      state.error = action.payload;
+  },
   RegisterRequest : (state) =>{
     state.loading = true;
   },

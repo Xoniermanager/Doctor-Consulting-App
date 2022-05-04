@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Banner from './Banner';
 import About from './About';
 import Section from './Section';
@@ -8,8 +8,17 @@ import Testimonial from './Testimonial';
 import Blog from './Blog';
 import Header from './Layout/Header';
 import Footer from './Layout/Footer';
+import { useDispatch, useSelector } from 'react-redux';
+import { getNewses } from '../Actions/Admin';
 
 const Home = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getNewses());
+  }, [dispatch]);
+
+  let { loading, newses } = useSelector((state) => state.newses);
+  
   return (
      <>
       <Header/>
@@ -19,7 +28,7 @@ const Home = () => {
         <Appointment />
         <Service />
         <Testimonial />
-        <Blog />
+        <Blog news = {newses && newses[0]}/>
       <Footer/>
     </>
   )

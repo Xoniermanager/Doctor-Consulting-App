@@ -72,6 +72,8 @@ import AddDoctor from './doctor/admin/Patient/AddDoctor';
 import Faqs from './components/Faqs';
 import NewFaq from './doctor/admin/Faq/NewFaq';
 import AllFaqs from './doctor/admin/Faq/AllFaqs';
+import AllNews from './doctor/admin/News/AllNews';
+import AddNews from './doctor/admin/News/AddNews';
 
 const App = () => {
  const dispatch = useDispatch();
@@ -172,6 +174,10 @@ const App = () => {
               <Route exact path="/admin/create-faq" element={user &&  user.role ==='admin' ? <NewFaq />: ''} />
                <Route exact path="/admin/faq-edit/:faqId" element={user &&  user.role ==='admin' ? <NewFaq />: ''} />
                <Route exact path="/admin/all-faqs" element={user &&  user.role ==='admin' ? <AllFaqs />: ''} />
+
+               <Route exact path="/admin/create-news" element={user &&  user.role ==='admin' ? <AddNews />: ''} />
+               <Route exact path="/admin/news-edit/:newsId" element={user &&  user.role ==='admin' ? <AddNews />: ''} />
+               <Route exact path="/admin/all-newses" element={user &&  user.role ==='admin' ? <AllNews />: ''} />
             </Routes>
 
        </Router>)}

@@ -1,10 +1,10 @@
 const express = require('express');
 const { registerUser, loginUser, myProfile, verifyEmail, forgotPassword,
-     resetPassword, updatePassword, updateProfile, updateLanguage, updateExperience, updateAccademicAward, createDrug, getDrugs, createTest, getTests, createPrescription, getPrescriptions, deleteDrug, deleteTest, getDrugDetails, getTestDetails, updateDrug, updateTest, deletePrescription, getPrescriptionDetails, updatePrescription, createSlots, getSlots, getSlotDetails, updateSlot, deleteSlot, getSlotsByDate, createDoctorAppointment, getDoctorAppointments, deleteDoctorAppointment, getDoctorAppointmentById, updateDoctorAppointment, searchDoctors } = require('../contollers/userController');
+     resetPassword, updatePassword, updateProfile, updateLanguage, updateExperience, updateAccademicAward, createDrug, getDrugs, createTest, getTests, createPrescription, getPrescriptions, deleteDrug, deleteTest, getDrugDetails, getTestDetails, updateDrug, updateTest, deletePrescription, getPrescriptionDetails, updatePrescription, createSlots, getSlots, getSlotDetails, updateSlot, deleteSlot, getSlotsByDate, createDoctorAppointment, getDoctorAppointments, deleteDoctorAppointment, getDoctorAppointmentById, updateDoctorAppointment, searchDoctors, userEnquiry } = require('../contollers/userController');
 const { isAuthenticatedUser } = require('../middleware/auth');
 
 const router = express.Router();
-
+router.route('/enquiry').post(userEnquiry);
 router.route('/register').post(registerUser);
 router.route('/login').post(loginUser);
 router.route('/me').get(isAuthenticatedUser, myProfile);

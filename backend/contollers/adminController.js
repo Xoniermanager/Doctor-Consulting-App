@@ -3,6 +3,7 @@ const User = require('../models/userModel');
 const Disease = require('../models/diseaseModel');
 const Faq = require("../models/faqModel")
 const Department = require('../models/departmentModel');
+const News = require('../models/newsModel');
 const cloudinary = require('cloudinary');
 const { sendEmail } = require('../middleware/sendEmail');
 
@@ -283,7 +284,7 @@ const { sendEmail } = require('../middleware/sendEmail');
         if(deptIcon && Object.keys(deptIcon).length !== 0){
            if(department)
            await cloudinary.v2.uploader.destroy('department/'+department.icon.public_id);
-          const myCloud = await cloudinary.v2.uploader.upload(deptIcon.icon, {
+          const myCloud = await cloudinary.v2.uploader.upload(deptIcon, {
             folder: "department",
           });
           department.icon = {
@@ -373,8 +374,6 @@ const { sendEmail } = require('../middleware/sendEmail');
       })
       }
   });
-
- 
 
 
    // create Faq
@@ -489,6 +488,148 @@ const { sendEmail } = require('../middleware/sendEmail');
         res.status(200).json({
             success : true,
             message : 'Faq deleted successfully.'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+
+   // create news
+   exports.createNews = catchAsyncErrors(async( req, res) => {
+    try {
+        const {newsValue, newsImage} = req.body;
+        const newsData = {...newsValue};
+        if(newsImage){
+         const myCloud = await cloudinary.v2.uploader.upload(newsImage, {
+           folder: "news",
+         });
+         newsData.image = {
+           public_id: myCloud.public_id,
+           url: myCloud.secure_url,
+         };
+        }  
+        const newNews =  await News.create(newsData);
+        res.status(201).json({
+            success : true,
+            newNews,
+            message : 'News added successfully.'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+
+    // Update News
+    exports.updateNews = catchAsyncErrors(async( req, res) => {
+      try {
+        const news = await News.findById(req.params.id);
+        const {newsValue, newsImage} = req.body;
+      
+        if(!news){
+            return res.status(404).json({
+                success : false,
+                message : 'News not found'
+            })
+        }
+        if(newsValue.newsTitle){
+          news.newsTitle = newsValue.newsTitle;
+        }
+        if(newsValue.newsDescription){
+          news.newsDescription = newsValue.newsDescription;
+        }        
+        if(newsImage){
+            if(news.image)
+            await cloudinary.v2.uploader.destroy('news/'+news.image.public_id);
+             const myCloud = await cloudinary.v2.uploader.upload(newsImage, {
+             folder: "news",
+            });
+            news.image = {
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+          };
+      }
+        await news.save();
+  
+          res.status(201).json({
+              success : true,
+              message : 'News updated successfully.'
+          });
+        } catch (error) {
+          res.status(500).json({
+            success : false,
+            message : error.message
+        })
+        }
+    });
+
+    // get faqs details
+    exports.getNewses = catchAsyncErrors(async( req, res) => {
+      try {
+         const newses = await News.find();
+         if(!newses){
+            return res.status(404).json({
+                success : false,
+                message : 'No news found'
+            });
+         }
+         res.status(200).json({
+             success : true,
+             newses
+         });
+       } catch (error) {
+         res.status(500).json({
+           success : false,
+           message : error.message
+        })
+       }
+    });
+
+
+  // get faq details by id
+  exports.getNewsDetails = catchAsyncErrors(async( req, res) => {
+    try {
+        //owner : req.user._id,
+        const news = await News.findOne({ _id : req.params.id});
+        if(!news){
+          return res.status(404).json({
+              success : false,
+              message : 'No news found'
+          });
+        }
+        res.status(200).json({
+            success : true,
+            news
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+  // detele faq
+    exports.deleteNews = catchAsyncErrors(async( req, res) => {
+    try {
+      const news = await News.findById(req.params.id);
+        if(!news){
+            return res.status(404).json({
+                success : false,
+                message : 'news not found'
+            })
+        }
+      await faq.remove();
+        res.status(200).json({
+            success : true,
+            message : 'News deleted successfully.'
         });
       } catch (error) {
         res.status(500).json({

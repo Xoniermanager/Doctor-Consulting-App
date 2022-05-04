@@ -141,6 +141,26 @@ const SideBar = () => {
               </ul>
             </li>
 
+
+            <li key={6} data-index={6} onClick={handlerMenu} className={ getIndex==6 ? 'mm-active' : ''}>
+              <a
+                className="has-arrow ai-icon"
+                href="#"
+                aria-expanded={ getIndex == 6 ? true : false}
+              >
+                <i className="flaticon-381-notepad"></i>
+                <span className="nav-text">News</span>
+              </a>
+              <ul aria-expanded="false" className={`mm-collapse  ${getIndex == 6 ? 'mm-show' : ''}`}>
+                <li>
+                  <Link to="/admin/create-news">Add News</Link>
+                </li>
+                <li>
+                  <Link to="/admin/all-newses">Newses</Link>
+                </li>
+              </ul>
+            </li>
+
           </ul>
         </div>
       </div>

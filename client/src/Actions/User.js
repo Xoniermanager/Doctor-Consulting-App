@@ -1,5 +1,33 @@
 import axios from "axios";
 
+export const userEnquiry = (userData) => async (dispatch) => {
+    try {
+      dispatch({
+        type: "EnquiryRequest",
+      });
+      const { data } = await axios.post(
+        "/api/v1/enquiry",
+        { ...userData },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      localStorage.setItem("token", data.authToken);
+      dispatch({
+        type: "EnquirySuccess",
+        payload: data.message,
+      });
+    } catch (error) {
+      localStorage.setItem("token", "");
+      dispatch({
+        type: "EnquiryFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };
+
 export const registerUser =
   (name, email, password, role, phone, certificate) => async (dispatch) => {
     try {

@@ -102,6 +102,50 @@ export const adminAPIReducer = createReducer(initialState, {
     state.loading = false;
     state.error = action.payload;
   },
+  CreateNewsRequest: (state) => {
+    state.loading = true;
+  },
+  CreateNewsSuccess: (state, action) => {
+    state.loading = false;
+    state.message = action.payload;
+  },
+  CreateNewsFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  },
+  UpdateNewsRequest: (state) => {
+    state.loading = true;
+  },
+  UpdateNewsSuccess: (state, action) => {
+    state.loading = false;
+    state.message = action.payload;
+  },
+  UpdateNewsFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  },
+  DeleteNewsRequest: (state) => {
+    state.loading = true;
+  },
+  DeleteNewsSuccess: (state, action) => {
+    state.loading = false;
+    state.message = action.payload;
+  },
+  DeleteNewsFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  },
+  EnquiryStatusRequest: (state) => {
+    state.loading = true;
+  },
+  EnquiryStatusSuccess: (state, action) => {
+    state.loading = false;
+    state.message = action.payload;
+  },
+  EnquiryStatusFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  },
   clearErrors: (state) => {
     state.error = null;
   },
@@ -165,6 +209,17 @@ export const adminDataDetailsReducer = createReducer(initialState, {
     state.loading = false;
     state.error = action.payload;
   },
+  EditNewsRequest: (state) => {
+    state.loading = true;
+  },
+  EditNewsSuccess: (state, action) => {
+    state.loading = false;
+    state.dataDetails = action.payload;
+  },
+  EditNewsFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  },
   clearErrors: (state) => {
     state.error = null;
   },
@@ -223,6 +278,46 @@ export const adminFaqsReducer = createReducer(initialState, {
     state.faqs = action.payload;
   },
   GetFaqsFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  },
+  clearErrors: (state) => {
+    state.error = null;
+  },
+  clearMessage: (state) => {
+    state.message = null;
+  },
+});
+
+export const adminNewsReducer = createReducer(initialState, {
+  GetNewsRequest: (state) => {
+    state.loading = true;
+  },
+  GetNewsSuccess: (state, action) => {
+    state.loading = false;
+    state.newses = action.payload;
+  },
+  GetNewsFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  },
+  clearErrors: (state) => {
+    state.error = null;
+  },
+  clearMessage: (state) => {
+    state.message = null;
+  },
+});
+
+export const enquiryReducer = createReducer(initialState, {
+  GetEnquiriesRequest: (state) => {
+    state.loading = true;
+  },
+  GetEnquiriesSuccess: (state, action) => {
+    state.loading = false;
+    state.newses = action.payload;
+  },
+  GetEnquiriesFailure: (state, action) => {
     state.loading = false;
     state.error = action.payload;
   },

@@ -1,5 +1,5 @@
 const express = require('express');
-const { getPatients, createDisease, getDiseases, deleteDisease, getDiseaseDetails, updateDisease, updateUserStatus, createDepartment, getDepartments, deleteDepartment, getDepartmentDetails, updateDepartment, createDoctor, createFaq, getFaqs, getFaqDetails, updateFaq, deletefaq } = require('../contollers/adminController');
+const { getPatients, createDisease, getDiseases, deleteDisease, getDiseaseDetails, updateDisease, updateUserStatus, createDepartment, getDepartments, deleteDepartment, getDepartmentDetails, updateDepartment, createDoctor, createFaq, getFaqs, getFaqDetails, updateFaq, deletefaq, createNews, getNewses, getNewsDetails, updateNews, deleteNews } = require('../contollers/adminController');
 const { isAuthenticatedUser } = require('../middleware/auth');
 
 const router = express.Router();
@@ -20,9 +20,15 @@ router.route('/edit-department/:id').get(isAuthenticatedUser, getDepartmentDetai
 router.route('/update-department/:id').put(isAuthenticatedUser, updateDepartment);
 
 router.route('/create-faq').post(isAuthenticatedUser, createFaq);
-router.route('/all-faqs').get(isAuthenticatedUser, getFaqs);
+router.route('/all-faqs').get(getFaqs);
 router.route('/delete-faq/:id').delete(isAuthenticatedUser, deletefaq);
 router.route('/edit-faq/:id').get(isAuthenticatedUser, getFaqDetails);
 router.route('/update-faq/:id').put(isAuthenticatedUser, updateFaq);
+
+router.route('/create-news').post(isAuthenticatedUser, createNews);
+router.route('/all-newses').get(getNewses);
+router.route('/delete-news/:id').delete(isAuthenticatedUser, deleteNews);
+router.route('/edit-news/:id').get(isAuthenticatedUser, getNewsDetails);
+router.route('/update-news/:id').put(isAuthenticatedUser, updateNews);
 
 module.exports = router;

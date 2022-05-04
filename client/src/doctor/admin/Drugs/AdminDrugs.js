@@ -112,7 +112,7 @@ const AdminDrugs = () => {
                     </div>
                     <div className="col-md-6 text-right">
                       <Link
-                        to="/create-drug"
+                        to="/admin/create-drug"
                         className="btn btn-primary btn-sm"
                       >
                         <i className="fa fa-plus"></i> New Drug

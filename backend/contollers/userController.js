@@ -4,12 +4,43 @@ const User = require('../models/userModel');
 const Drug = require('../models/drugModel');
 const Test = require('../models/testModel');
 const Slot = require('../models/slotsModel');
+const Enquiry = require('../models/enquiryModel');
 const Appointment = require('../models/appointmentModel');
 const Prescription = require('../models/prescriptionModel');
 const { sendEmail } = require('../middleware/sendEmail');
 const cloudinary = require('cloudinary');
 
 const mongoose  = require('mongoose');
+
+//  user enquiry
+exports.userEnquiry = catchAsyncErrors(async (req, res)=>{
+  try{
+  const enquiryData = { ...req.body}
+  const enq = await Enquiry.create(enquiryData);
+  const message = '<html><body> <h3 style="text-align:center;"> New Enquiry </h3> <table width="100%" style="table-layout:fixed; min-height:750px;"> <tbody><tr><td align="center" valign="top" style="padding-right:10px;padding-left:10px;">  <table style="max-width:600px;" width="100%"> <tbody><tr> <td align="center" valign="top"> <table style="border:1px solid #E5E5E5;" width="100%"> <tbody>  <tr>  <td colspan="2" style="color:#fff; background:#0e76bc;text-align:center;padding:10px 0;"> <a href="#" target="_blank" style="margin:auto;text-align:center;text-decoration:none;"> <center>	<img src="https://xoniertechnologies.com/assets/uploads/logo/dd5a61da6f0e50fea2ac4f86b60406c4.png"   alt="" border="0" style="width:150px; height:auto; display:block;"> </center></a>  </td> </tr>  <tr>     <td align="center" valign="top" style="padding-bottom: 5px; padding-left: 20px; padding-right: 20px;">  <h2 class="text" style="color:#000000; font-family: Helvetica, Arial, sans-serif; font-size:28px; font-weight:500;  text-align:center; padding:0; margin:10px 0;"> </h2>   </td>  </tr>       <td align="center" style="padding-left:20px;padding-right:20px;">  <table border="0" width="100%"><tbody>  <tr width="100%">   <td valign="top" style="padding-bottom: 10px;">  <span class="text" style="font-weight:bold; font-family:Arial;">  Name:</span> </td>   <td valign="top" style="padding-bottom: 10px;"> <span style="font-family:Arial;">'+enquiryData.name+'</span> </td> </tr><tr width="100%"><td valign="top" style="padding-bottom: 10px;"> <span class="text" style="font-weight:bold; font-family:Arial;"> Email:</span> </td> <td valign="top" style="padding-bottom: 10px;"><span style="font-family:Arial;">'+enquiryData.email+'</span></td></tr><tr width="100%"><td valign="top" style="padding-bottom: 10px;"><span class="text" style="font-weight:bold; font-family:Arial;">Phone:</span> </td> <td valign="top" style="padding-bottom: 10px;"><span style="font-family:Arial;">'+enquiryData.phone+'</span> </td> </tr><tr width="100%"><td valign="top" style="padding-bottom: 10px;"> <span class="text" style="font-weight:bold; font-family:Arial;"> Department:</span>  </td>  <td valign="top" style="padding-bottom: 10px;"> <span style="font-family:Arial;"> '+enquiryData.department+'</span>  </td></tr>	 <tr width="100%"> <td valign="top" style="padding-bottom: 10px;"> <span class="text" style="font-weight:bold; font-family:Arial;">Message:</span>  </td>  <td valign="top" style="padding-bottom: 10px;"> <span style="font-family:Arial;"> '+enquiryData.message+'</span>   </td>   </tr>	  </tbody></table>  </td>  </tr>   <tr>  <td colspan="2" style="color:#fff; background:#0e76bc;font-family: Helvetica, Arial, sans-serif; font-size:14px; font-weight:bold;font-style:normal; letter-spacing:normal; text-transform:none; text-align:center;padding:20px 0;">  © 2022 All Rights Reserved. </td></tr>  </tbody>  </table>   </td>   </tr> </tbody> </table> </td>     </tr></tbody> </table></body> </html>';
+    try {
+      await sendEmail({
+        email: process.env.SMTP_EMAIL,
+        subject: "Equiry email",
+        message,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  res.status(201).json({
+      success : true,
+      message : 'Enquiry submitted successfully.'
+  })
+ }catch (error) {
+  res.status(500).json({
+    success: false,
+    message: error.message,
+  });
+}
+})
 
 // register user
 exports.registerUser = catchAsyncErrors(async (req, res, next)=>{
