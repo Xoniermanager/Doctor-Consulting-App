@@ -99,7 +99,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next)=>{
      if(!email || !password){
         return next(new ErrorHandler("Please enter email or password", 400));
     }
-    const user = await User.findOne({email}).select("+password");
+    const user = await User.findOne({email, role}).select("+password");
 
     if(!user){
         return next(new ErrorHandler("Invalid entered email or password", 401));
