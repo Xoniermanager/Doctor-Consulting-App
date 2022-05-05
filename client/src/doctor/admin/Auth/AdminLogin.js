@@ -16,7 +16,7 @@ const AdminLogin = () => {
   const { error, message, loading } = useSelector((state) => state.adminApiStatus);
 
   // login 
-  const loginInitialValue = { email:"", password:""};
+  const loginInitialValue = { email:"", password:"", role:"admin"};
   const [loginValues, setLoginValues] = useState(loginInitialValue); 
   const handleLoginChange = (e) => {
     setLoginValues({...loginValues, [e.target.name] : e.target.value});
@@ -27,11 +27,11 @@ const AdminLogin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setFormErrors(validate_login(loginValues));
-    let {password, email} = loginValues;
-    await dispatch(loginUser(email, password));
+    let {password, email, role} = loginValues;
+    await dispatch(loginUser(email, password, role));
     dispatch(loadUser());
     dispatch(loadUser());
-    if(!error && user.role === 'admin'){
+    if(!error && loginValues.role === 'admin'){
 	  	history('/admin');
     }
 	 return false;
