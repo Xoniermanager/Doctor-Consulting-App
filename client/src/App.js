@@ -76,10 +76,8 @@ import AllNews from './doctor/admin/News/AllNews';
 import AddNews from './doctor/admin/News/AddNews';
 import FindDoctors from './doctor/patient/Appointment/FindDoctors';
 
-
 const App = () => {
-  const { loading, user} = useSelector((state)=>state.user);
-  const dispatch = useDispatch();
+ const dispatch = useDispatch();
  useEffect(async()=>{
   await dispatch(loadUser());
    connectWithWebSocket();
@@ -88,7 +86,7 @@ const App = () => {
 
  const {menuToggle} = useSelector((state)=>state.menuToggle);
 
- console.log(user);
+ const { loading, user} = useSelector((state)=>state.user);
  
   return (
     <div id='main-wrapper' className={`shows ${menuToggle ? menuToggle.isToggle : ''}`}>

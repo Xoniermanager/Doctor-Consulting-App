@@ -90,7 +90,7 @@ const Login = () => {
 							) : ''}
 								<form onSubmit={handleLogin}>
                  <div className="form-group">
-										<input type="radio"  name="role" value="patient" onChange={handleLoginChange}/> Patient
+										<input type="radio" checked name="role" value="patient" onChange={handleLoginChange}/> Patient
                     &emsp;
                     <input type="radio" name="role" value="doctor" onChange={handleLoginChange}/> Doctor
 									</div>
