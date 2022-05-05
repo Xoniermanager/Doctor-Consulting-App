@@ -74,9 +74,12 @@ import NewFaq from './doctor/admin/Faq/NewFaq';
 import AllFaqs from './doctor/admin/Faq/AllFaqs';
 import AllNews from './doctor/admin/News/AllNews';
 import AddNews from './doctor/admin/News/AddNews';
+import FindDoctors from './doctor/patient/Appointment/FindDoctors';
+
 
 const App = () => {
- const dispatch = useDispatch();
+  const { loading, user} = useSelector((state)=>state.user);
+  const dispatch = useDispatch();
  useEffect(async()=>{
   await dispatch(loadUser());
    connectWithWebSocket();
@@ -85,7 +88,7 @@ const App = () => {
 
  const {menuToggle} = useSelector((state)=>state.menuToggle);
 
- const { loading, user} = useSelector((state)=>state.user);
+ console.log(user);
  
   return (
     <div id='main-wrapper' className={`shows ${menuToggle ? menuToggle.isToggle : ''}`}>
@@ -141,12 +144,13 @@ const App = () => {
               {/* Patient module */}
               <Route exact path='/patient' element={ user &&  user.role ==='patient' ? <PatientDashboard/> : ''} />
               <Route exact path='/patient/profile' element={ user &&  user.role ==='patient' ? <PatientProfile/> : ''} />
-              <Route exact path='/patient/create-appointment' element={ user &&  user.role ==='patient' ? <CreatePatientAppointment/> : ''} />
+              <Route exact path='/patient/doctor-list' element={ user &&  user.role ==='patient' ? <FindDoctors/> : ''} />
               <Route exact path='/patient/appointments' element={ user &&  user.role ==='patient' ? <PatientAppointments/> : ''} />
               <Route exact path='/patient/change-password' element={ user &&  user.role ==='patient' ? <ChangePassword/> : ''} />
               <Route exact path='/patient/all-prescription' element={ user &&  user.role ==='patient' ? <PatientPrescriptions/> : ''} />
               <Route exact path='/patient/view-prescription/:presId' element={  user &&  user.role ==='patient' ? <ViewPatientPrescription/> : '' } />
               <Route exact path='/patient/reports' element={ user &&  user.role ==='patient' ? <PatientReport/> : '' } />
+              <Route exact path='/patient/create-appointment/:doctId' element={ user &&  user.role ==='patient' ? <CreatePatientAppointment/> : ''} />
 
                {/* Admin module */}
                <Route exact path="/admin/login" element={<AdminLogin />} />

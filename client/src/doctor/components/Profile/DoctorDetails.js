@@ -46,7 +46,7 @@ const DoctorDetails = ({ user }) => {
                           <p className="mb-1">{user.about}</p>
                           <p className="mb-2">
                             <i className="fa fa-star text-warning"></i> 4.8 (200
-                            Review){" "}
+                            Review)
                           </p>
                         </div>
                         <Link
@@ -61,19 +61,19 @@ const DoctorDetails = ({ user }) => {
                         to="#"
                         className="btn bgl-primary btn-rounded text-black mb-2 mr-2"
                       >
-                        500 Patients
+                        {user.patientNo} Patients
                       </Link>
                       <Link
                         to="#"
                         className="btn bgl-primary btn-rounded mb-2 text-black"
                       >
-                        50 Surgery
+                        {user.surgery} Surgery
                       </Link>
                       <Link
                         to="#"
                         className="btn bgl-primary btn-rounded text-black mb-2 mr-2"
                       >
-                        10 year Experience
+                         {user.experienceYear} year Experience
                       </Link>
                     </div>
                   </div>

@@ -133,7 +133,7 @@ const PatientAppointments = () => {
                     <DataTable
                       columns={columns}
                       data={allDoctorAppointments}
-                      defaultSortField="patientName"
+                      defaultSortField="cdate"
                       pagination
                       selectableRows
                       selectableRowsComponent={Checkbox}

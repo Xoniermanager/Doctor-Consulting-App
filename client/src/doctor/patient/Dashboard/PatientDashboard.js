@@ -17,10 +17,13 @@ const PatientDashboard = () => {
 
   const dispatch = useDispatch();
   let dt = Moment(new Date()).format('YYYY-MM-DD');
+  useEffect(async () => {
+    await dispatch(getPatientDashboard(dt));
+  },[])
   const alert = useAlert();
   const { error, message } = useSelector((state) => state.apiStatus);
+  
   useEffect(() => {
-    dispatch(getPatientDashboard(dt));
     if (error) {
       alert.error(error);
       dispatch({ type: "clearErrors" });
@@ -152,7 +155,7 @@ const PatientDashboard = () => {
                     </div>
                     <div className="col-5">
                       <Link
-                        to="/patient/create-appointment"
+                        to="/patient/doctor-list"
                         className="btn btn-primary float-right mr-2"
                       >
                         <i className="fa fa-plus"></i> New Appointment

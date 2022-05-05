@@ -44,7 +44,7 @@ const PatientSideBar = () => {
               </a>
               <ul aria-expanded="false" className={`mm-collapse  ${getIndex == 1 ? 'mm-show' : ''}`}>
                 <li>
-                  <Link to="/patient/create-appointment">New Appointment</Link>
+                  <Link to="/patient/doctor-list">Book Appointment</Link>
                 </li>
                 <li>
                   <Link to="/patient/appointments">All Appointments</Link>

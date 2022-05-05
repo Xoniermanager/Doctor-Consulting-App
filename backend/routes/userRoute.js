@@ -1,6 +1,6 @@
 const express = require('express');
 const { registerUser, loginUser, myProfile, verifyEmail, forgotPassword,
-     resetPassword, updatePassword, updateProfile, updateLanguage, updateExperience, updateAccademicAward, createDrug, getDrugs, createTest, getTests, createPrescription, getPrescriptions, deleteDrug, deleteTest, getDrugDetails, getTestDetails, updateDrug, updateTest, deletePrescription, getPrescriptionDetails, updatePrescription, createSlots, getSlots, getSlotDetails, updateSlot, deleteSlot, getSlotsByDate, createDoctorAppointment, getDoctorAppointments, deleteDoctorAppointment, getDoctorAppointmentById, updateDoctorAppointment, searchDoctors, userEnquiry, resetOTP } = require('../contollers/userController');
+     resetPassword, updatePassword, updateProfile, updateLanguage, updateExperience, updateAccademicAward, createDrug, getDrugs, createTest, getTests, createPrescription, getPrescriptions, deleteDrug, deleteTest, getDrugDetails, getTestDetails, updateDrug, updateTest, deletePrescription, getPrescriptionDetails, updatePrescription, createSlots, getSlots, getSlotDetails, updateSlot, deleteSlot, getSlotsByDate, createDoctorAppointment, getDoctorAppointments, deleteDoctorAppointment, getDoctorAppointmentById, updateDoctorAppointment, searchDoctors, userEnquiry, resetOTP, getDoctorDetails } = require('../contollers/userController');
 const { isAuthenticatedUser } = require('../middleware/auth');
 
 const router = express.Router();
@@ -14,6 +14,7 @@ router.route("/otp/validate").post(resetOTP);
 router.route("/password/reset/:userId").put(resetPassword);
 router.route('/update/password').put(isAuthenticatedUser, updatePassword);
 router.route('/search/doctor/:key').get(isAuthenticatedUser, searchDoctors);
+router.route('/doctor-details/:doctId').get(isAuthenticatedUser, getDoctorDetails);
 
 router.route('/doctor/update').put(isAuthenticatedUser, updateProfile);
 router.route('/doctor/language').put(isAuthenticatedUser, updateLanguage);

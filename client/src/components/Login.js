@@ -14,7 +14,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const alert = useAlert();
   // login 
-  const loginInitialValue = { email:"", password:""};
+  const loginInitialValue = { email:"", password:"", role : "patient"};
   const [loginValues, setLoginValues] = useState(loginInitialValue); 
   const handleLoginChange = (e) => {
     setLoginValues({...loginValues, [e.target.name] : e.target.value});
@@ -22,23 +22,25 @@ const Login = () => {
 
   const [formErrors, setFormErrors] = useState({});
 
-  const { user} = useSelector((state) => state.user);
   const { error, message, loading } = useSelector((state) => state.apiStatus);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setFormErrors(validate_login(loginValues));
-    let {password, email} = loginValues;
-    await dispatch(loginUser(email, password)); 
+    let {password, email, role} = loginValues;
+    await dispatch(loginUser(email, password, role)); 
     await dispatch(loadUser());
-    dispatch(loadUser());
-    if(!error && user != undefined && user.role === 'patient'){
+    if(loginValues.role === 'patient'){
+      history('/patient');
       registerNewUser(user.name);
-        history('/patient');
-      }else if(!error && user != undefined && user.role === 'doctor'){
-        history('/doctor');
       }
+   if(loginValues.role === 'doctor'){
+        history('/doctor');
+     }
   }; 
+
+
+  const { user} = useSelector((state)=>state.user);
 
   useEffect(() => {
     if (error) {
@@ -49,7 +51,7 @@ const Login = () => {
       alert.success(message);
       dispatch({ type: "clearMessage" });
     }
-  }, [formErrors, alert, error, dispatch, message]);
+  }, [formErrors, alert, error, dispatch, message, loadUser]);
 
 
   const validate_login = (values) => {
@@ -67,7 +69,6 @@ const Login = () => {
   // Google recaptcha 
   const [isGoogleValidate, setIsGoogleValidate] = useState(false);
   const onChange = (value) =>{
-    console.log("Captcha value:", value);
 	setIsGoogleValidate(true);
   }
  
@@ -88,6 +89,12 @@ const Login = () => {
 								<div className="ui message success">Logged in successfully</div>
 							) : ''}
 								<form onSubmit={handleLogin}>
+                 <div className="form-group">
+										<input type="radio" checked name="role" value="patient" onChange={handleLoginChange}/> Patient
+                    &emsp;
+                    <input type="radio" name="role" value="doctor" onChange={handleLoginChange}/> Doctor
+									</div>
+
 									<div className="form-group">
 										<input type="text" className="form-control" name="email" placeholder="Email" onChange={handleLoginChange}/>
 										<span className='text-danger'>{formErrors.email}</span>
@@ -96,14 +103,15 @@ const Login = () => {
 										<input type="password" className="form-control" name='password' placeholder="Password" onChange={handleLoginChange}/>
 										<span className='text-danger'>{formErrors.password}</span>
 									</div>
-									<div className="form-group">
+									{/* <div className="form-group">
 									   <ReCAPTCHA
 											sitekey="6LeXBkkbAAAAACYj7aMH2oWsIIkhpCGvm1LDQX9H"
 											onChange={onChange}
 										/>
-									</div>
+                     disabled={!isGoogleValidate} 
+									</div> */}
 									<div className="form-group">
-										<button type="submit" disabled={!isGoogleValidate} className="btn mb-30 btn-lg btn-primary w-100">login</button>
+										<button type="submit" className="btn mb-30 btn-lg btn-primary w-100">login</button>
 										<Link to="/forget-password">Forgot Password</Link>
 									</div>
 									<div className="text-center mt-40">						

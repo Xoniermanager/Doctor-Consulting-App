@@ -30,7 +30,7 @@ const Home = () => {
         <Appointment />
         <Service />
         <Testimonial />
-       <Blog news={newses.length > 0 ? newses[0] : []} />
+       {/* <Blog news={newses.length > 0 ? newses[0] : []} /> */}
       <Footer/>
     </>
   )

@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { appointmentsReducer, dateSlotReducer, doctorsReducer, drugDataReducer, editDataReducer, forgetPasswordReducer, patientAppointmentReducer, patientPrescriptionReducer, patientReportReducer, patientsReducer, prescriptionReducer, slotsReducer, testsReducer, toggleReducer, userReducer, patientDashboardReducer } from './Reducers/User';
+import { appointmentsReducer, dateSlotReducer, doctorsReducer, drugDataReducer, editDataReducer, forgetPasswordReducer, patientAppointmentReducer, patientPrescriptionReducer, patientReportReducer, patientsReducer, prescriptionReducer, slotsReducer, testsReducer, toggleReducer, userReducer, patientDashboardReducer, getSearchDoctorReducer } from './Reducers/User';
 import dashboardReducer from './Reducers/dashboardReducer';
 import callReducer from './Reducers/callReducer';
 import { adminAPIReducer, adminDataDetailsReducer, adminDepartmentsReducer, adminDiseasesReducer, adminFaqsReducer, adminNewsReducer, adminPatientsReducer, enquiryReducer } from './Reducers/Admin';
@@ -32,7 +32,8 @@ const store = configureStore({
       departments : adminDepartmentsReducer,
       faqs : adminFaqsReducer,
       newses : adminNewsReducer,
-      enquiries : enquiryReducer
+      enquiries : enquiryReducer,
+      searchDoctors : getSearchDoctorReducer
     }
 })
 

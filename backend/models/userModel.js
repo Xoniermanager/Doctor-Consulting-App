@@ -40,6 +40,9 @@ const userSchema = new mongoose.Schema({
         type : Date,
         default : Date.now
     },
+    patientNo : Number,
+    surgery : Number,
+    experienceYear : Number,
     department : String,
     departmentId : String,
     specialist : String,

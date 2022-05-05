@@ -440,6 +440,17 @@ export const editDataReducer = createReducer(initialState, {
       state.loading = false;
       state.error = action.payload;
   },
+  GetUserDetailsRequest : (state) =>{
+    state.loading = true;
+  },
+  GetUserDetailsSuccess : (state, action) =>{
+      state.loading = false;
+      state.editData = action.payload;
+  },
+  GetUserDetailsFailure : (state, action) =>{
+      state.loading = false;
+      state.error = action.payload;
+  },
   clearErrors: (state) => {
     state.error = null;
   },
@@ -625,5 +636,25 @@ export const patientDashboardReducer = createReducer(initialState, {
   },
 });
 
+
+export const getSearchDoctorReducer = createReducer(initialState, {
+  GetSearchDoctorRequest : (state) => {
+    state.loading = true;
+  },
+  GetSearchDoctorSuccess : (state, action) =>{
+    state.loading = false;
+    state.searchDoctors = action.payload;
+  },
+  GetSearchDoctorFailure : (state, action) =>{
+      state.loading = false;
+      state.error = action.payload;
+  },
+  clearErrors: (state) => {
+    state.error = null;
+  },
+  clearMessage: (state) => {
+    state.message = null;
+  },
+});
 
 

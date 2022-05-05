@@ -94,12 +94,12 @@ exports.registerUser = catchAsyncErrors(async (req, res, next)=>{
 
 // login user
 exports.loginUser = catchAsyncErrors(async (req, res, next)=>{
-    const {email, password} = req.body;
+    const {email, password, role} = req.body;
      // checking user have given email and password both
      if(!email || !password){
         return next(new ErrorHandler("Please enter email or password", 400));
     }
-    const user = await User.findOne({email}).select("+password");
+    const user = await User.findOne({email, role}).select("+password");
 
     if(!user){
         return next(new ErrorHandler("Invalid entered email or password", 401));
@@ -162,6 +162,23 @@ exports.myProfile = catchAsyncErrors(async (req, res, next)=>{
         message: error.message,
       });
    }
+})
+
+
+//  doctor details by id
+exports.getDoctorDetails = catchAsyncErrors(async (req, res, next)=>{
+  try {
+      const doctor = await User.findById(req.params.doctId);
+      res.status(200).json({
+       success: true,
+       doctor,
+     });     
+  } catch (error) {
+     res.status(500).json({
+       success: false,
+       message: error.message,
+     });
+  }
 })
 
 // verify user email
@@ -324,7 +341,7 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
  exports.updateProfile = catchAsyncErrors(async( req, res) => {
    try {
       const user = await User.findById(req.user._id);
-      const { name, academic, specialist, about, profileImage} = req.body;
+      const {name, academic, specialist, about, profileImage, patientNo, surgery, experienceYear} = req.body;
       if(name){
         user.name = name;
       }
@@ -336,6 +353,15 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
       }
       if(about){
         user.about = about;
+      }
+      if(patientNo){
+        user.patientNo = patientNo;
+      } 
+      if(surgery){
+        user.surgery = surgery;
+      }
+      if(experienceYear){
+        user.experienceYear = experienceYear;
       }
       if(profileImage && Object.keys(profileImage).length !== 0){
           if(user.profileImage)

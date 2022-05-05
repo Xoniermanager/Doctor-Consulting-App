@@ -18,15 +18,15 @@ const Profile = () => {
   const [profileImage, setProfileImage] = useState({});
 
    // profile data update
-  const intialValue = { name : user.name, academic: user.academic, specialist : user.specialist, about : user.about};
+  const intialValue = { name : user.name, academic: user.academic, specialist : user.specialist, about : user.about, patientNo: user.patientNo, surgery : user.surgery, experienceYear : user.experienceYear};
   const [profileValue, setProfileValue] = useState(intialValue);
   const handleChange = (e) =>{
     setProfileValue({...profileValue, [e.target.name]: e.target.value});
   }
   const handleProfileSubmit = async (e) =>{
     e.preventDefault();
-    let { name, academic, specialist, about } = profileValue;
-   await dispatch(updateDoctorProfile(name, academic, specialist, about, profileImage));
+    let { name, academic, specialist, about, patientNo, surgery, experienceYear } = profileValue;
+   await dispatch(updateDoctorProfile(name, academic, specialist, about, patientNo, surgery, experienceYear, profileImage));
     dispatch(loadUser());
     handleLanguageClick();
   }
@@ -159,6 +159,42 @@ const [expValue, setExpValue] = useState(user.experiences?user.experiences : [{e
                         value={profileValue.about}
                         onChange={handleChange}
                       ></textarea>
+                    </div>
+
+                    <div className="form-group col-md-6">
+                      <label>Patients</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Patients"
+                        name="patientNo"
+                        value={profileValue.patientNo}
+                        onChange={handleChange}
+                      />
+                    </div>
+
+                    <div className="form-group col-md-6">
+                      <label>Surgery</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Surgery"
+                        name="surgery"
+                        value={profileValue.surgery}
+                        onChange={handleChange}
+                      />
+                    </div>
+
+                    <div className="form-group col-md-6">
+                      <label>Experience</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Experience"
+                        name="experienceYear"
+                        value={profileValue.experienceYear}
+                        onChange={handleChange}
+                      />
                     </div>
 
                   <div className="form-group col-md-6">

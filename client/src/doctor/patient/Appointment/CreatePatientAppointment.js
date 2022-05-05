@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { createDoctorAppointment,  getDoctors,  getSlotByDate } from "../../../Actions/User";
+import { useNavigate, useParams } from "react-router-dom";
+import { createDoctorAppointment,  getSlotByDate } from "../../../Actions/User";
 import Footer from "../Layout/Footer";
 import Header from "../Layout/Header";
 import Moment from 'moment';
@@ -10,17 +10,25 @@ import PatientSideBar from "../Layout/PatientSideBar";
 import Loader from "../Layout/Loader";
 
 const CreatePatientAppointment = () => {
-
+  const { doctId } = useParams();
   const dispatch = useDispatch();
   const history = useNavigate();
 
+
+
   let dt =  Moment(new Date()).format('YYYY-MM-DD');
-  const [selectDate, setSelectDate] = useState('');
+  const [selectDate, setSelectDate] = useState(dt);
+
+  const [showBtn, setShowBtn] = useState('none');
 
   const alert = useAlert();
   const { error, message } = useSelector((state) => state.apiStatus);
 
-  const [doctorId, setDoctorId] = useState('');
+  const doctorId = doctId;
+
+  useEffect(async () => {
+    await dispatch(getSlotByDate(selectDate, doctorId));
+   }, []);
 
   useEffect(() => {
     if (error) {
@@ -33,37 +41,31 @@ const CreatePatientAppointment = () => {
     }
   }, [alert, error, dispatch, message]);
 
-  useEffect(() => {
-    dispatch(getDoctors());
-  }, []);
-
-  let { doctors } = useSelector((state) => state.doctors);
   const {user} = useSelector((state)=>state.user);
 
   const [patientDetail, setPatientDetail] = useState({patientId : user._id, patientName :user.name});
-  const [doctorDetail, setDoctorDetail] = useState({doctorId : '', doctorName :''});
   const [formData, setFormData] = useState({ slotId : '', appointmentTime : '', appointmentDate : '', appointmentStartTime : '',  appointmentEndTime : '' });
 
-  const handleOnChange = async (e) => {
-    e.preventDefault();
-    let index = e.nativeEvent.target.selectedIndex;
-    setDoctorId(e.target.value);
-    setDoctorDetail({ ...doctorDetail, doctorId : e.target.value, doctorName :  e.nativeEvent.target[index].text, patientId : user._id, patientName : user.name });
-
-    if (selectDate && e.target.value) {
-      await dispatch(getSlotByDate(selectDate, e.target.value));
-    }
-  };
+  const confirmedRef = useRef(null);
+  const handleModalClick = () => {
+    confirmedRef.current.click();
+}
 
   const submitData = async (e) => {
     e.preventDefault();
     await dispatch(createDoctorAppointment(formData, patientDetail));
     if(!error){
-      history('/patient/appointments')
+      handleModalClick();
     }
   }; 
 
+  const appointmentList = () =>{
+    history('/patient/appointments')
+  }
+
   const getSlotDetails = (e) =>{
+    e.target.className = 'btn btn-danger btn-block';
+    setShowBtn('block')
     setFormData({slotId :  e.target.dataset.rdv_slotid, appointmentTime :  e.target.dataset.rdv_slottime, appointmentDate : selectDate, appointmentStartTime : e.target.dataset.rdv_time_start,   appointmentEndTime : e.target.dataset.rdv_time_end, doctorId: doctorId});
   }
   
@@ -96,28 +98,7 @@ const CreatePatientAppointment = () => {
                   <form onSubmit={submitData}>
                   <div className="row" data-select2-id="select2-data-5-akdn">
                     <div className="col-md-4 col-sm-12">
-                      <div
-                        className="form-group"
-                        data-select2-id="select2-data-4-e5qv"
-                      >
-                        <label for="patient_name">Patient </label>
-                        <select onChange={handleOnChange}
-                          name="doctorId"
-                          value={doctorId}
-                          className="form-control patient_name multiselect-doctorino select2-hidden-accessible"
-                          data-select2-id="select2-data-patient_name"
-                          tabIndex="-1"
-                          aria-hidden="true"
-                        >
-                          <option value=""> Select Doctor...</option>
-                         { doctors && doctors.map(doctors => (
-                          <option value={doctors._id}>
-                          {doctors.name}
-                          </option>
-                         ))}
-                        </select>
-                      </div>
-                      <div className="form-group">
+                       <div className="form-group">
                         <label for="rdvdate">Date</label>
                         <div role="wrapper" className="input-group">
                           <input type="date"  onChange={handleChange} min={dt} value={selectDate} className="form-control" />
@@ -133,11 +114,9 @@ const CreatePatientAppointment = () => {
                           dateSlots.allSlots.slots.map((slt, index) => (
                         <>
                             <div key={index} className="col-sm-6 col-md-4 mb-2">
-                            {Moment() > Moment(selectDate+' '+slt.slot.split('-')[0].trim()) ? (<button class="btn btn-warning btn-block" disabled>{slt.slot}</button>) : ( bookedData && bookedData.includes(slt._id) ? (<button class="btn btn-danger btn-block">{slt.slot}</button>) : (<button type="button"
+                            {Moment() > Moment(selectDate+' '+slt.slot.split('-')[0].trim()) ? (<button class="btn btn-warning btn-block" disabled>{slt.slot}</button>) : ( bookedData && bookedData.includes(slt._id) ? (<button class="btn btn-danger btn-block" disabled>{slt.slot}</button>) : (<button type="button"
                                 onClick={getSlotDetails}
                                 className="btn btn-primary btn-block"
-                                data-toggle="modal"
-                                data-target={`#RDVModalSubmit_${index}`}
                                 data-rdv_slotid={slt._id}
                                 data-rdv_slottime={slt.slot}
                                 data-rdv_date={dateSlots.slotDate}
@@ -145,43 +124,39 @@ const CreatePatientAppointment = () => {
                                 data-rdv_time_end={slt.slot.split('-')[1].trim()}
                               > {slt.slot}</button>) ) }
                              </div>
-
-                             <div key={slt._id} className="modal fade" id={`RDVModalSubmit_${index}`}>
-                                <div className="modal-dialog modal-lg" role="document">
-                                    <div className="modal-content">
-                                        <div className="modal-header">
-                                            <h5 className="modal-title">Are you sure of the date</h5>
-                                            <button type="button" className="close" data-dismiss="modal"><span>&times;</span></button>
-                                        </div>
-                                        <div className="modal-body">
-                                        <p><b>Patient :</b> <span> {doctorDetail.doctorName} (ID : {doctorDetail.doctorId})</span></p>
-                                        <p><b>Date :</b> <label className="badge badge-primary-soft">{selectDate}</label></p>
-                                        <p><b>Time Slot :</b> <label className="badge badge-primary-soft">{slt.slot}</label></p>
-
-                                        <button className="btn btn-primary">Save</button>
-                                    </div>                      
-                                </div>
-                            </div>
-                        </div>
-                     </> )) } 
+                         </> )) } 
                       </div>
-                      <div
-                        role="alert"
-                        id="help-block"
-                        className="alert alert-danger text-center"
-                        style={{display: 'none' }}
-                      >
-                        <img src="#" />
-                        <br /> <b>No date selected</b>
-                      </div>
+                      <button style={{display : showBtn}} className="btn btn-success text-center">Confirm</button>
                     </div>
                   </div>
-                    </form>
+                  </form>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+
+        <button type="button" ref={confirmedRef} data-toggle="modal" data-target="#RDVModalSubmit"></button>
+
+         <div className="modal fade" id="RDVModalSubmit">
+                <div className="modal-dialog modal-lg" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h4 className="modal-title">Appointment Confirmation </h4>
+                            <button type="button" onClick={appointmentList} className="close" data-dismiss="modal"><span>&times;</span></button>
+                        </div>
+                        <div className="modal-body">
+                        <h5>Dear {patientDetail.patientName}, </h5>
+                        <p> We have successfully schedule your appointment for:</p>     
+                       
+                        <p className="text-info"> {formData.appointmentDate +' '+formData.appointmentTime } </p>
+                    </div>                      
+                </div>
+            </div>
+        </div>
+
+
       </div>)}
       <Footer />
     </>

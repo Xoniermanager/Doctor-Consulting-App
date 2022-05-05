@@ -57,14 +57,14 @@ export const registerUser =
     }
   };
 
-export const loginUser = (email, password) => async (dispatch) => {
+export const loginUser = (email, password, role) => async (dispatch) => {
   try {
     dispatch({
       type: "LoginRequest",
     });
     const { data } = await axios.post(
       "/api/v1/login",
-      { email, password },
+      { email, password, role },
       {
         headers: {
           "Content-Type": "application/json",
@@ -198,14 +198,14 @@ export const resetPassword = (otp, password) => async (dispatch) => {
 
 // update doctor profile
 export const updateDoctorProfile =
-  (name, academic, specialist, about, profileImage) => async (dispatch) => {
+  (name, academic, specialist, about, patientNo, surgery, experienceYear, profileImage) => async (dispatch) => {
     try {
       dispatch({
         type: "UpdateDoctorRequest",
       });
       const { data } = await axios.put(
         "/api/v1/doctor/update",
-        { name, academic, specialist, about,profileImage },
+        { name, academic, specialist, about, patientNo, surgery, experienceYear, profileImage },
         {
           headers: {
             "Content-Type": "application/json",
@@ -313,6 +313,30 @@ export const updateClinicAwards =
       });
     }
   };
+
+
+  // Doctor details by id
+export const doctorDetailById = (userId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "GetUserDetailsRequest",
+    });
+    const { data } = await axios.get(`/api/v1/doctor-details/${userId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "GetUserDetailsSuccess",
+      payload: data.doctor,
+    });
+  } catch (error) {
+    dispatch({
+      type: "GetUserDetailsFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
 
 // create patient
 export const createPatient = (userValue) => async (dispatch) => {
@@ -1253,6 +1277,31 @@ export const getPatientDashboard = (selectedDate) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "GetPatientDashboardDataFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+
+
+// get search doctor 
+export const getSearchDoctor = (key) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "GetSearchDoctorRequest",
+    });
+    const { data } = await axios.get(`/api/v1/search/doctor/${key}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "GetSearchDoctorSuccess",
+      payload: data.doctors,
+    });
+  } catch (error) {
+    dispatch({
+      type: "GetSearchDoctorFailure",
       payload: error.response.data.message,
     });
   }
