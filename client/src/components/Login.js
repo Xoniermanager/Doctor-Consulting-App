@@ -22,6 +22,7 @@ const Login = () => {
 
   const [formErrors, setFormErrors] = useState({});
 
+  const { user} = useSelector((state) => state.user);
   const { error, message, loading } = useSelector((state) => state.apiStatus);
 
   const handleLogin = async (e) => {
@@ -30,17 +31,15 @@ const Login = () => {
     let {password, email, role} = loginValues;
     await dispatch(loginUser(email, password, role)); 
     await dispatch(loadUser());
-    if(loginValues.role === 'patient'){
-      history('/patient');
-      registerNewUser(user.name);
+    dispatch(loadUser());
+    if(!error && loginValues.role === 'patient'){
+     // registerNewUser(user.name);
+        history('/patient');
       }
-   if(loginValues.role === 'doctor'){
+       if(!error && loginValues.role === 'doctor'){
         history('/doctor');
-     }
+      }
   }; 
-
-
-  const { user} = useSelector((state)=>state.user);
 
   useEffect(() => {
     if (error) {
@@ -51,7 +50,7 @@ const Login = () => {
       alert.success(message);
       dispatch({ type: "clearMessage" });
     }
-  }, [formErrors, alert, error, dispatch, message, loadUser]);
+  }, [formErrors, alert, error, dispatch, message]);
 
 
   const validate_login = (values) => {
@@ -69,6 +68,7 @@ const Login = () => {
   // Google recaptcha 
   const [isGoogleValidate, setIsGoogleValidate] = useState(false);
   const onChange = (value) =>{
+    console.log("Captcha value:", value);
 	setIsGoogleValidate(true);
   }
  
@@ -90,7 +90,7 @@ const Login = () => {
 							) : ''}
 								<form onSubmit={handleLogin}>
                  <div className="form-group">
-										<input type="radio" checked name="role" value="patient" onChange={handleLoginChange}/> Patient
+										<input type="radio"  name="role" value="patient" onChange={handleLoginChange}/> Patient
                     &emsp;
                     <input type="radio" name="role" value="doctor" onChange={handleLoginChange}/> Doctor
 									</div>
@@ -108,7 +108,7 @@ const Login = () => {
 											sitekey="6LeXBkkbAAAAACYj7aMH2oWsIIkhpCGvm1LDQX9H"
 											onChange={onChange}
 										/>
-                     disabled={!isGoogleValidate} 
+                     disabled={!isGoogleValidate}
 									</div> */}
 									<div className="form-group">
 										<button type="submit" className="btn mb-30 btn-lg btn-primary w-100">login</button>

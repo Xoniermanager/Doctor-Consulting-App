@@ -16,7 +16,7 @@ const AdminLogin = () => {
   const { error, message, loading } = useSelector((state) => state.adminApiStatus);
 
   // login 
-  const loginInitialValue = { email:"", password:"", role:"admin"};
+  const loginInitialValue = { email:"", password:""};
   const [loginValues, setLoginValues] = useState(loginInitialValue); 
   const handleLoginChange = (e) => {
     setLoginValues({...loginValues, [e.target.name] : e.target.value});
@@ -27,10 +27,11 @@ const AdminLogin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setFormErrors(validate_login(loginValues));
-    let {password, email, role} = loginValues;
-    await dispatch(loginUser(email, password, role));
-    await dispatch(loadUser());
-    if(!error && loginValues.role === 'admin'){
+    let {password, email} = loginValues;
+    await dispatch(loginUser(email, password));
+    dispatch(loadUser());
+    dispatch(loadUser());
+    if(!error && user.role === 'admin'){
 	  	history('/admin');
     }
 	 return false;
@@ -95,7 +96,8 @@ const AdminLogin = () => {
 									   <ReCAPTCHA
 											sitekey="6LeXBkkbAAAAACYj7aMH2oWsIIkhpCGvm1LDQX9H"
 											onChange={onChange}
-										/>disabled={!isGoogleValidate} 
+										/>
+                    disabled={!isGoogleValidate} 
 									</div> */}
 									<div className="form-group">
 										<button type="submit" className="btn mb-30 btn-lg btn-primary w-100">login</button>
