@@ -6,7 +6,7 @@ const reportSchema = new mongoose.Schema({
         required : [true, 'Doctor name is required']
     },
     reportDate : {
-        type : String,
+        type : Date,
         required : [true, 'Report date is required']
     },
     diagnosis : {

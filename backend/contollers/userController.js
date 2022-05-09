@@ -45,7 +45,7 @@ exports.userEnquiry = catchAsyncErrors(async (req, res)=>{
 // register user
 exports.registerUser = catchAsyncErrors(async (req, res, next)=>{
     try{
-    const {name, email,  password, role, phone, certificate} = req.body;
+    const {name, email,  password, role, phone,departmentId,department, certificate} = req.body;
     const uData = {
       name, email,  password, role, phone
     }
@@ -58,6 +58,8 @@ exports.registerUser = catchAsyncErrors(async (req, res, next)=>{
           url: myCloud.secure_url,
         };
         uData.status = 0;
+        uData.departmentId;
+        uData.department;
     }
 
     const user = await User.create(uData);
@@ -767,15 +769,21 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
  // create prescription
   exports.createPrescription = catchAsyncErrors(async( req, res) => {
     try {
-        const user = await User.findById(req.user._id);
         const { selectPatient, drugValue, testValue } = req.body;
+        const appointment = await Appointment.findById(selectPatient.appointmentId);
+
         const prescriptionData = {
           ...selectPatient,
           drugs : drugValue,
           tests : testValue,
           doctorId : req.user._id,               
       }
-         await Prescription.create(prescriptionData);
+     let presData =  await Prescription.create(prescriptionData);
+
+      appointment.isPrescription = 1;
+      appointment.prescriptionId = presData._id;
+
+      await appointment.save();
          res.status(201).json({
             success : true,
             message : 'Prescription added successfully.'
@@ -812,6 +820,7 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
       if(selectPatient){
         prescription.patientId = selectPatient.patientId;
         prescription.diagnosticSummary = selectPatient.diagnosticSummary;
+        prescription.nextAppointment = selectPatient.nextAppointment;
       }
       
       if(drugValue){
@@ -1216,11 +1225,51 @@ exports.createDoctorAppointment = catchAsyncErrors(async( req, res) => {
     })
     }
 });
+
+
+// create doctor appointment
+exports.newCreateDoctorAppointment = catchAsyncErrors(async( req, res) => {
+  try {
+      const {formData, patientDetail} = req.body;
+
+      const doctor = await User.findById(formData.doctorId);
+      const user = await User.findById(req.user._id);
+
+    //   const slot = await Slot.find(
+    //     { 'manageSlots.slots._id': formData.slotId},
+    //     { 'slot.$': 1 }
+    // )
+
+    //   const appointmentData = {
+    //     ...formData,
+    //     ...patientDetail,
+    //     createdBy : req.user._id,                
+    // }
+
+    //   await Appointment.create(appointmentData);
+    //   doctor.patients.includes(patientDetail.patientId) ? doctor.patients : doctor.patients.push(patientDetail.patientId);
+    //   user.doctors.includes(formData.doctorId) ? user.doctors : user.doctors.push(formData.doctorId);
+
+    //   await doctor.save();
+    //   await user.save();
+
+      res.status(201).json({
+          success : true,
+          slot,
+          message : 'Appointment created successfully.'
+      });
+    } catch (error) {
+      res.status(500).json({
+        success : false,
+        message : error.message
+    })
+    }
+});
   
   // get Doctor Appointments
   exports.getDoctorAppointments = catchAsyncErrors(async( req, res) => {
     try {
-        const appointments = await Appointment.find({doctorId : req.user._id});
+        const appointments = await Appointment.find({doctorId : req.user._id}).sort({_id : -1});
         if(!appointments){
           return res.status(404).json({
               success : false,

@@ -17,10 +17,18 @@ const appointmentSchema = new mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref : 'Slot'
     },
+    prescriptionId : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'Prescription'
+    },
     appointmentTime :  String,
     appointmentDate : Date,
     appointmentStartTime : String,
     appointmentEndTime : String,
+    isPrescription :{
+        type:Number,
+        default : 0
+    },
     createdAt : {
         type : Date,
         default : Date.now

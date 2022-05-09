@@ -44,7 +44,7 @@ const CreatePatientAppointment = () => {
   const {user} = useSelector((state)=>state.user);
 
   const [patientDetail, setPatientDetail] = useState({patientId : user._id, patientName :user.name});
-  const [formData, setFormData] = useState({ slotId : '', appointmentTime : '', appointmentDate : '', appointmentStartTime : '',  appointmentEndTime : '' });
+  const [formData, setFormData] = useState({ slotId : '', appointmentTime : '', appointmentDate : '', appointmentStartTime : '',  appointmentEndTime : '', doctorId : '' });
 
   const confirmedRef = useRef(null);
   const handleModalClick = () => {
@@ -64,7 +64,11 @@ const CreatePatientAppointment = () => {
   }
 
   const getSlotDetails = (e) =>{
-    e.target.className = 'btn btn-danger btn-block';
+    let div = document.getElementsByClassName('om');
+    for (let i=0; i < div.length; i++) {
+      div[i].className='btn btn-primary btn-block om';
+     }
+    e.target.className = 'btn btn-danger btn-block om';
     setShowBtn('block')
     setFormData({slotId :  e.target.dataset.rdv_slotid, appointmentTime :  e.target.dataset.rdv_slottime, appointmentDate : selectDate, appointmentStartTime : e.target.dataset.rdv_time_start,   appointmentEndTime : e.target.dataset.rdv_time_end, doctorId: doctorId});
   }
@@ -116,7 +120,7 @@ const CreatePatientAppointment = () => {
                             <div key={index} className="col-sm-6 col-md-4 mb-2">
                             {Moment() > Moment(selectDate+' '+slt.slot.split('-')[0].trim()) ? (<button class="btn btn-warning btn-block" disabled>{slt.slot}</button>) : ( bookedData && bookedData.includes(slt._id) ? (<button class="btn btn-danger btn-block" disabled>{slt.slot}</button>) : (<button type="button"
                                 onClick={getSlotDetails}
-                                className="btn btn-primary btn-block"
+                                className="btn btn-primary btn-block om"
                                 data-rdv_slotid={slt._id}
                                 data-rdv_slottime={slt.slot}
                                 data-rdv_date={dateSlots.slotDate}

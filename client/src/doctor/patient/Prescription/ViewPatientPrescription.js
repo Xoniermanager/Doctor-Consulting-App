@@ -13,18 +13,25 @@ const ViewPatientPrescription = () => {
 
   const { presId } = useParams();
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getPatientPrescriptionDetails(presId));
-  }, []);
+
+  let { loading, editData } = useSelector((state) => state.editData);
+
+  useEffect(async() => {
+   if(presId)
+   await dispatch(getPatientPrescriptionDetails(presId));
+   if(editData === undefined){
+    await dispatch(getPatientPrescriptionDetails(presId));
+   }
+  }, [dispatch, presId]);
 
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
 
+  let { user } = useSelector((state) => state.user);
 
-  let { loading, editData } = useSelector((state) => state.editData);
-   const diffInMs = Math.abs(new Date() - new Date(editData.patientDetail[0].birthday));
+   const diffInMs = Math.abs(new Date() - new Date(user.birthday));
    const age = Math.ceil(diffInMs / (1000 * 60 * 60 * 24 * 365));
 
   return (
@@ -54,10 +61,10 @@ const ViewPatientPrescription = () => {
                     <div className="col">
                       <hr />
                       <p>
-                        <b>Patient Name :</b> {editData.patientDetail[0].name} - <b>Age :</b>
-                        { `${editData.patientDetail[0].birthday} (${age} Years)`} -<b>Gender :</b> {editData.patientDetail[0].gender} - 
-                        <b>Patient Weight :</b> {editData.patientDetail[0].weight} Kg - <b>Patient Height :</b>{" "}
-                        {editData.patientDetail[0].height} cm
+                        <b>Patient Name :</b> {user.name} - <b>Age :</b>
+                        { `${user.birthday} (${age} Years)`} -<b>Gender :</b> {user.gender} - 
+                        <b>Patient Weight :</b> {user.weight} Kg - <b>Patient Height :</b>{" "}
+                        {user.height} cm
                       </p>
                       <hr />
                     </div>

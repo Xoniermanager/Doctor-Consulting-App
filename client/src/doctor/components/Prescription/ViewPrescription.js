@@ -13,18 +13,24 @@ const ViewPrescription = () => {
 
   const { presId } = useParams();
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(editPrescription(presId));
-  }, []);
+  let { loading, editData } = useSelector((state) => state.editData);
+  useEffect(async() => {
+    if(presId) 
+    await dispatch(editPrescription(presId));
+
+    if(editData === undefined){
+      await dispatch(editPrescription(presId));
+    }
+  }, [dispatch, presId]);
+  
+
 
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
 
-
-  let { loading, editData } = useSelector((state) => state.editData);
-   const diffInMs = Math.abs(new Date() - new Date(editData.patientDetail[0].birthday));
+    const diffInMs = Math.abs(new Date() - new Date(editData && editData.patientDetail[0].birthday));
     const age = Math.ceil(diffInMs / (1000 * 60 * 60 * 24 * 365));
 
   return (

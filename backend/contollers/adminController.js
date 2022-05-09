@@ -626,7 +626,7 @@ const { sendEmail } = require('../middleware/sendEmail');
                 message : 'news not found'
             })
         }
-      await faq.remove();
+      await news.remove();
         res.status(200).json({
             success : true,
             message : 'News deleted successfully.'

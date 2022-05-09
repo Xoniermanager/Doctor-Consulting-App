@@ -32,9 +32,18 @@ const prescriptionSchema = new mongoose.Schema({
                 type : mongoose.Schema.Types.ObjectId,
                 ref : 'Test'
              },
-             testDescription : String
+             testDescription : String,
+             report : {
+                 public_id : String,
+                 url : String
+             }
         }
     ],
+    appointmentId : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'Appointment'
+    },
+    nextAppointment : Date,
     createdAt : {
         type : Date,
         default : Date.now

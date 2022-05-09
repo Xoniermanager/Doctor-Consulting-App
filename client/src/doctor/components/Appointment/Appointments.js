@@ -33,11 +33,12 @@ const Appointments = () => {
 
   let { loading, doctorAppointments } = useSelector((state) => state.doctorAppointments);
 
-  let allDoctorAppointments = doctorAppointments && doctorAppointments.map((element)=>{
+  let allDoctorAppointments = doctorAppointments && doctorAppointments.map((element, index)=>{
     let cdate = Moment(element.createdAt).format('DD-MM-YYYY');
     let appDate = Moment(element.appointmentDate).format('DD-MM-YYYY');
     element = {
       ...element,
+      sno : index+1,
       cdate : cdate,
       appDate : appDate
     }
@@ -52,23 +53,23 @@ const Appointments = () => {
     }
   }
 
-  const handleDeleteClick = async (e) =>{
-    let id = e.target.id;
-    const result = await confirm("Do you want to delete this?",options);
-    if (result) {
-      await dispatch(deleteAppointmentById(id));
-      alert.success("Appointment deleted successfully");
-      dispatch(allDoctorAppointments());
-      dispatch({ type: "clearErrors" });
-      dispatch({ type: "clearMessage" });
-    }
-  }
+  // const handleDeleteClick = async (e) =>{
+  //   let id = e.target.id;
+  //   const result = await confirm("Do you want to delete this?",options);
+  //   if (result) {
+  //     await dispatch(deleteAppointmentById(id));
+  //     alert.success("Appointment deleted successfully");
+  //     dispatch(allDoctorAppointments());
+  //     dispatch({ type: "clearErrors" });
+  //     dispatch({ type: "clearMessage" });
+  //   }
+  // }
 
 
   const columns = [
     {
-      name: "ID",
-      selector: "_id",
+      name: "S.No.",
+      selector: "sno",
       sortable: true,
     },
     {
@@ -92,8 +93,9 @@ const Appointments = () => {
     },
     {
       cell:(row) => <div className="d-flex">
-      <button type='button' id={row._id} onClick={handleDeleteClick} class="btn btn-danger shadow btn-sm sharp mr-1"><i class="fa fa-trash"></i></button></div>,
-      name: "ACTIONS",
+      { row.isPrescription ? (<> <Link to={`/edit-prescription/${row._id}`} className="btn btn-primary shadow btn-sm sharp mr-1"><i className="fa fa-pencil"></i></Link> <Link to={`/view-prescription/${row.prescriptionId}`} className="btn btn-success shadow btn-sm sharp mr-1"><i className="fa fa-eye"></i></Link></>) : (<Link to={`/create-prescription/${row._id}`} className="btn btn-primary shadow btn-sm sharp mr-1"><i className="fa fa-plus"></i></Link>)}
+      </div>,
+      name: "Prescription",
     },
   ];
 
@@ -131,7 +133,6 @@ const Appointments = () => {
                     <DataTable
                       columns={columns}
                       data={allDoctorAppointments}
-                      defaultSortField="patientName"
                       pagination
                       selectableRows
                       selectableRowsComponent={Checkbox}

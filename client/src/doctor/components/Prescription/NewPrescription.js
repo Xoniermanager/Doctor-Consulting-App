@@ -2,34 +2,41 @@ import React, { useEffect, useState } from "react";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { createPrescription, editPrescription, getDrug, getPatient, getTests, updatePrescription } from "../../../Actions/User";
+import { createPrescription, editPrescription, getAppointmentDetailsById, getDrug, getPatient, getTests, updatePrescription } from "../../../Actions/User";
 import DoctSideBar from "../Layout/DoctSideBar";
 import Footer from "../Layout/Footer";
 import Header from "../Layout/Header";
 
 import AddMoreDrug from "./AddMoreDrug";
 import AddMoreTest from "./AddMoreTest";
-import Select from 'react-select';
 import Loader from "../Layout/Loader";
+import Moment from 'moment';
 
 const NewPrescription = () => {
+
+  let dt =  Moment(new Date()).format('YYYY-MM-DD');
   
   const history = useNavigate();
-  const { presId } = useParams();
+  const { appId, presId } = useParams();
   
   const dispatch = useDispatch();
   const alert = useAlert();
   let { error, message } = useSelector((state) => state.apiStatus);
   let { loading, editData } = useSelector((state) => state.editData);
 
-  useEffect(() => {
-    dispatch(getDrug());
-    dispatch(getTests());
-    dispatch(getPatient());
-    dispatch(editPrescription(presId));
-  }, []);
+  useEffect(async() => {
 
-  useEffect(() => {
+  dispatch(getDrug());
+  dispatch(getTests());
+   if(presId !== undefined && presId)
+   await dispatch(editPrescription(presId));
+   if(appId !== undefined && appId)
+   await dispatch(getAppointmentDetailsById(appId));
+
+   if(editData === undefined){
+    await dispatch(editPrescription(presId));
+  }
+  
     if (error) {
       alert.error(error);
       dispatch({ type: "clearErrors" });
@@ -38,13 +45,12 @@ const NewPrescription = () => {
       alert.success(message);
       dispatch({ type: "clearMessage" });
     }
-  }, [dispatch, alert, error, message]);
+  }, [dispatch, alert, error, message, presId, appId]);
 
   let { drugs } = useSelector((state) => state.drugs);
   let { tests } = useSelector((state) => state.tests);
-  let { patients } = useSelector((state) => state.patients);
 
-   const [selectPatient, setSelectPatient] = useState( editData ? editData : {patientId : '', diagnosticSummary:'' });
+   const [selectPatient, setSelectPatient] = useState( editData ? editData : {patientId : '', diagnosticSummary:'', nextAppointment : dt});
   const handleOnChange = (e) =>{
     setSelectPatient({...selectPatient, [e.target.name] : e.target.value});
   }
@@ -54,22 +60,18 @@ const NewPrescription = () => {
 
   const handleSubmit = async (e)=>{
     e.preventDefault();
-    if(presId)
+    if(presId !== undefined)
     {
       await dispatch(updatePrescription(presId, selectPatient, drugValue, testValue));
     }
     else{
+      selectPatient.appointmentId = appId;
       await dispatch(createPrescription(selectPatient, drugValue, testValue));
     }
     if(!error){
       history('/all-prescription')
     }
   }
-
-  let patientData = [];
-  patientData.unshift({ label: 'Select patient', value: ''});
-  patientData = patients && patients.map(patient => ({ label: patient.name, value: patient._id}));
- 
   return (
     <>
       <Header title={'Create Prescription'}/>
@@ -91,11 +93,14 @@ const NewPrescription = () => {
                         <div className="form-row">
                           <div className="form-group col-md-12 m-0">
                             <div className="form-group m-0">
-                            <Select name="patientId"
-                                options={patientData} onChange={opt => {setSelectPatient({ diagnosticSummary: selectPatient.diagnosticSummary,
-                                  patientId : opt.value
-                                })}}
-                              />
+                            <input
+                              type="text"
+                              className="form-control"
+                              name="patientName"
+                              value={ appId !== undefined ? selectPatient.patientName : editData && editData.patientDetail[0].name} 
+                            />
+                            <input type="hidden" value={selectPatient.patientId} name="patientId" />
+                            <input type="hidden" value={ appId !== undefined ? appId : selectPatient.appointmentId} name="appointmentId" />
                             </div>
                           </div>
                         </div>
@@ -129,6 +134,20 @@ const NewPrescription = () => {
                 </div>
               </div>
             </div>
+
+
+
+            <div className="col-md-12">
+              <div className="card mb-3">
+                <div className="card-body">
+                  <h4 className="text-primary mb-4">Next Appointment</h4>
+                  <div className="form-group-custom">
+                  <input type="date" name="nextAppointment"  onChange={handleOnChange} min={dt} value={Moment(selectPatient.nextAppointment).format('YYYY-MM-DD')} className="form-control" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
 
             <div className="col-md-12">
               <div className="card mb-4">

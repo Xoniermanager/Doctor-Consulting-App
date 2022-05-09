@@ -1,4 +1,5 @@
 import React from "react";
+import Select from 'react-select';
 
 const AddMoreDrug = ({drugValue, setDrugValue, drugs}) => {
 
@@ -15,10 +16,22 @@ const AddMoreDrug = ({drugValue, setDrugValue, drugs}) => {
     setDrugValue(list);
   };
 
+  let arr = [];
+   drugs && drugs.forEach(drug => {
+    arr.push({ label: drug.drugName, value: drug._id })
+  });
+
+  const help = (index,e) => {
+    const list = [...drugValue];
+    list[index]['drugId'] = e.value;
+    setDrugValue(list);
+  }
+
   return (
     <>
      {drugValue.map((data, index) => {
       const { drugType, drugId, drugStrength, drugDose, drugDuration, drugAdvice } = data;
+      let indx = arr.findIndex((a1) => a1.value ===  drugId._id)
       return (
       <section key={index} className="field-group mt-4">
         <div className="row">
@@ -38,21 +51,9 @@ const AddMoreDrug = ({drugValue, setDrugValue, drugs}) => {
             </div>
           </div>
           <div className="col-md-3 pr-0">
-            <select
-              className="form-control multiselect-drug"
-              name="drugId"
-              tabindex="-1"
-              value={drugId._id}
-              onChange={(evnt) => handleOnChange(index, evnt)}
-              aria-hidden="true"
-              required=""
-            >
-              <option value="">Select Drug...</option>
-              {drugs &&
-                drugs.map((drug) => (
-                  <option value={drug._id}>{drug.drugName}</option>
-                ))}
-            </select>
+           <Select name="drugId" onChange={(evnt) => help(index, evnt)}
+              options={arr} defaultValue={arr[indx]}
+            />
           </div>
 
           <div className="col-md-3 pr-0">

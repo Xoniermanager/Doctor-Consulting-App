@@ -118,7 +118,7 @@ const App = () => {
               <Route exact path='/patient/create' element={ user &&  user.role ==='doctor' ? <NewPatient /> : ''} />
               <Route exact path='/patients' element={ user &&  user.role ==='doctor' ? <Patients /> : ''} />
 
-              <Route exact path='/create-prescription' element={ user &&  user.role ==='doctor' ? <NewPrescription/> : ''} />
+              <Route exact path='/create-prescription/:appId' element={ user &&  user.role ==='doctor' ? <NewPrescription/> : ''} />
               <Route exact path='/edit-prescription/:presId' element={ user &&  user.role ==='doctor' ?<NewPrescription/> : '' } />
               <Route exact path='/all-prescription' element={ user &&  user.role ==='doctor' ? <Prescriptions/> : ''} />
               <Route exact path='/view-prescription/:presId' element= { user &&  user.role ==='doctor' ? <ViewPrescription/> : '' } />

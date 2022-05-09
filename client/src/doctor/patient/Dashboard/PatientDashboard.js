@@ -37,12 +37,13 @@ const PatientDashboard = () => {
    let {loading, patientDashBoard } = useSelector((state) => state.patientDashBoard);
    let allDoctorAppointments = [];
    if(patientDashBoard != undefined) {
-      allDoctorAppointments = patientDashBoard.todayApp.map((element)=>{
+      allDoctorAppointments = patientDashBoard.todayApp.map((element, index)=>{
         let cdate = Moment(element.createdAt).format('DD-MM-YYYY');
         let appDate = Moment(element.appointmentDate).format('DD-MM-YYYY');
         let doctorName = element.doctors[0].name
         element = {
           ...element,
+          sno : index+1,
           cdate : cdate,
           appDate : appDate,
           doctorName
@@ -61,8 +62,8 @@ const PatientDashboard = () => {
 
   const columns = [
     {
-      name: "ID",
-      selector: "_id",
+      name: "S.No.",
+      selector: "sno",
       sortable: true,
     },
     {
@@ -150,7 +151,7 @@ const PatientDashboard = () => {
                   <div className="row">
                     <div className="col-7">
                       <h6 className="m-0 font-weight-bold text-primary w-75 p-2">
-                        Today's Appointment - {Moment(new Date()).format('DD MMMM YYYY')}
+                         Appointment's - {Moment(new Date()).format('DD MMMM YYYY')}
                       </h6>
                     </div>
                     <div className="col-5">
@@ -168,7 +169,7 @@ const PatientDashboard = () => {
                     <DataTable
                       columns={columns}
                       data={allDoctorAppointments}
-                      defaultSortField="patientName"
+                      defaultSortField="appDate"
                       pagination
                       selectableRows
                       selectableRowsComponent={Checkbox}

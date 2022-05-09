@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Moment from 'moment';
 import Footer from '../Layout/Footer';
@@ -8,8 +8,7 @@ import { Paper, Checkbox } from "@material-ui/core";
 
 import { Link } from "react-router-dom";
 import { useAlert } from 'react-alert';
-import { confirm } from "react-confirm-box";
-import { deleteAppointmentById, getPatientAppointments,  } from '../../../Actions/User';
+import {  getPatientAppointments, getPatientPrescriptionDetails,  } from '../../../Actions/User';
 import PatientSideBar from '../Layout/PatientSideBar';
 import Loader from '../Layout/Loader';
 
@@ -33,12 +32,13 @@ const PatientAppointments = () => {
 
   let { loading, patientAppointments } = useSelector((state) => state.patientAppointments);
 
-  let allDoctorAppointments = patientAppointments && patientAppointments.map((element)=>{
+  let allDoctorAppointments = patientAppointments && patientAppointments.map((element, index)=>{
     let cdate = Moment(element.createdAt).format('DD-MM-YYYY');
     let appDate = Moment(element.appointmentDate).format('DD-MM-YYYY');
     let doctorName = element.doctors[0].name
     element = {
       ...element,
+      sno : index +1,
       cdate : cdate,
       appDate : appDate,
       doctorName
@@ -54,24 +54,10 @@ const PatientAppointments = () => {
     }
   }
 
-  const handleDeleteClick = async (e) =>{
-    let id = e.target.id;
-    const result = await confirm("Do you want to delete this?",options);
-    if (result) {
-      await dispatch(deleteAppointmentById(id));
-      alert.success("Appointment deleted successfully");
-      dispatch(allDoctorAppointments());
-      dispatch({ type: "clearErrors" });
-      dispatch({ type: "clearMessage" });
-    }
-  }
-
-
   const columns = [
     {
-      name: "ID",
-      selector: "_id",
-      sortable: true,
+      name: "S.No.",
+      selector: "sno"
     },
     {
       name: "DOCTOR NAME",
@@ -84,24 +70,67 @@ const PatientAppointments = () => {
       sortable: true,
     },
     {
-        name: "Slot Time",
+        name: "SLOT TIME",
         selector: "appointmentTime",
         sortable: true,
     },
     {
-      name: "Created Date",
+      name: "CREATED DATE",
       selector: "cdate"
     },
-    // {
-    //   cell:(row) => <div className="d-flex">
-    //   <button type='button' id={row._id} onClick={handleDeleteClick} class="btn btn-danger shadow btn-sm sharp mr-1"><i class="fa fa-trash"></i></button></div>,
-    //   name: "ACTIONS",
-    // },
+    {
+      cell:(row) => <div className="d-flex">
+      { row.isPrescription ? (<> <Link to={`/patient/view-prescription/${row.prescriptionId}`} className="btn btn-success shadow btn-sm sharp mr-1"><i className="fa fa-eye"></i></Link> <button id={row.prescriptionId} onClick={handleOpenModal} className="btn btn-primary shadow btn-sm sharp mr-1"><i className="fa fa-file"></i></button></>) : (<button className='btn btn-danger'>No</button>)}
+      </div>,
+      name: "Prescription",
+    }
   ];
 
   const isIndeterminate = (indeterminate) => indeterminate;
   const selectableRowsComponentProps = { indeterminate: isIndeterminate };
 
+ 
+
+  const [modalShow, setModalShow] = useState('none');
+
+  let { editData } = useSelector((state) => state.editData);
+
+  let [testData, setTestData] = useState([]);
+  const modalOpenRef = useRef(null);
+    const handleOpenModal = (e) => {
+      let id = e.target.id;
+      setModalShow('block');
+      dispatch(getPatientPrescriptionDetails(id));
+     modalOpenRef.current.click();
+  }
+
+  const modalRef = useRef(null);
+  const handleModalClick = () => {
+    setModalShow('none');
+    modalRef.current.click();
+  }
+
+  
+
+  const handleChange = (index, evnt) => {
+    const { name } = evnt.target;
+    const list = [...testData];
+      const file = evnt.target.files[0];
+      const Reader = new FileReader();
+      Reader.readAsDataURL(file);
+      Reader.onload = () => {
+        if (Reader.readyState === 2) {
+          list[index][name] = Reader.result;
+        }
+      };
+      setTestData(list);
+  };
+
+  const handleSubmit = (e) =>{
+    e.preventDefault();
+    console.log(testData);
+  }
+ 
 
   return (
     <>
@@ -118,14 +147,6 @@ const PatientAppointments = () => {
                     <div className="col-md-6">
                       <h4 className="card-title">All Appointments</h4>
                     </div>
-                    <div className="col-md-6 text-right">
-                      <Link
-                        to="/patient/create-appointment"
-                        className="btn btn-primary btn-sm"
-                      >
-                        <i className="fa fa-plus"></i> Create Appointment
-                      </Link>
-                    </div>
                   </div>
                 </div>
                 <div className="card-body">
@@ -133,7 +154,6 @@ const PatientAppointments = () => {
                     <DataTable
                       columns={columns}
                       data={allDoctorAppointments}
-                      defaultSortField="cdate"
                       pagination
                       selectableRows
                       selectableRowsComponent={Checkbox}
@@ -148,6 +168,57 @@ const PatientAppointments = () => {
           </div>
         </div>
       </div>)}
+
+      <a href="#" ref={modalOpenRef} data-toggle="modal" data-target="#exampleModal"></a> 
+
+      <div className="modal fade" id="exampleModal" style={{display : modalShow}}>
+        <div className="modal-dialog modal-lg" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Upload Reports</h5>
+              <button type="button" ref={modalRef} className="close" data-dismiss="modal">
+                <span>&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="basic-form">
+                <form onSubmit={handleSubmit} autoComplete='off'>
+                {modalShow === 'block' && editData && editData.tests.map((test, index)=> (
+                  <div key={index} className="form-row">
+                 
+                   {/* {testData[index] = {doctorName : editData.doctorDetail[0].name, reportDate :new Date(), diagnosis : test.testId.testName, patientId :editData.patientId, testId : test.testId._id, testDescription : test.testDescription, presTestId : test._id, report : ''}}  */}
+                  
+                    <div className="form-group col-md-6">
+                      <label>{test.testId.testName}</label>
+                    </div>
+                    <div className="form-group col-md-6">
+                    {/* <input type="hidden" value={editData.doctorDetail[0].name} name={`testData[${index}].doctorName`}/>
+                    <input type="hidden" value={new Date()} name={`testData[${index}].reportDate`} />
+                    <input type="hidden" value={test.testId.testName} name={`testData[${index}].diagnosis`} />
+                    <input type="hidden" value={editData.patientId} name={`testData[${index}].patientId`} />
+                    <input type="hidden" value={test.testId._id} name={`testData[${index}].testId`} />
+                    <input type="hidden" value={test.testDescription} name={`testData[${index}].testDescription`} />
+                    <input type="hidden" value={test._id} name={`testData[${index}].presTestId`} /> */}
+                      <input
+                        type="file"
+                        name="report"
+                        onChange={(evnt) => handleChange(index, evnt)}
+                        className="form-control"
+                        accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps"
+                      />
+                    </div>
+                   </div>
+                  ))}
+                  <button type="submit" className="btn btn-primary text-right">
+                    Upload
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <Footer/>
     </>
   );

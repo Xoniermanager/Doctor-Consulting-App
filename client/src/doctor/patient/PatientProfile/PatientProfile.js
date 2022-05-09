@@ -12,23 +12,31 @@ const PatientProfile = () => {
 
   const dispatch = useDispatch();
 
-  const handleToSubmit = async(e) =>{
-    e.preventDefault();
-    setFormErrors(validate(detail));
-    await dispatch(updatePatient(user._id, detail, profileImage));
-    await dispatch(loadUser());
-    handleModalClick();
-  }
-
   const {loading, user} = useSelector((state)=>state.user);
 
   const diffInMs = Math.abs(new Date() - new Date(user.birthday));
   const age = Math.ceil(diffInMs / (1000 * 60 * 60 * 24 * 365));
-  const [detail, setDetail] = useState(user);
-
+  
   const alert = useAlert();
   const { error, message } = useSelector((state) => state.apiStatus);
   const [formErrors, setFormErrors] = useState({});
+
+  const [isSubmit, setIsSubmit] = useState(true);
+
+
+  const [detail, setDetail] = useState({name: user.name ? user.name : '', birthday : user.birthday ? user.birthday : '', phone :  user.phone ? user.phone : '', address : user.address ? user.address : '', weight :  user.weight ? user.weight : '',  height :  user.height ? user.height : '', bloodgroup : user.bloodgroup ? user.bloodgroup : ''})
+
+  const handleToSubmit = async(e) =>{
+    e.preventDefault();
+    await setFormErrors(validate(detail));
+   if(Object.keys(formErrors).length === 0 && isSubmit){
+    await dispatch(updatePatient(user._id, detail, profileImage));
+    await dispatch(loadUser());
+    handleModalClick();
+    }else{
+    return false;
+    }
+  }
 
   const handleChange = (e) =>{
     setDetail({...detail, [e.target.name]: e.target.value});
@@ -48,19 +56,32 @@ const PatientProfile = () => {
 
   const validate = (values) => {
     const errors = {};
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    const nameRegex = /^[A-Za-z ]+$/i;
+    const phoneRegex = /^[6789]\d{9}$/i;
+    const addressRegex = /^[a-zA-Z0-9\s,'-]*$/i;
+
     if (!values.name) {
       errors.name = "Name is required!";
+      setIsSubmit(false); 
     }
-    if (!values.email) {
-      errors.email = "Email is required!";
-    } else if (!regex.test(values.email)) {
-      errors.email = "This is not a valid email format!";
+    if (!nameRegex.test(values.name)) {
+      errors.name = "Name is not valid!";
+      setIsSubmit(false); 
+    }
+   
+    if (!phoneRegex.test(values.phone)) {
+      errors.phone = "This is not a valid phone number!";
+      setIsSubmit(false); 
     }
 
     if (!values.birthday) {
         errors.birthday = "Birthday is required!";
-      } 
+        setIsSubmit(false); 
+    } 
+    if (!addressRegex.test(values.address)) {
+      errors.address = "Valid address detail!";
+      setIsSubmit(false); 
+     } 
     return errors;
   };
 
@@ -165,6 +186,7 @@ const PatientProfile = () => {
                         onChange={handleChange}
                         value={detail.name}
                       />
+                      <span className="text-danger">{formErrors.name}</span>
                     </div>
                     <div className="form-group col-md-6">
                       <label>Age </label>
@@ -176,6 +198,7 @@ const PatientProfile = () => {
                         onChange={handleChange}
                         placeholder=""
                       />
+                      <span className="text-danger">{formErrors.birthday}</span>
                     </div>
                     <div className="form-group col-md-6">
                       <label>Phone </label>
@@ -187,6 +210,7 @@ const PatientProfile = () => {
                         onChange={handleChange}
                         placeholder=""
                       />
+                       <span className="text-danger">{formErrors.phone}</span>
                     </div>
                     <div className="form-group col-md-6">
                       <label>Gender</label>
@@ -244,6 +268,7 @@ const PatientProfile = () => {
                         className="form-control"
                         onChange={handleChange}
                         name="weight"
+                        pattern="[1-9]"
                         value={detail.weight}
                         placeholder="In Kg"
                       />
@@ -256,7 +281,9 @@ const PatientProfile = () => {
                         onChange={handleChange}
                         name="height"
                         value={detail.height}
+                        pattern="[1-9]"
                         placeholder="In cm"
+                        required
                       />
                     </div>
                     <div className="form-group col-md-6">

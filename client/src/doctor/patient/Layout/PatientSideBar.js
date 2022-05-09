@@ -51,17 +51,7 @@ const PatientSideBar = () => {
                 </li>
               </ul>
             </li>
-
-            <li>
-              <Link
-                className="ai-icon"
-                to="/patient/all-prescription"
-                aria-expanded="false"
-              >
-                <i className="flaticon-381-heart"></i>
-                <span className="nav-text">Prescription</span>
-              </Link>
-            </li>
+            
             <li>
               <Link className="ai-icon" to="/patient/reports" aria-expanded="false">
                 <i className="flaticon-381-internet"></i>

@@ -29,14 +29,14 @@ export const userEnquiry = (userData) => async (dispatch) => {
   };
 
 export const registerUser =
-  (name, email, password, role, phone, certificate) => async (dispatch) => {
+  (name, email, password, role, phone, departmentId,department, certificate) => async (dispatch) => {
     try {
       dispatch({
         type: "RegisterRequest",
       });
       const { data } = await axios.post(
         "/api/v1/register",
-        { name, email, password, role, phone, certificate },
+        { name, email, password, role, phone,departmentId,department, certificate },
         {
           headers: {
             "Content-Type": "application/json",

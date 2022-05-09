@@ -44,7 +44,7 @@ const AllNews = () => {
   const handleDeleteClick = async (e) =>{
     let id = e.target.id;
     const result = await confirm("Do you want to delete this?",options);
-    if (result) {
+    if (result && id) {
       await dispatch(deleteNews(id));
       dispatch(getNewses());
       alert.success("News deleted successfully");

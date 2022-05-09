@@ -149,7 +149,7 @@ const Report = require('../models/reportModel');
             foreignField: "_id",
             as: "doctors"
           }
-        }
+        },{$sort : {appointmentDate : -1}}
       ])
 
        res.status(200).json({
@@ -296,7 +296,7 @@ const Report = require('../models/reportModel');
       try {
          let dt = new Date(req.body.selectedDate);
          const todayApp = await Appointment.aggregate([
-          { $match:{patientId : req.user._id, appointmentDate : dt}},
+          { $match:{patientId : req.user._id, appointmentDate: {$gt: dt}}},
           {
             $lookup: {
               from: "users",
@@ -304,7 +304,7 @@ const Report = require('../models/reportModel');
               foreignField: "_id",
               as: "doctors"
             }
-          }
+          },{$sort: {_id: -1}} 
         ]);
 
         const allApp = await Appointment.find({patientId : req.user._id});

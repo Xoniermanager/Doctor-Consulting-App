@@ -43,10 +43,10 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await setFormErrors(validate(formValues));
-    let { name, email, password, role, phone, conf_password } = formValues;
+    let { name, email, password, role, phone, conf_password, departmentId, department } = formValues;
     setIsSubmit(true);
     if(password.length >5 && password === conf_password){
-       await dispatch(registerUser(name, email, password, role, phone, certificate));
+       await dispatch(registerUser(name, email, password, role, phone, departmentId, department, certificate));
       if (!error ) {
         history("/login");
       }

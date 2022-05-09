@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {  getSearchDoctor } from "../../../Actions/User";
 import Footer from "../Layout/Footer";
 import Header from "../Layout/Header";
 import PatientSideBar from "../Layout/PatientSideBar";
-import Loader from "../Layout/Loader";
 
 const FindDoctors = () => {
 
@@ -18,14 +16,11 @@ const FindDoctors = () => {
   }, [])
 
   const [searchKey, setSearchKey] = useState('');
-  const { loading, searchDoctors } = useSelector((state) => state.searchDoctors);
+  const { searchDoctors } = useSelector((state) => state.searchDoctors);
 
-  const handleSearch = (e)=>{
+  const handleSearch = async(e)=>{
     setSearchKey(e.target.value);
-  }
-  const submitSearch = async(e) => {
-    e.preventDefault();
-     await dispatch(getSearchDoctor(searchKey));
+    await dispatch(getSearchDoctor(searchKey));
   }
   const showSlots = (doctId) =>{
     history(`/patient/create-appointment/${doctId}`)
@@ -35,7 +30,7 @@ const FindDoctors = () => {
     <>
       <Header title={'New Appointment'} />
       <PatientSideBar />
-      {loading === true ? <Loader /> : (<div className="content-body">
+      <div className="content-body">
         <div className="container-fluid">
           {/* <!-- row --> */}
           <div className="row">
@@ -45,23 +40,16 @@ const FindDoctors = () => {
                 
                   <div className="row" data-select2-id="select2-data-5-akdn">
 
-                  <div className="col-md-10 col-sm-10">
+                  <div className="col-md-12 col-sm-12">
                       <div
                         className="form-group">
                         <label for="searchKey">Search Doctor/Department </label>
-                        <input type="text" name="searchKey" onChange={handleSearch} placeholder="Search for department or doctor" className="form-control" />
-                      </div>
-                    </div>
-                   <div className="col-md-2 col-sm-2">
-                      <div className="form-group">
-                        <label for="searchValue"></label><br/>
-                        <button type="button" onClick={submitSearch} className="btn btn-primary">Search</button>
+                        <input type="text" name="searchKey" value={searchKey} onChange={handleSearch} placeholder="Search for department or doctor" className="form-control" autoComplete="off" />
                       </div>
                     </div>
 
-    
            {/* doctors */}
-           { searchDoctors && searchDoctors.length > 0 ? searchDoctors.map((user)=> (
+           {  searchDoctors && searchDoctors.length > 0 ? searchDoctors.map((user)=> (
              <>
               <div className="col-xl-12 col-xxl-12 col-lg-12">
               <div className="card">
@@ -137,7 +125,7 @@ const FindDoctors = () => {
             </div>
           </div>
         </div>
-      </div>)}
+      </div>
       <Footer />
     </>
   );

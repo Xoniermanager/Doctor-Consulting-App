@@ -1,4 +1,5 @@
 import React from "react";
+import Select from 'react-select';
 
 const AddMoreTest = ({ testValue, setTestValue, tests }) => {
   const removeInputFields = (index) => {
@@ -14,29 +15,29 @@ const AddMoreTest = ({ testValue, setTestValue, tests }) => {
     setTestValue(list);
   };
 
+  let arr = [];
+  tests && tests.forEach(test => {
+    arr.push({ label: test.testName, value: test._id })
+  });
+
+  const help = (index,e) => {
+    const list = [...testValue];
+    list[index]['testId'] = e.value;
+    setTestValue(list);
+  }
+
   return (
     <>
       {testValue.map((data, index) => {
         const { testId, testDescription } = data;
+        let indx = arr.findIndex((a1) => a1.value ===  testId._id)
         return (
           <div key={index} className="field-group row  mt-4">
             <div className="col-md-4">
-              <select
-                className="form-control multiselect-doctorino"
-                name="testId"
-                value={testId._id}
-                onChange={(evnt) => handleOnTChange(index, evnt)}
-                tabindex="-1"
-                aria-hidden="true"
-                required=""
-              >
-                <option value="">Select Test...</option>
-                {tests &&
-                  tests.map((test) => (
-                    <option value={test._id}>{test.testName}</option>
-                  ))}
-              </select>
-            </div>
+            <Select name="testId" onChange={(evnt) => help(index, evnt)}
+              options={arr} defaultValue={arr[indx]}
+            />
+           </div>
 
             <div className="col-md-5">
               <div className="form-group-custom">
