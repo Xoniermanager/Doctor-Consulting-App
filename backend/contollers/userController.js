@@ -746,7 +746,7 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
         if(test.owner.toString() !== req.user._id.toString()){
             return res.status(401).json({
                 success : false,
-                message : 'Unauthorised'
+                message : 'Unauthorised' 
             })
         }
       await test.remove();
