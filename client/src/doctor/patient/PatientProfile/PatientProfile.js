@@ -4,15 +4,17 @@ import Footer from "../Layout/Footer";
 import Header from "../Layout/Header";
 import Loader from "../Layout/Loader";
 import PatientSideBar from "../Layout/PatientSideBar";
-import moment from "moment";
 import { useAlert } from "react-alert";
 import { updatePatient, loadUser } from "../../../Actions/User";
+import moment from "moment";
 
 const PatientProfile = () => {
 
   const dispatch = useDispatch();
 
   const {loading, user} = useSelector((state)=>state.user);
+
+  let dt = moment(new Date()).format('YYYY-MM-DD');
 
   const diffInMs = Math.abs(new Date() - new Date(user.birthday));
   const age = Math.ceil(diffInMs / (1000 * 60 * 60 * 24 * 365));
@@ -24,12 +26,12 @@ const PatientProfile = () => {
   const [isSubmit, setIsSubmit] = useState(true);
 
 
-  const [detail, setDetail] = useState({name: user.name ? user.name : '', birthday : user.birthday ? user.birthday : '', phone :  user.phone ? user.phone : '', address : user.address ? user.address : '', weight :  user.weight ? user.weight : '',  height :  user.height ? user.height : '', bloodgroup : user.bloodgroup ? user.bloodgroup : ''})
+  const [detail, setDetail] = useState({name: user.name ? user.name : '', birthday : user.birthday ? user.birthday : '', phone :  user.phone ? user.phone : '', address : user.address ? user.address : '', weight :  user.weight ? user.weight : 0,  height :  user.height ? user.height : 0, bloodgroup : user.bloodgroup ? user.bloodgroup : '', gender : user.gender ? user.gender : 'Male' })
 
   const handleToSubmit = async(e) =>{
     e.preventDefault();
     await setFormErrors(validate(detail));
-   if(Object.keys(formErrors).length === 0 && isSubmit){
+   if(Object.keys(formErrors).length === 0 && isSubmit === true){
     await dispatch(updatePatient(user._id, detail, profileImage));
     await dispatch(loadUser());
     handleModalClick();
@@ -82,6 +84,17 @@ const PatientProfile = () => {
       errors.address = "Valid address detail!";
       setIsSubmit(false); 
      } 
+    
+     if (+(values.height) <= 0) {
+      errors.height = "Enter valid height!";
+      setIsSubmit(false); 
+     } 
+
+     if (+(values.weight) <= 0) {
+      errors.weight = "Enter valid weight!";
+      setIsSubmit(false); 
+     } 
+
     return errors;
   };
 
@@ -189,12 +202,13 @@ const PatientProfile = () => {
                       <span className="text-danger">{formErrors.name}</span>
                     </div>
                     <div className="form-group col-md-6">
-                      <label>Age </label>
+                      <label>Birthday </label>
                       <input
                         type="date"
                         className="form-control"
                         value={detail.birthday}
                         name="birthday"
+                        max={dt}
                         onChange={handleChange}
                         placeholder=""
                       />
@@ -221,7 +235,7 @@ const PatientProfile = () => {
                           name="gender"
                           onChange={handleChange}
                           id="gridRadios1"
-                          checked={detail.gender == 'Male'}
+                          checked={detail.gender === 'Male'}
                           value='Male'
                         />
                         <label
@@ -238,7 +252,7 @@ const PatientProfile = () => {
                           name="gender"
                           onChange={handleChange}
                           id="gridRadios2"
-                          checked={detail.gender == 'Female'}
+                          checked={detail.gender === 'Female'}
                           value='Female'
                         />
                         <label
@@ -272,6 +286,7 @@ const PatientProfile = () => {
                         value={detail.weight}
                         placeholder="In Kg"
                       />
+                      <span className="text-danger">{formErrors.weight}</span>
                     </div>
                     <div className="form-group col-md-6">
                       <label>Height </label>
@@ -285,17 +300,21 @@ const PatientProfile = () => {
                         placeholder="In cm"
                         required
                       />
+                      <span className="text-danger">{formErrors.height}</span>
                     </div>
                     <div className="form-group col-md-6">
                       <label>Blood Group </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        onChange={handleChange}
-                        name="bloodgroup"
-                        value={detail.bloodgroup}
-                        placeholder=""
-                      />
+                      <select name="bloodgroup" value={detail.bloodgroup} onChange={handleChange} className="form-control">
+                        <option value="Unknown">Unknown</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                    </select>
                     </div>
 
                     <div className="form-group col-md-6">

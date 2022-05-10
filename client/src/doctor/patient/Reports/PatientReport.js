@@ -73,7 +73,6 @@ const PatientReport = () => {
     reportModal.current.click();
   }
 
-
   const columns = [
     {
       name: "ID",
@@ -102,7 +101,7 @@ const PatientReport = () => {
     {
       cell:(row) => <div className="d-flex">
       <button type='button' id={row._id} onClick={handleDeleteClick} className="btn btn-danger shadow sharp mr-2"><i class="fa fa-trash"></i></button>
-      <a href={`${row.document.url}`} target="_blank" class="btn btn-primary shadow sharp mr-2" rel="noopener noreferrer" download><i class="fa fa-download"></i> </a>
+      {/* <a href={`${row.document.url}`} target="_blank" class="btn btn-primary shadow sharp mr-2" rel="noopener noreferrer" download><i class="fa fa-download"></i> </a> */}
       </div>,
       name: "ACTIONS",
     },

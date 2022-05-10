@@ -1306,3 +1306,31 @@ export const getSearchDoctor = (key) => async (dispatch) => {
     });
   }
 };
+
+// submit test reports 
+export const submitTestReport =  (formData) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "SubmitTestReportRequest",
+    });
+    const { data } = await axios.post(
+      "/api/v1/patient/submit-report",
+      { formData },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+    dispatch({
+      type: "SubmitTestReportSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "SubmitTestReportFailure",
+      payload: error.response.data.message,
+    });
+  }
+}

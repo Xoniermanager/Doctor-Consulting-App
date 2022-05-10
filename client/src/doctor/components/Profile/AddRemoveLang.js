@@ -12,7 +12,6 @@ const AddRemoveLang = ({langValue,setLangValue}) => {
     console.log('target',evnt.target.name)
     const list = [...langValue];
     list[index].value = value;
-    console.log(list)
     setLangValue(list);
   }
   

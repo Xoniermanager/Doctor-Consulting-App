@@ -282,6 +282,17 @@ export const forgetPasswordReducer = createReducer(initialState, {
       state.loading = false;
       state.error = action.payload;
   },
+  SubmitTestReportRequest : (state) =>{
+    state.loading = true;
+  },
+  SubmitTestReportSuccess : (state, action) =>{
+      state.loading = false;
+      state.message = action.payload;
+  },
+  SubmitTestReportFailure : (state, action) =>{
+      state.loading = false;
+      state.error = action.payload;
+  },
   clearErrors: (state) => {
     state.error = null;
   },

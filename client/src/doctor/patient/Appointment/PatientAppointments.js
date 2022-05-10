@@ -8,7 +8,7 @@ import { Paper, Checkbox } from "@material-ui/core";
 
 import { Link } from "react-router-dom";
 import { useAlert } from 'react-alert';
-import {  getPatientAppointments, getPatientPrescriptionDetails,  } from '../../../Actions/User';
+import {  getPatientAppointments, getPatientPrescriptionDetails, submitTestReport,  } from '../../../Actions/User';
 import PatientSideBar from '../Layout/PatientSideBar';
 import Loader from '../Layout/Loader';
 
@@ -126,9 +126,9 @@ const PatientAppointments = () => {
       setTestData(list);
   };
 
-  const handleSubmit = (e) =>{
+  const handleSubmit = async(e) =>{
     e.preventDefault();
-    console.log(testData);
+    await dispatch(submitTestReport(testData));
   }
  
 
@@ -183,22 +183,17 @@ const PatientAppointments = () => {
             <div className="modal-body">
               <div className="basic-form">
                 <form onSubmit={handleSubmit} autoComplete='off'>
+                {modalShow === 'block' && editData && editData.tests.forEach((test,index)=>{
+                  testData[index] = {doctorName : editData.doctorDetail[0].name, reportDate :new Date(), diagnosis : test.testId.testName, patientId :editData.patientId, testId : test.testId._id, testDescription : test.testDescription, presTestId : test._id, report : '', prescriptionId : editData._id
+                   }
+                })}
+            
                 {modalShow === 'block' && editData && editData.tests.map((test, index)=> (
                   <div key={index} className="form-row">
-                 
-                   {/* {testData[index] = {doctorName : editData.doctorDetail[0].name, reportDate :new Date(), diagnosis : test.testId.testName, patientId :editData.patientId, testId : test.testId._id, testDescription : test.testDescription, presTestId : test._id, report : ''}}  */}
-                  
                     <div className="form-group col-md-6">
                       <label>{test.testId.testName}</label>
                     </div>
                     <div className="form-group col-md-6">
-                    {/* <input type="hidden" value={editData.doctorDetail[0].name} name={`testData[${index}].doctorName`}/>
-                    <input type="hidden" value={new Date()} name={`testData[${index}].reportDate`} />
-                    <input type="hidden" value={test.testId.testName} name={`testData[${index}].diagnosis`} />
-                    <input type="hidden" value={editData.patientId} name={`testData[${index}].patientId`} />
-                    <input type="hidden" value={test.testId._id} name={`testData[${index}].testId`} />
-                    <input type="hidden" value={test.testDescription} name={`testData[${index}].testDescription`} />
-                    <input type="hidden" value={test._id} name={`testData[${index}].presTestId`} /> */}
                       <input
                         type="file"
                         name="report"

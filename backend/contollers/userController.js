@@ -134,7 +134,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next)=>{
  // filter doctors
  exports.searchDoctors = catchAsyncErrors(async( req, res) => {
   try {
-    const doctors = await User.find({ role : 'doctor', $or:[
+    const doctors = await User.find({ role : 'doctor', status : 1, $or:[
       {name:{'$regex' : `^${req.params.key}`, '$options' : 'i'}},
       {specialist:{'$regex' : `^${req.params.key}`, '$options' : 'i'}}
    ]});

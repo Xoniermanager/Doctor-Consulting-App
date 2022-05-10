@@ -104,6 +104,7 @@ const Report = require('../models/reportModel');
     exports.getPatient = catchAsyncErrors(async( req, res) => {
       try {
          const patient = await User.find({ $and: [
+            {status:1},
             {role:'patient'},
             { doctors: { $in: [ req.user._id ] } }
         ]});
@@ -329,3 +330,32 @@ const Report = require('../models/reportModel');
         })
        }
     });
+ 
+    // submit reports
+  exports.submitTestReport = catchAsyncErrors(( req, res) => {
+    try {
+      let {formData} = req.body;
+      formData.forEach(async (data)=>{
+        let datas = {...data};
+        if(datas.report){
+          const myCloud = await cloudinary.v2.uploader.upload(datas.report, {
+            folder: "report",
+          });
+          datas.document = {
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+          };
+      }
+     await Report.create(datas);
+      })
+      res.status(200).json({
+        success : true,
+        message : 'Report created successfully.'
+    });
+    } catch (error) {
+       res.status(500).json({
+        success : false,
+        message : error.message
+       })
+    }
+  });
