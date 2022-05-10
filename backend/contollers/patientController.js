@@ -334,7 +334,6 @@ const Report = require('../models/reportModel');
     // submit reports
   exports.submitTestReport = catchAsyncErrors(( req, res) => {
     try {
-      console.log(req.body.formData); return false;
       let {formData} = req.body;
       formData.forEach(async (data)=>{
         let datas = {...data};

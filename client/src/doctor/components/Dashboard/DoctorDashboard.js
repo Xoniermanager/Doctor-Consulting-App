@@ -4,8 +4,10 @@ import DoctSideBar from "../Layout/DoctSideBar";
 import Footer from "../Layout/Footer";
 import Header from "../Layout/Header";
 import MediaItem from "./MediaItem";
+import moment from "moment";
 
 const DoctorDashboard = () => {
+  
   return (
     <>
       <Header title={'Dashboard'}/>
@@ -98,17 +100,17 @@ const DoctorDashboard = () => {
                   <div className="row">
                     <div className="col-7">
                       <h6 className="m-0 font-weight-bold text-primary w-75 p-2">
-                        Today's Appointment - 15 Mar 2022
+                        Today's Appointment - {moment(new Date()).format('DD MMM YYYY')}
                       </h6>
                     </div>
-                    <div className="col-5">
+                    {/* <div className="col-5">
                       <Link
                         to="/create-appointment"
                         className="btn btn-primary float-right mr-2"
                       >
                         <i className="fa fa-plus"></i> New Appointment
                       </Link>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className="card-body">

@@ -1195,7 +1195,7 @@ export const getPatientPrescriptionDetails = (presId) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "GetPatientPrescriptionByIdFailure",
-      payload: error.response.data.message,
+    //  payload: error.response.data.message,
     });
   }
 };

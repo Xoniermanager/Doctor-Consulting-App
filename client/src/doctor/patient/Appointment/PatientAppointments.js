@@ -99,14 +99,15 @@ const PatientAppointments = () => {
   const modalOpenRef = useRef(null);
     const handleOpenModal = (e) => {
       let id = e.target.id;
+      if(id){
       setModalShow('block');
       dispatch(getPatientPrescriptionDetails(id));
-     modalOpenRef.current.click();
+      modalOpenRef.current.click();
+      }
   }
 
   const modalRef = useRef(null);
   const handleModalClick = () => {
-    setModalShow('none');
     modalRef.current.click();
   }
 
@@ -129,6 +130,7 @@ const PatientAppointments = () => {
   const handleSubmit = async(e) =>{
     e.preventDefault();
     await dispatch(submitTestReport(testData));
+    handleModalClick();
   }
  
 
@@ -155,11 +157,11 @@ const PatientAppointments = () => {
                       columns={columns}
                       data={allDoctorAppointments}
                       pagination
-                      selectableRows
-                      selectableRowsComponent={Checkbox}
-                      selectableRowsComponentProps={
-                        selectableRowsComponentProps
-                      }
+                      // selectableRows
+                      // selectableRowsComponent={Checkbox}
+                      // selectableRowsComponentProps={
+                      //   selectableRowsComponentProps
+                      // }
                     />
                   </Paper>
                 </div>
@@ -183,7 +185,7 @@ const PatientAppointments = () => {
             <div className="modal-body">
               <div className="basic-form">
                 <form onSubmit={handleSubmit} autoComplete='off'>
-                {modalShow === 'block' && editData && editData.tests !== undefined && editData.tests.forEach((test,index)=>{
+                {modalShow === 'block' && editData && editData.tests && editData.tests.forEach((test,index)=>{
                   testData[index] = {doctorName : editData.doctorDetail[0].name, reportDate :new Date(), diagnosis : test.testId.testName, patientId :editData.patientId, testId : test.testId._id, testDescription : test.testDescription, presTestId : test._id, report : '', prescriptionId : editData._id
                    }
                 })}

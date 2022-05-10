@@ -77,18 +77,18 @@ const PatientDashboard = () => {
       sortable: true,
     },
     {
-        name: "Slot Time",
+        name: "SLOT TIME",
         selector: "appointmentTime",
         sortable: true,
     },
     {
-      name: "Created Date",
+      name: "CREATED DATE",
       selector: "cdate"
     },
     {
       cell:(row) => <div className="d-flex">
       <a href="javascript:void(0);" class="btn btn-outline-success btn-circle btn-md mr-2"><i class="fa fa-check"></i></a></div>,
-      name: "ACTIONS",
+      name: "STATUS",
     },
   ];
 
@@ -171,11 +171,11 @@ const PatientDashboard = () => {
                       data={allDoctorAppointments}
                       defaultSortField="appDate"
                       pagination
-                      selectableRows
-                      selectableRowsComponent={Checkbox}
-                      selectableRowsComponentProps={
-                        selectableRowsComponentProps
-                      }
+                      // selectableRows
+                      // selectableRowsComponent={Checkbox}
+                      // selectableRowsComponentProps={
+                      //   selectableRowsComponentProps
+                      // }
                     />
                   </Paper> 
                 </div>
