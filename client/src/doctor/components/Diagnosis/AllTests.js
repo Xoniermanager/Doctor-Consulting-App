@@ -19,13 +19,16 @@ const AllTests = () => {
     dispatch(getTests());
   }, [dispatch]);
 
+  let { user } = useSelector((state) => state.user);
+
   let { loading, tests } = useSelector((state) => state.tests);
 
-  let allTests = tests && tests.map((element)=>{
+  let allTests = tests && tests.map((element, index)=>{
     let cdate = Moment(element.createdAt).format('DD MMMM YYYY HH:mm');
     element = {
       ...element,
-      cdate : cdate
+      cdate : cdate,
+      sno  : index + 1
     }
     return element;
   })
@@ -44,7 +47,7 @@ const AllTests = () => {
   const handleDeleteClick = async (e) =>{
     let id = e.target.id;
     const result = await confirm("Do you want to delete this?",options);
-    if (result) {
+    if (result && id) {
       await dispatch(deleteTest(id));
       dispatch(getTests());
       alert.success("Test deleted successfully");
@@ -54,8 +57,8 @@ const AllTests = () => {
 
   const columns = [
     {
-      name: "ID",
-      selector: "_id",
+      name: "S.No",
+      selector: "sno",
       sortable: true,
     },
     {
@@ -69,7 +72,7 @@ const AllTests = () => {
       sortable: true,
     },
     {
-      cell:(row) => <div className="d-flex"><Link to={`/test-edit/${row._id}`} className="btn btn-primary shadow btn-sm sharp mr-1"><i className="fa fa-edit"></i></Link>
+      cell:(row) => <div style={{display : row.owner.toString() === user._id ? 'block' : 'none' }}><Link to={`/test-edit/${row._id}`} className="btn btn-primary shadow btn-sm sharp mr-1"><i className="fa fa-edit"></i></Link>
       <button type='button' id={row._id} onClick={handleDeleteClick} className="btn btn-danger shadow btn-sm sharp mr-1"><i className="fa fa-trash"></i></button></div>,
       name: "ACTIONS"
     },
@@ -121,11 +124,11 @@ const AllTests = () => {
                     data={allTests}
                     defaultSortField="testName"
                     pagination
-                    selectableRows
-                    selectableRowsComponent={Checkbox}
-                    selectableRowsComponentProps={
-                      selectableRowsComponentProps
-                    }
+                    // selectableRows
+                    // selectableRowsComponent={Checkbox}
+                    // selectableRowsComponentProps={
+                    //   selectableRowsComponentProps
+                    // }
                   />
                 </Paper>
               </div>

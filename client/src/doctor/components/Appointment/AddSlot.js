@@ -15,7 +15,8 @@ const AddSlot = () => {
   const {slotId} = useParams();
   const dispatch = useDispatch();
 
- 
+  const minDt = moment(new Date()).format('YYYY-MM-DD');
+
   useEffect(() => {
     dispatch(editSlot(slotId));
   }, [dispatch]);
@@ -136,11 +137,11 @@ const AddSlot = () => {
                     <div className="row">
                       <div className="form-group col-md-6">
                         <label for="">Start Slot Date *</label>
-                        <input type="date" name="slotStartDate" onChange={handleCheckField} value={moment(fieldValue.slotStartDate).format('YYYY-MM-DD')} className="form-control" />
+                        <input type="date" min={minDt} name="slotStartDate" onChange={handleCheckField} value={moment(fieldValue.slotStartDate).format('YYYY-MM-DD')} className="form-control" />
                       </div>
                       <div className="form-group col-md-6">
                         <label for="">End Slot Date</label>
-                        <input type="date" name="slotEndDate" onChange={handleCheckField} value={moment(fieldValue.slotEndDate).format('YYYY-MM-DD')} className="form-control" />
+                        <input type="date" min={minDt} name="slotEndDate" onChange={handleCheckField} value={moment(fieldValue.slotEndDate).format('YYYY-MM-DD')} className="form-control" />
                       </div>
                     </div>
                     <div className="row">

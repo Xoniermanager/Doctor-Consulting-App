@@ -221,6 +221,7 @@ const PatientProfile = () => {
                         className="form-control"
                         value={detail.phone}
                         name="phone"
+                        pattern="\d*" maxlength="10"
                         onChange={handleChange}
                         placeholder=""
                       />
@@ -283,6 +284,7 @@ const PatientProfile = () => {
                         onChange={handleChange}
                         name="weight"
                         pattern="[1-9]"
+                        min={0.5}
                         value={detail.weight}
                         placeholder="In Kg"
                       />
@@ -297,6 +299,7 @@ const PatientProfile = () => {
                         name="height"
                         value={detail.height}
                         pattern="[1-9]"
+                        min={100}
                         placeholder="In cm"
                         required
                       />

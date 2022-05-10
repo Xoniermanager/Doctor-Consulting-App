@@ -1,5 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { getDepartments } from "../../../Actions/Admin";
 import { updateDoctorProfile, loadUser, updateDoctorLanguage, updateDoctorExperience, updateClinicAwards } from "../../../Actions/User";
 import DoctSideBar from "../Layout/DoctSideBar";
 import Footer from "../Layout/Footer";
@@ -97,6 +98,11 @@ const [expValue, setExpValue] = useState(user.experiences?user.experiences : [{e
       }
     };
   };
+
+  useEffect(async() => {
+   await dispatch(getDepartments());
+  }, [dispatch]);
+  let { departments } = useSelector((state) => state.departments);
   
   return (
     <>
@@ -141,14 +147,20 @@ const [expValue, setExpValue] = useState(user.experiences?user.experiences : [{e
                     </div>
                     <div className="form-group col-md-6">
                       <label>Specialist</label>
-                      <input
+                      <select className="form-control" name="specialist" value={profileValue.specialist} onChange={handleChange}>
+                      <option value="">Select Department</option>
+                        { departments && departments.map((depat)=> (
+                          <option value={depat._id}>{depat.departmentName}</option>
+                          ))}
+                    </select>
+                      {/* <input
                         type="text"
                         className="form-control"
                         placeholder=""
                         name="specialist"
                         value={profileValue.specialist}
                         onChange={handleChange}
-                      />
+                      /> */}
                     </div>
                     <div className="form-group col-md-6">
                       <label>About doctor</label>

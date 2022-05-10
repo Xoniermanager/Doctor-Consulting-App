@@ -55,11 +55,11 @@ const Header = ({title}) => {
             							Create as new
             						</button>
             						<div className="dropdown-menu shadow">
-            							<Link to="/all-prescription" className="dropdown-item">Prescription</Link>
-            							<Link to="/patients" className="dropdown-item">Patient</Link>
-            							<Link to="/doctor-appointments" className="dropdown-item">Appointment</Link> 
-            							<Link to="/all-drugs" className="dropdown-item">Drug</Link>
-            							<Link to="/all-tests" className="dropdown-item">Diagnosis Test</Link>
+            							<Link to="/patient/create" className="dropdown-item">Add Patient</Link>
+            							<Link to="/create-appointment" className="dropdown-item">Create Appointment</Link> 
+            							<Link to="/create-slot" className="dropdown-item">Create Time Slot</Link>
+            							<Link to="/create-test" className="dropdown-item">Add Diagnosis Test</Link>
+										<Link to="/create-drug" className="dropdown-item">Add Drug</Link>
             						</div>
             					</div>
 

@@ -22,11 +22,12 @@ const AdminDrugs = () => {
 
   let { loading, drugs } = useSelector((state) => state.drugs);
 
-  let allDrugs = drugs && drugs.map((element)=>{
+  let allDrugs = drugs && drugs.map((element, index)=>{
     let cdate = Moment(element.createdAt).format('DD MMMM YYYY HH:mm');
     element = {
       ...element,
-      cdate : cdate
+      cdate : cdate,
+      sno : index + 1
     }
     return element;
   })
@@ -44,7 +45,7 @@ const AdminDrugs = () => {
   const handleDeleteClick = async (e) =>{
     let id = e.target.id;
     const result = await confirm("Do you want to delete this?",options);
-    if (result) {
+    if (result && id) {
       await dispatch(deleteDrug(id));
       alert.success("Drug deleted successfully");
       dispatch(getDrug());
@@ -66,9 +67,8 @@ const AdminDrugs = () => {
 
   const columns = [
     {
-      name: "ID",
-      selector: "_id",
-      sortable: true,
+      name: "S.No.",
+      selector: "sno"
     },
     {
       name: "DRUG NAME",
@@ -127,11 +127,11 @@ const AdminDrugs = () => {
                       data={allDrugs}
                       defaultSortField="name"
                       pagination
-                      selectableRows
-                      selectableRowsComponent={Checkbox}
-                      selectableRowsComponentProps={
-                        selectableRowsComponentProps
-                      }
+                      // selectableRows
+                      // selectableRowsComponent={Checkbox}
+                      // selectableRowsComponentProps={
+                      //   selectableRowsComponentProps
+                      // }
                     />
                   </Paper>
                 </div>

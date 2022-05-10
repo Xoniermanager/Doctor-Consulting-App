@@ -21,11 +21,12 @@ const AllFaqs = () => {
   
     let { loading, faqs } = useSelector((state) => state.faqs);
   
-    let allFaqs = faqs && faqs.map((element)=>{
+    let allFaqs = faqs && faqs.map((element, index)=>{
       let cdate = Moment(element.createdAt).format('DD MMMM YYYY HH:mm');
       element = {
         ...element,
-        cdate : cdate
+        cdate : cdate,
+        sno : index + 1
       }
       return element;
     })
@@ -44,7 +45,7 @@ const AllFaqs = () => {
     const handleDeleteClick = async (e) =>{
       let id = e.target.id;
       const result = await confirm("Do you want to delete this?",options);
-      if (result) {
+      if (result && id) {
         await dispatch(deleteFaq(id));
         dispatch(getFaqs());
         alert.success("Faq deleted successfully");
@@ -54,9 +55,8 @@ const AllFaqs = () => {
   
     const columns = [
       {
-        name: "ID",
-        selector: "_id",
-        sortable: true,
+        name: "S.No.",
+        selector: "sno"
       },
       {
         name: "FAQ Question",

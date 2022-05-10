@@ -33,7 +33,7 @@ const AppointmentSlot = () => {
 
   let { slots } = useSelector((state) => state.slots);
 
-  let allSlots = slots && slots.map((element)=>{
+  let allSlots = slots && slots.map((element,index)=>{
     let cdate = Moment(element.createdAt).format('DD-MM-YYYY');
     let slotStartDate = Moment(element.slotStartDate).format('DD-MM-YYYY');
     let slotEndDate = Moment(element.slotEndDate).format('DD-MM-YYYY');
@@ -43,7 +43,8 @@ const AppointmentSlot = () => {
       slotStartDate : slotStartDate,
       slotEndDate : slotEndDate,
       interval : interval,
-      cdate : cdate
+      cdate : cdate,
+      sno : index+1
     }
     return element;
   })
@@ -59,7 +60,7 @@ const AppointmentSlot = () => {
   const handleDeleteClick = async (e) =>{
     let id = e.target.id;
     const result = await confirm("Do you want to delete this?",options);
-    if (result) {
+    if (result && id) {
       await dispatch(deleteSlot(id));
       alert.success("Slot deleted successfully");
       dispatch(getSlots());
@@ -71,8 +72,8 @@ const AppointmentSlot = () => {
 
   const columns = [
     {
-      name: "ID",
-      selector: "_id",
+      name: "S.No.",
+      selector: "sno",
       sortable: true,
     },
     {
@@ -133,11 +134,11 @@ const AppointmentSlot = () => {
                       data={allSlots}
                       defaultSortField="name"
                       pagination
-                      selectableRows
-                      selectableRowsComponent={Checkbox}
-                      selectableRowsComponentProps={
-                        selectableRowsComponentProps
-                      }
+                      // selectableRows
+                      // selectableRowsComponent={Checkbox}
+                      // selectableRowsComponentProps={
+                      //   selectableRowsComponentProps
+                      // }
                     />
                   </Paper>
                 </div>

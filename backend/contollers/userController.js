@@ -556,12 +556,12 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
                })
            }
 
-           if(drug.owner.toString() !== req.user._id.toString()){
-               return res.status(401).json({
-                   success : false,
-                   message : 'Unauthorised'
-               })
-           }
+          //  if(drug.owner.toString() !== req.user._id.toString()){
+          //      return res.status(401).json({
+          //          success : false,
+          //          message : 'Unauthorised'
+          //      })
+          //  }
           await drug.remove();
           let user = await User.findById(req.user._id);
           let index = user.drugs.indexOf(req.params.id);
@@ -742,13 +742,12 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
                 message : 'Test not found'
             })
         }
-
-        if(test.owner.toString() !== req.user._id.toString()){
-            return res.status(401).json({
-                success : false,
-                message : 'Unauthorised' 
-            })
-        }
+        // if(test.owner.toString() !== req.user._id.toString()){
+        //     return res.status(401).json({
+        //         success : false,
+        //         message : 'Unauthorised' 
+        //     })
+        // }
       await test.remove();
       let user = await User.findById(req.user._id);
       let index = user.tests.indexOf(req.params.id);

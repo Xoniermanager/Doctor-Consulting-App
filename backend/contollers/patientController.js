@@ -334,6 +334,7 @@ const Report = require('../models/reportModel');
     // submit reports
   exports.submitTestReport = catchAsyncErrors(( req, res) => {
     try {
+      console.log(req.body.formData); return false;
       let {formData} = req.body;
       formData.forEach(async (data)=>{
         let datas = {...data};
@@ -346,7 +347,7 @@ const Report = require('../models/reportModel');
             url: myCloud.secure_url,
           };
       }
-     await Report.create(datas);
+      await Report.create(datas);
       })
       res.status(200).json({
         success : true,

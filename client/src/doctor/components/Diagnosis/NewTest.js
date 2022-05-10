@@ -18,9 +18,11 @@ const NewTest = () => {
     const initalValue = { testName : '', testDescription : ''};
     const [testValue, setTestValue] = useState(editData ? editData : initalValue);
 
-    useEffect(() => {
-      dispatch(editTest(testId));
-    }, [dispatch]);
+    useEffect(async() => {
+      if(testId){
+       await dispatch(editTest(testId));
+      }
+    }, [dispatch, testId]);
 
     const handleOnChange = (e) =>{
         setTestValue({...testValue, [e.target.name] : e.target.value});

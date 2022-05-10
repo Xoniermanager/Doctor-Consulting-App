@@ -24,13 +24,16 @@ const AdminPatients = () => {
     const diffInMs = Math.abs(date2 - date1);
     return Math.ceil(diffInMs / (1000 * 60 * 60 * 24 * 365));
   }
-  let patiens = adminPatients && adminPatients.map((element) => {
-      let age = getDifferenceInDays(new Date(), new Date(element.birthday));
+  let patiens = adminPatients && adminPatients.map((element, index) => {
+      let age = '-';
+      if(element.birthday)
+      age = +(getDifferenceInDays(new Date(), new Date(element.birthday)));
       let cdate = Moment(element.createdAt).format('DD MMMM YYYY HH:mm');
       element = {
         ...element,
         cdate : cdate,
-        age : age
+        age : age,
+        sno : index + 1
       }
       return element;
   });
@@ -59,12 +62,16 @@ const AdminPatients = () => {
 
   const columns = [
     {
+      name: "S.No.",
+      selector: "sno"
+    },
+    {
       name: "PATIENT NAME",
       selector: "name",
       sortable: true,
     },
     {
-      name: "AGE",
+      name: "AGE(Yrs)",
       selector: "age",
       sortable: true,
     },
@@ -88,9 +95,7 @@ const AdminPatients = () => {
       name: "STATUS",
     },
     {
-      cell:(row) => <div className="d-flex"> <Link to="view-patient.html" className="btn btn-success shadow btn-sm sharp mr-1"><i className="fa fa-eye"></i></Link>
-      <button type="button" className="btn btn-primary shadow btn-sm sharp mr-1"><i className="fa fa-edit"></i></button>
-      <button type="button" className="btn btn-danger shadow btn-sm sharp mr-1"><i className="fa fa-trash"></i></button></div>,
+      cell:(row) => <div className="d-flex"> <Link to="#" className="btn btn-success shadow btn-sm sharp mr-1"><i className="fa fa-eye"></i></Link></div>,
       name: "ACTIONS",
     },
   ];

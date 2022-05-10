@@ -29,7 +29,7 @@ const DoctSideBar = () => {
               </Link>
             </li>
 
-            <li key={1} data-index={1} onClick={handlerMenu} className={ getIndex ==1 ? 'mm-active' : ''}>
+            {/* <li key={1} data-index={1} onClick={handlerMenu} className={ getIndex ==1 ? 'mm-active' : ''}>
               <a
                 className="has-arrow ai-icon"
                 href="#"
@@ -46,7 +46,7 @@ const DoctSideBar = () => {
                   <Link to="/all-prescription">All Prescriptions</Link>
                 </li>
               </ul>
-            </li>
+            </li> */}
 
             <li key={2} data-index={2} onClick={handlerMenu} className={ getIndex==2 ? 'mm-active' : ''}>
               <a

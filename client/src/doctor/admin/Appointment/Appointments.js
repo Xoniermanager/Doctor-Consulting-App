@@ -54,7 +54,7 @@ const Appointments = () => {
   const handleDeleteClick = async (e) =>{
     let id = e.target.id;
     const result = await confirm("Do you want to delete this?",options);
-    if (result) {
+    if (result && id) {
       await dispatch(deleteAppointmentById(id));
       alert.success("Appointment deleted successfully");
       dispatch(allDoctorAppointments());

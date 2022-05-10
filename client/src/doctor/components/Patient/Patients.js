@@ -21,19 +21,24 @@ const Patients = () => {
     const diffInMs = Math.abs(date2 - date1);
     return Math.ceil(diffInMs / (1000 * 60 * 60 * 24 * 365));
   }
-  let patiens = patients && patients.map((element) => {
+  let patiens = patients && patients.map((element, index) => {
       let age = getDifferenceInDays(new Date(), new Date(element.birthday));
       let cdate = Moment(element.createdAt).format('DD MMMM YYYY HH:mm');
       element = {
         ...element,
         cdate : cdate,
-        age : age
+        age : age,
+        sno : index+1
       }
       return element;
   });
 
 
   const columns = [
+    {
+      name: "S.No.",
+      selector: "sno",
+    },
     {
       name: "PATIENT NAME",
       selector: "name",
@@ -63,12 +68,12 @@ const Patients = () => {
       cell:(row) =>  <Link to="view-prescription.html" className="btn btn-outline-primary btn-sm"><i className="fa fa-eye"></i> View</Link>,
       name: "PRESCRIPTIONS",
     },
-    {
-      cell:(row) => <div className="d-flex"> <Link to="view-patient.html" className="btn btn-success shadow btn-sm sharp mr-1"><i className="fa fa-eye"></i></Link>
-      <button type="button" className="btn btn-primary shadow btn-sm sharp mr-1"><i className="fa fa-edit"></i></button>
-      <button type="button" className="btn btn-danger shadow btn-sm sharp mr-1"><i className="fa fa-trash"></i></button></div>,
-      name: "ACTIONS",
-    },
+    // {
+    //   cell:(row) => <div className="d-flex"> <Link to="view-patient.html" className="btn btn-success shadow btn-sm sharp mr-1"><i className="fa fa-eye"></i></Link>
+    //   <button type="button" className="btn btn-primary shadow btn-sm sharp mr-1"><i className="fa fa-edit"></i></button>
+    //   <button type="button" className="btn btn-danger shadow btn-sm sharp mr-1"><i className="fa fa-trash"></i></button></div>,
+    //   name: "ACTIONS",
+    // },
   ];
 
   const isIndeterminate = (indeterminate) => indeterminate;
@@ -106,11 +111,11 @@ const Patients = () => {
                       data={patiens}
                       defaultSortField="name"
                       pagination
-                      selectableRows
-                      selectableRowsComponent={Checkbox}
-                      selectableRowsComponentProps={
-                        selectableRowsComponentProps
-                      }
+                      // selectableRows
+                      // selectableRowsComponent={Checkbox}
+                      // selectableRowsComponentProps={
+                      //   selectableRowsComponentProps
+                      // }
                     />
                   </Paper>
                 </div>

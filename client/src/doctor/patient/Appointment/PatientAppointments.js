@@ -183,7 +183,7 @@ const PatientAppointments = () => {
             <div className="modal-body">
               <div className="basic-form">
                 <form onSubmit={handleSubmit} autoComplete='off'>
-                {modalShow === 'block' && editData && editData.tests.forEach((test,index)=>{
+                {modalShow === 'block' && editData && editData.tests !== undefined && editData.tests.forEach((test,index)=>{
                   testData[index] = {doctorName : editData.doctorDetail[0].name, reportDate :new Date(), diagnosis : test.testId.testName, patientId :editData.patientId, testId : test.testId._id, testDescription : test.testDescription, presTestId : test._id, report : '', prescriptionId : editData._id
                    }
                 })}

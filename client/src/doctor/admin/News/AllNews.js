@@ -21,11 +21,12 @@ const AllNews = () => {
 
   let { loading, newses } = useSelector((state) => state.newses);
 
-  let allNews = newses && newses.map((element)=>{
+  let allNews = newses && newses.map((element, index)=>{
     let cdate = Moment(element.createdAt).format('DD MMMM YYYY HH:mm');
     element = {
       ...element,
-      cdate : cdate
+      cdate : cdate,
+      sno : index + 1
     }
     return element;
   })
@@ -54,9 +55,8 @@ const AllNews = () => {
 
   const columns = [
     {
-      name: "ID",
-      selector: "_id",
-      sortable: true,
+      name: "S.No.",
+      selector: "sno"
     },
     {
       name: "NEWS TITLE",

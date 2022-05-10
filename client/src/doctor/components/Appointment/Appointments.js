@@ -9,8 +9,7 @@ import { Paper, Checkbox } from "@material-ui/core";
 
 import { Link } from "react-router-dom";
 import { useAlert } from 'react-alert';
-import { confirm } from "react-confirm-box";
-import { deleteAppointmentById, getDoctorAppointments } from '../../../Actions/User';
+import { getDoctorAppointments } from '../../../Actions/User';
 import Loader from '../Layout/Loader';
 
 const Appointments = () => {
@@ -134,11 +133,11 @@ const Appointments = () => {
                       columns={columns}
                       data={allDoctorAppointments}
                       pagination
-                      selectableRows
-                      selectableRowsComponent={Checkbox}
-                      selectableRowsComponentProps={
-                        selectableRowsComponentProps
-                      }
+                      // selectableRows
+                      // selectableRowsComponent={Checkbox}
+                      // selectableRowsComponentProps={
+                      //   selectableRowsComponentProps
+                      // }
                     />
                   </Paper>
                 </div>

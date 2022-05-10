@@ -15,17 +15,18 @@ import Loader from '../Layout/Loader';
 const AdminAllTests = () => {
 
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getTests());
+  useEffect(async() => {
+   await dispatch(getTests());
   }, [dispatch]);
 
   let { loading, tests } = useSelector((state) => state.tests);
 
-  let allTests = tests && tests.map((element)=>{
+  let allTests = tests && tests.map((element, index)=>{
     let cdate = Moment(element.createdAt).format('DD MMMM YYYY HH:mm');
     element = {
       ...element,
-      cdate : cdate
+      cdate : cdate,
+      sno : index + 1
     }
     return element;
   })
@@ -44,7 +45,7 @@ const AdminAllTests = () => {
   const handleDeleteClick = async (e) =>{
     let id = e.target.id;
     const result = await confirm("Do you want to delete this?",options);
-    if (result) {
+    if (result && id) {
       await dispatch(deleteTest(id));
       dispatch(getTests());
       alert.success("Test deleted successfully");
@@ -54,9 +55,8 @@ const AdminAllTests = () => {
 
   const columns = [
     {
-      name: "ID",
-      selector: "_id",
-      sortable: true,
+      name: "S.No.",
+      selector: "sno"
     },
     {
       name: "TEST NAME",
@@ -110,11 +110,11 @@ const AdminAllTests = () => {
                     data={allTests}
                     defaultSortField="testName"
                     pagination
-                    selectableRows
-                    selectableRowsComponent={Checkbox}
-                    selectableRowsComponentProps={
-                      selectableRowsComponentProps
-                    }
+                    // selectableRows
+                    // selectableRowsComponent={Checkbox}
+                    // selectableRowsComponentProps={
+                    //   selectableRowsComponentProps
+                    // }
                   />
                 </Paper>
               </div>
