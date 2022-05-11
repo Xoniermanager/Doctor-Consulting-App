@@ -47,6 +47,15 @@ const PatientSideBar = () => {
                   <Link to="/patient/doctor-list">Book Appointment</Link>
                 </li>
                 <li>
+                  <Link to="/patient/upcomming-appointment">Upcomming</Link>
+                </li>
+                <li>
+                  <Link to="/patient/completed-appointment">Completed</Link>
+                </li>
+                <li>
+                  <Link to="/patient/followup-appointment">Followup</Link>
+                </li>
+                <li>
                   <Link to="/patient/appointments">All Appointments</Link>
                 </li>
               </ul>

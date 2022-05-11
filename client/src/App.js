@@ -75,6 +75,9 @@ import AllFaqs from './doctor/admin/Faq/AllFaqs';
 import AllNews from './doctor/admin/News/AllNews';
 import AddNews from './doctor/admin/News/AddNews';
 import FindDoctors from './doctor/patient/Appointment/FindDoctors';
+import UpcommingAppointment from './doctor/patient/Appointment/UpcommingAppointment';
+import FollowupAppointment from './doctor/patient/Appointment/FollowupAppointment';
+import CompletedAppointment from './doctor/patient/Appointment/CompletedAppointment';
 
 const App = () => {
  const dispatch = useDispatch();
@@ -149,6 +152,10 @@ const App = () => {
               <Route exact path='/patient/view-prescription/:presId' element={  user &&  user.role ==='patient' ? <ViewPatientPrescription/> : '' } />
               <Route exact path='/patient/reports' element={ user &&  user.role ==='patient' ? <PatientReport/> : '' } />
               <Route exact path='/patient/create-appointment/:doctId' element={ user &&  user.role ==='patient' ? <CreatePatientAppointment/> : ''} />
+
+              <Route exact path='/patient/upcomming-appointment' element={ user &&  user.role ==='patient' ? <UpcommingAppointment/> : ''} />
+              <Route exact path='/patient/completed-appointment' element={ user &&  user.role ==='patient' ? <CompletedAppointment/> : ''} />
+              <Route exact path='/patient/followup-appointment' element={ user &&  user.role ==='patient' ? <FollowupAppointment/> : ''} />
 
                {/* Admin module */}
                <Route exact path="/admin/login" element={<AdminLogin />} />

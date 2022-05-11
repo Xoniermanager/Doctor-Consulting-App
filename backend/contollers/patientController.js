@@ -5,6 +5,7 @@ const cloudinary = require('cloudinary');
 const Appointment = require('../models/appointmentModel');
 const Prescription = require('../models/prescriptionModel');
 const mongoose = require('mongoose');
+const moment= require('moment') 
 const Report = require('../models/reportModel');
  
   // add create patient
@@ -165,6 +166,59 @@ const Report = require('../models/reportModel');
      }
   });
 
+  //upcomming appointments list
+  exports.getUpcommingAppointments = catchAsyncErrors(async( req, res) => {
+    try {
+       const patientAppointments = await Appointment.aggregate([
+        {$match: {"$and": [{  patientId : req.user._id}, {isPrescription: 0}]}},
+        {
+          $lookup: {
+            from: "users",
+            localField: "doctorId",
+            foreignField: "_id",
+            as: "doctors"
+          }
+        },{$sort : {appointmentDate : -1}}
+      ])
+
+       res.status(200).json({
+           success : true,
+           patientAppointments
+       });
+     } catch (error) {
+       res.status(500).json({
+         success : false,
+         message : error.message
+      })
+     }
+  });
+  //completed appointments list
+  exports.getCompletedAppointments = catchAsyncErrors(async( req, res) => {
+    try {
+       let dt = moment(new Date()).format('YYYY-MM-DD')+'T00:00:00.000+00:00';
+       const patientAppointments = await Appointment.aggregate([
+       {$match: {"$and": [{ patientId : req.user._id}, {isPrescription : { $eq: 1}} ]}},
+        {
+          $lookup: {
+            from: "users",
+            localField: "doctorId",
+            foreignField: "_id",
+            as: "doctors"
+          }
+        },{$sort : {appointmentDate : -1}}
+      ])
+
+       res.status(200).json({
+           success : true,
+           patientAppointments
+       });
+     } catch (error) {
+       res.status(500).json({
+         success : false,
+         message : error.message
+      })
+     }
+  });
     // get Prescriptions details
     exports.getPrescriptions = catchAsyncErrors(async( req, res) => {
     try {

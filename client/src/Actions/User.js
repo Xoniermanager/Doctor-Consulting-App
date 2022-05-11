@@ -1152,6 +1152,52 @@ export const getPatientAppointments = () => async (dispatch) => {
   }
 };
 
+// get patient upcomming appointments
+export const getPatientUpcommingAppointments = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "GetPatientUpcommingAppointmentsRequest",
+    });
+    const { data } = await axios.get("/api/v1/patient/upcomming-appointments", {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "GetPatientUpcommingAppointmentsSuccess",
+      payload: data.patientAppointments,
+    });
+  } catch (error) {
+    dispatch({
+      type: "GetPatientUpcommingAppointmentsFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// get patient completed appointments
+export const getPatientCompletedAppointments = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "GetPatientCompletedAppointmentsRequest",
+    });
+    const { data } = await axios.get("/api/v1/patient/completed-appointments", {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "GetPatientCompletedAppointmentsSuccess",
+      payload: data.patientAppointments,
+    });
+  } catch (error) {
+    dispatch({
+      type: "GetPatientCompletedAppointmentsFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
 
 // get Patient prescriptions
 export const getPatientPrescription = () => async (dispatch) => {

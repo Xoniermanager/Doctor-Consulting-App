@@ -577,6 +577,28 @@ export const patientAppointmentReducer = createReducer(initialState, {
       state.loading = false;
       state.error = action.payload;
   },
+  GetPatientUpcommingAppointmentsRequest : (state) => {
+    state.loading = true;
+  },
+  GetPatientUpcommingAppointmentsSuccess : (state, action) =>{
+    state.loading = false;
+    state.patientAppointments = action.payload;
+  },
+  GetPatientUpcommingAppointmentsFailure : (state, action) =>{
+      state.loading = false;
+      state.error = action.payload;
+  },
+  GetPatientCompletedAppointmentsRequest : (state) => {
+    state.loading = true;
+  },
+  GetPatientCompletedAppointmentsSuccess : (state, action) =>{
+    state.loading = false;
+    state.patientAppointments = action.payload;
+  },
+  GetPatientCompletedAppointmentsFailure : (state, action) =>{
+      state.loading = false;
+      state.error = action.payload;
+  },
   clearErrors: (state) => {
     state.error = null;
   },

@@ -1,5 +1,5 @@
 const express = require('express');
-const { createPatient, getPatient, updatePatient, getDoctors, getAppointments, getPrescriptions, getPrescriptionDetails, createReport, getReports, getDashboard, submitTestReport } = require('../contollers/patientController');
+const { createPatient, getPatient, updatePatient, getDoctors, getAppointments, getPrescriptions, getPrescriptionDetails, createReport, getReports, getDashboard, submitTestReport, getUpcommingAppointments, getCompletedAppointments } = require('../contollers/patientController');
 const { isAuthenticatedUser } = require('../middleware/auth');
 
 const router = express.Router();
@@ -12,6 +12,8 @@ router.route('/').get(isAuthenticatedUser, getPatient);
 router.route('/doctors').get(isAuthenticatedUser, getDoctors);
 
 router.route('/appointments').get(isAuthenticatedUser, getAppointments);
+router.route('/upcomming-appointments').get(isAuthenticatedUser, getUpcommingAppointments);
+router.route('/completed-appointments').get(isAuthenticatedUser, getCompletedAppointments);
 
 router.route('/prescriptions').get(isAuthenticatedUser, getPrescriptions);
 
