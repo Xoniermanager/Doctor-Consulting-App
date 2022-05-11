@@ -23,7 +23,7 @@ const PatientProfile = () => {
   const { error, message } = useSelector((state) => state.apiStatus);
   const [formErrors, setFormErrors] = useState({});
 
-  const [isSubmit, setIsSubmit] = useState(false);
+  const [isSubmit, setIsSubmit] = useState(true);
 
 
   const [detail, setDetail] = useState({name: user.name ? user.name : '', birthday : user.birthday ? user.birthday : '', phone :  user.phone ? user.phone : '', address : user.address ? user.address : '', weight :  user.weight ? user.weight : 0,  height :  user.height ? user.height : 0, bloodgroup : user.bloodgroup ? user.bloodgroup : '', gender : user.gender ? user.gender : 'Male' })
@@ -31,7 +31,6 @@ const PatientProfile = () => {
   const handleToSubmit = async(e) =>{
     e.preventDefault();
     await setFormErrors(validate(detail));
-    Object.keys(formErrors).length ? setIsSubmit(true) : setIsSubmit(false); 
    if(Object.keys(formErrors).length === 0 && isSubmit === true){
     await dispatch(updatePatient(user._id, detail, profileImage));
     await dispatch(loadUser());

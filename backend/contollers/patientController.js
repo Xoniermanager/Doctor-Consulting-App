@@ -396,9 +396,8 @@ const Report = require('../models/reportModel');
       if(prescription && prescription.tests){
         testArr = prescription.tests.map((test)=> test.testId.toString());
       }
-      prescription.tests = [];
-  
-      formData.forEach(async (data)=>{
+
+      formData.forEach(async (data, indexId)=>{
         let datas = {...data};
         let myCloud = {};
         if(datas.report){
@@ -413,12 +412,9 @@ const Report = require('../models/reportModel');
           };
 
           if(testArr.includes(datas.testId)){
-            prescription.tests.push({
-              testId : datas.testId,
-              testDescription : datas.testDescription,
-              _id : datas.presTestId,
-              report : { public_id: myCloud.public_id, url: myCloud.secure_url}
-            });
+            prescription.tests[indexId] =  { testId : datas.testId, testDescription : datas.testDescription,
+              _id : datas.presTestId, report : { public_id: myCloud.public_id, url: myCloud.secure_url}}
+            await prescription.save();
           } 
         }else if(datas.report === '' && datas.docs){
           datas.document = {
@@ -427,17 +423,15 @@ const Report = require('../models/reportModel');
           };
 
           if(testArr.includes(datas.testId)){
-            prescription.tests.push({
-              testId : datas.testId,
-              testDescription : datas.testDescription,
-              _id : datas.presTestId,
-              report : {public_id: datas.docs.public_id, url: datas.docs.url,}
-            });
+            prescription.tests[indexId] = { testId : datas.testId, testDescription : datas.testDescription, _id : datas.presTestId, report : {public_id: datas.docs.public_id, url: datas.docs.url}}
+            await prescription.save();
           } 
         }
         await Report.create(datas);
       })
-      await prescription.save();
+
+      
+
       res.status(200).json({
         success : true,
         message : 'Report created successfully.'
