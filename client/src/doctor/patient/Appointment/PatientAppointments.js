@@ -132,7 +132,7 @@ const PatientAppointments = () => {
     await dispatch(submitTestReport(testData));
     handleModalClick();
   }
- 
+
 
   return (
     <>
@@ -186,16 +186,18 @@ const PatientAppointments = () => {
               <div className="basic-form">
                 <form onSubmit={handleSubmit} autoComplete='off'>
                 {modalShow === 'block' && editData && editData.tests && editData.tests.forEach((test,index)=>{
-                  testData[index] = {doctorName : editData.doctorDetail[0].name, reportDate :new Date(), diagnosis : test.testId.testName, patientId :editData.patientId, testId : test.testId._id, testDescription : test.testDescription, presTestId : test._id, report : '', prescriptionId : editData._id
-                   }
+                  testData[index] = {doctorName : editData.doctorDetail[0].name, reportDate :new Date(), diagnosis : test.testId.testName, patientId :editData.patientId, testId : test.testId._id, testDescription : test.testDescription, presTestId : test._id, report : '', prescriptionId : editData._id, docs : {public_id : test.report && test.report.public_id ? test.report.public_id : '', url :  test.report && test.report.url ? test.report.url : ''} }
                 })}
             
                 {modalShow === 'block' && editData && editData.tests.map((test, index)=> (
                   <div key={index} className="form-row">
-                    <div className="form-group col-md-6">
+                    <div className="form-group col-md-4">
                       <label>{test.testId.testName}</label>
                     </div>
-                    <div className="form-group col-md-6">
+                    <div className="form-group col-md-5">
+                      {test.report && test.report.url ? (<button type="button" onClick={()=> window.open(test.report.url, "_blank")} className='btn btn-primary shadow btn-xs'><i className="fa fa-file"></i></button>) : ''}  
+                    </div>
+                    <div className="form-group col-md-3">
                       <input
                         type="file"
                         name="report"

@@ -71,13 +71,23 @@ const ViewPatientPrescription = () => {
                   </div>
                   <div className="row justify-content-center">
                     <div className="col">
+                    <h3> Drugs</h3>
                     {editData.drugs && editData.drugs.map(drug=>(
                       <p>
                         {drug.drugId.drugName}
                         <span className="float-right">{drug.drugDuration} days</span>
                       </p>
                     ))}
-                      
+                    
+                    <h3> Tests </h3>
+                    {editData.tests && editData.tests.map(test=>(
+                      <p>
+                        {test.testId.testName}
+                        {test.report && test.report.url ? (<button type="button" onClick={()=> window.open(test.report.url, "_blank")} className='btn btn-primary shadow btn-xs text-center'><i className="fa fa-file"></i></button>) : ''} 
+                        <span className="float-right">{test.testDescription} </span>
+                      </p>
+                    ))}
+
                     </div>
                   </div>
                 </div>) : '' } 

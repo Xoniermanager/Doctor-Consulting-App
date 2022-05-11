@@ -17,6 +17,10 @@ const reportSchema = new mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref : 'User'
     },
+    prescriptionId : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'Prescription'
+    },
     document : {
         public_id : String,
         url :String

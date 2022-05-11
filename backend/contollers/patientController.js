@@ -332,22 +332,58 @@ const Report = require('../models/reportModel');
     });
  
     // submit reports
-  exports.submitTestReport = catchAsyncErrors(( req, res) => {
+  exports.submitTestReport = catchAsyncErrors(async(req, res) => {
     try {
       let {formData} = req.body;
+      let prescription = await Prescription.findOne({_id : formData[0].prescriptionId});
+      await Report.deleteMany({prescriptionId : { $eq: formData[0].prescriptionId }});
+     
+      let testArr = [];
+      if(prescription && prescription.tests){
+        testArr = prescription.tests.map((test)=> test.testId.toString());
+      }
+      prescription.tests = [];
+  
       formData.forEach(async (data)=>{
         let datas = {...data};
+        let myCloud = {};
         if(datas.report){
-          const myCloud = await cloudinary.v2.uploader.upload(datas.report, {
+          if(datas.docs.public_id)
+          await cloudinary.v2.uploader.destroy('report/'+datas.docs.public_id);
+          myCloud = await cloudinary.v2.uploader.upload(datas.report, {
             folder: "report",
           });
           datas.document = {
             public_id: myCloud.public_id,
             url: myCloud.secure_url,
           };
-      }
-      await Report.create(datas);
+
+          if(testArr.includes(datas.testId)){
+            prescription.tests.push({
+              testId : datas.testId,
+              testDescription : datas.testDescription,
+              _id : datas.presTestId,
+              report : { public_id: myCloud.public_id, url: myCloud.secure_url}
+            });
+          } 
+        }else if(datas.report === '' && datas.docs){
+          datas.document = {
+            public_id: datas.docs.public_id,
+            url: datas.docs.url,
+          };
+
+          if(testArr.includes(datas.testId)){
+            prescription.tests.push({
+              testId : datas.testId,
+              testDescription : datas.testDescription,
+              _id : datas.presTestId,
+              report : {public_id: datas.docs.public_id, url: datas.docs.url,}
+            });
+          } 
+        }
+        await Report.create(datas);
       })
+      await prescription.save();
       res.status(200).json({
         success : true,
         message : 'Report created successfully.'

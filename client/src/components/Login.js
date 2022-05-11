@@ -33,7 +33,7 @@ const Login = () => {
     await dispatch(loadUser());
     dispatch(loadUser());
     if(!error && loginValues.role === 'patient'){
-      registerNewUser(user.name);
+      registerNewUser('om');
         history('/patient');
       }
        if(!error && loginValues.role === 'doctor'){

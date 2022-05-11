@@ -57,18 +57,6 @@ const PatientReport = () => {
     }
   }
 
-  const handleDeleteClick = async (e) =>{
-    let id = e.target.id;
-   /// const result = await confirm("Do you want to delete this?",options);
-    // if (result && id) {
-    //   await dispatch((id));
-    //   alert.success("Appointment deleted successfully");
-    //   dispatch(getPatientReports());
-    //   dispatch({ type: "clearErrors" });
-    //   dispatch({ type: "clearMessage" });
-    // }
-  }
-
   const reportModal= useRef(null);
   const closeModal = () => {
     reportModal.current.click();
@@ -100,8 +88,7 @@ const PatientReport = () => {
     },
     {
       cell:(row) => <div className="d-flex">
-      <button type='button' id={row._id} onClick={handleDeleteClick} className="btn btn-danger shadow sharp mr-2"><i class="fa fa-trash"></i></button>
-      {/* <a href={`${row.document.url}`} target="_blank" class="btn btn-primary shadow sharp mr-2" rel="noopener noreferrer" download><i class="fa fa-download"></i> </a> */}
+      {row.document && row.document.url ? (<button type="button" id={row.document.url} onClick={()=> window.open(row.document.url, "_blank")} className='btn btn-primary shadow btn-xs'><i className="fa fa-file"></i></button>) : ''} 
       </div>,
       name: "ACTIONS",
     },
