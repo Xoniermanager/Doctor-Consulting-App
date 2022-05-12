@@ -1356,6 +1356,7 @@ export const getSearchDoctor = (key) => async (dispatch) => {
 // submit test reports 
 export const submitTestReport =  (formData) => async (dispatch) => {
   try {
+    console.log('action',  formData);
     dispatch({
       type: "SubmitTestReportRequest",
     });

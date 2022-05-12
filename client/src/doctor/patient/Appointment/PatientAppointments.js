@@ -113,23 +113,26 @@ const PatientAppointments = () => {
 
   
 
-  const handleChange = (index, evnt) => {
-    const { name } = evnt.target;
+  const handleChange = async(evnt) => {
+    const { id } = evnt.target;
     const list = [...testData];
       const file = evnt.target.files[0];
       const Reader = new FileReader();
       Reader.readAsDataURL(file);
       Reader.onload = () => {
-        if (Reader.readyState === 2) {
-          list[index][name] = Reader.result;
+        if (Reader.readyState == 2) {
+          testData[id]['report'] = Reader.result;
+          testData[id]['indexId'] = id;
+          dispatch(submitTestReport(testData[id]));
         }
       };
-      setTestData(list);
+  //  setTestData(list);
+   // await dispatch(submitTestReport(testData[id]));
   };
 
   const handleSubmit = async(e) =>{
     e.preventDefault();
-    await dispatch(submitTestReport(testData));
+   // await dispatch(submitTestReport(testData));
     handleModalClick();
   }
 
@@ -200,8 +203,8 @@ const PatientAppointments = () => {
                     <div className="form-group col-md-3">
                       <input
                         type="file"
-                        name="report"
-                        onChange={(evnt) => handleChange(index, evnt)}
+                        id={index}
+                        onChange={(evnt) => handleChange(evnt)}
                         className="form-control"
                         accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps"
                       />
@@ -217,7 +220,6 @@ const PatientAppointments = () => {
           </div>
         </div>
       </div>
-
       <Footer/>
     </>
   );

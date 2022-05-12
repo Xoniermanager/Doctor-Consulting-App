@@ -117,76 +117,76 @@ const App = () => {
 
               {/* for doctors */}
               <Route exact path='/doctor/profile' element={<Profile />} />
-              <Route exact path='/doctor' element={ user &&  user.role ==='doctor' ? <DoctorDashboard/> : ''} />
-              <Route exact path='/patient/create' element={ user &&  user.role ==='doctor' ? <NewPatient /> : ''} />
-              <Route exact path='/patients' element={ user &&  user.role ==='doctor' ? <Patients /> : ''} />
+              <Route exact path='/doctor' element={ user &&  user.role ==='doctor' ? <DoctorDashboard/> : <Login/>} />
+              <Route exact path='/patient/create' element={ user &&  user.role ==='doctor' ? <NewPatient /> : <Login/>} />
+              <Route exact path='/patients' element={ user &&  user.role ==='doctor' ? <Patients /> : <Login/>} />
 
-              <Route exact path='/create-prescription/:appId' element={ user &&  user.role ==='doctor' ? <NewPrescription/> : ''} />
+              <Route exact path='/create-prescription/:appId' element={ user &&  user.role ==='doctor' ? <NewPrescription/> : <Login/>} />
               <Route exact path='/edit-prescription/:presId' element={ user &&  user.role ==='doctor' ?<NewPrescription/> : '' } />
-              <Route exact path='/all-prescription' element={ user &&  user.role ==='doctor' ? <Prescriptions/> : ''} />
+              <Route exact path='/all-prescription' element={ user &&  user.role ==='doctor' ? <Prescriptions/> : <Login/>} />
               <Route exact path='/view-prescription/:presId' element= { user &&  user.role ==='doctor' ? <ViewPrescription/> : '' } />
 
-              <Route exact path='/create-drug' element={ user &&  user.role ==='doctor' ? <NewDrug /> : ''} />
-              <Route exact path='/drug-edit/:drugId' element={ user &&  user.role ==='doctor' ? <NewDrug /> : ''} />
-              <Route exact path='/all-drugs' element={ user &&  user.role ==='doctor' ? <Drugs /> : ''} />
+              <Route exact path='/create-drug' element={ user &&  user.role ==='doctor' ? <NewDrug /> : <Login/>} />
+              <Route exact path='/drug-edit/:drugId' element={ user &&  user.role ==='doctor' ? <NewDrug /> : <Login/>} />
+              <Route exact path='/all-drugs' element={ user &&  user.role ==='doctor' ? <Drugs /> : <Login/>} />
 
-              <Route exact path='/create-test' element={ user &&  user.role ==='doctor' ? <NewTest/> : ''} />
-              <Route exact path='/test-edit/:testId' element={ user &&  user.role ==='doctor' ? <NewTest /> : ''} />
-              <Route exact path='/all-tests' element={ user &&  user.role ==='doctor' ? <AllTests/> : ''} />
+              <Route exact path='/create-test' element={ user &&  user.role ==='doctor' ? <NewTest/> : <Login/>} />
+              <Route exact path='/test-edit/:testId' element={ user &&  user.role ==='doctor' ? <NewTest /> : <Login/>} />
+              <Route exact path='/all-tests' element={ user &&  user.role ==='doctor' ? <AllTests/> : <Login/>} />
 
-              <Route exact path='/create-slot' element={ user &&  user.role ==='doctor' ? <AddSlot/> : ''} />
-              <Route exact path='/my-slots' element={user &&  user.role ==='doctor' ? <AppointmentSlot/> : ''} />
-              <Route exact path='/edit-slot/:slotId' element={ user &&  user.role ==='doctor' ? <AddSlot/> : ''} />
-              <Route exact path='/date-slot' element={ user &&  user.role ==='doctor' ? <DateSlot/> : ''} />
+              <Route exact path='/create-slot' element={ user &&  user.role ==='doctor' ? <AddSlot/> : <Login/>} />
+              <Route exact path='/my-slots' element={user &&  user.role ==='doctor' ? <AppointmentSlot/> : <Login/>} />
+              <Route exact path='/edit-slot/:slotId' element={ user &&  user.role ==='doctor' ? <AddSlot/> : <Login/>} />
+              <Route exact path='/date-slot' element={ user &&  user.role ==='doctor' ? <DateSlot/> : <Login/>} />
 
-              <Route exact path='/create-appointment' element={ user &&  user.role ==='doctor' ? <CreateAppointment/> : ''} />
-              <Route exact path='/doctor-appointments' element={ user &&  user.role ==='doctor' ? <Appointments/> : ''} />
+              <Route exact path='/create-appointment' element={ user &&  user.role ==='doctor' ? <CreateAppointment/> : <Login/>} />
+              <Route exact path='/doctor-appointments' element={ user &&  user.role ==='doctor' ? <Appointments/> : <Login/>} />
 
               {/* Patient module */}
-              <Route exact path='/patient' element={ user &&  user.role ==='patient' ? <PatientDashboard/> : ''} />
-              <Route exact path='/patient/profile' element={ user &&  user.role ==='patient' ? <PatientProfile/> : ''} />
-              <Route exact path='/patient/doctor-list' element={ user &&  user.role ==='patient' ? <FindDoctors/> : ''} />
-              <Route exact path='/patient/appointments' element={ user &&  user.role ==='patient' ? <PatientAppointments/> : ''} />
-              <Route exact path='/patient/change-password' element={ user &&  user.role ==='patient' ? <ChangePassword/> : ''} />
-              <Route exact path='/patient/all-prescription' element={ user &&  user.role ==='patient' ? <PatientPrescriptions/> : ''} />
+              <Route exact path='/patient' element={ user &&  user.role ==='patient' ? <PatientDashboard/> : <Login/>} />
+              <Route exact path='/patient/profile' element={ user &&  user.role ==='patient' ? <PatientProfile/> : <Login/>} />
+              <Route exact path='/patient/doctor-list' element={ user &&  user.role ==='patient' ? <FindDoctors/> : <Login/>} />
+              <Route exact path='/patient/appointments' element={ user &&  user.role ==='patient' ? <PatientAppointments/> : <Login/>} />
+              <Route exact path='/patient/change-password' element={ user &&  user.role ==='patient' ? <ChangePassword/> : <Login/>} />
+              <Route exact path='/patient/all-prescription' element={ user &&  user.role ==='patient' ? <PatientPrescriptions/> : <Login/>} />
               <Route exact path='/patient/view-prescription/:presId' element={  user &&  user.role ==='patient' ? <ViewPatientPrescription/> : '' } />
               <Route exact path='/patient/reports' element={ user &&  user.role ==='patient' ? <PatientReport/> : '' } />
-              <Route exact path='/patient/create-appointment/:doctId' element={ user &&  user.role ==='patient' ? <CreatePatientAppointment/> : ''} />
+              <Route exact path='/patient/create-appointment/:doctId' element={ user &&  user.role ==='patient' ? <CreatePatientAppointment/> : <Login/>} />
 
-              <Route exact path='/patient/upcomming-appointment' element={ user &&  user.role ==='patient' ? <UpcommingAppointment/> : ''} />
-              <Route exact path='/patient/completed-appointment' element={ user &&  user.role ==='patient' ? <CompletedAppointment/> : ''} />
-              <Route exact path='/patient/followup-appointment' element={ user &&  user.role ==='patient' ? <FollowupAppointment/> : ''} />
+              <Route exact path='/patient/upcomming-appointment' element={ user &&  user.role ==='patient' ? <UpcommingAppointment/> : <Login/>} />
+              <Route exact path='/patient/completed-appointment' element={ user &&  user.role ==='patient' ? <CompletedAppointment/> : <Login/>} />
+              <Route exact path='/patient/followup-appointment' element={ user &&  user.role ==='patient' ? <FollowupAppointment/> : <Login/>} />
 
                {/* Admin module */}
                <Route exact path="/admin/login" element={<AdminLogin />} />
                <Route exact path="/admin/forget-password" element={<AdminForgetpassword />} />
                <Route exact path="/admin/reset-password" element={<AdminResetPassword />} />
-               <Route exact path="/admin" element={user &&  user.role ==='admin' ? <AdminDashboard /> : ''} />
-               <Route exact path="/admin/patients" element={user &&  user.role ==='admin' ? <AdminPatients />: ''} />
-               <Route exact path="/admin/create-doctor" element={user &&  user.role ==='admin' ? <AddDoctor />: ''} />
+               <Route exact path="/admin" element={user &&  user.role ==='admin' ? <AdminDashboard /> : <AdminLogin/>} />
+               <Route exact path="/admin/patients" element={user &&  user.role ==='admin' ? <AdminPatients />: <AdminLogin/>} />
+               <Route exact path="/admin/create-doctor" element={user &&  user.role ==='admin' ? <AddDoctor />: <AdminLogin/>} />
 
-               <Route exact path="/admin/create-drug" element={user &&  user.role ==='admin' ? <AdminNewDrug />: ''} />
-               <Route exact path='/admin/drug-edit/:drugId' element={ user &&  user.role ==='doctor' ? <AdminNewDrug /> : ''} />
-               <Route exact path="/admin/all-drugs" element={user &&  user.role ==='admin' ? <AdminDrugs />: ''} />
+               <Route exact path="/admin/create-drug" element={user &&  user.role ==='admin' ? <AdminNewDrug />: <AdminLogin/>} />
+               <Route exact path='/admin/drug-edit/:drugId' element={ user &&  user.role ==='doctor' ? <AdminNewDrug /> : <AdminLogin/>} />
+               <Route exact path="/admin/all-drugs" element={user &&  user.role ==='admin' ? <AdminDrugs />: <AdminLogin/>} />
 
-               <Route exact path="/admin/create-test" element={user &&  user.role ==='admin' ? <AdminNewTest />: ''} />
-               <Route exact path="/admin/edit-test/:testId" element={user &&  user.role ==='admin' ? <AdminNewTest />: ''} />
-               <Route exact path="/admin/all-tests" element={user &&  user.role ==='admin' ? <AdminAllTests />: ''} />
-               <Route exact path="/admin/doctors" element={user &&  user.role ==='admin' ? <AdminDoctors />: ''} />
-               <Route exact path="/admin/create-disease" element={user &&  user.role ==='admin' ? <NewDisease />: ''} />
-               <Route exact path="/admin/disease-edit/:diseaseId" element={user &&  user.role ==='admin' ? <NewDisease />: ''} />
-               <Route exact path="/admin/all-diseases" element={user &&  user.role ==='admin' ? <AllDisease />: ''} />
-               <Route exact path="/admin/create-department" element={user &&  user.role ==='admin' ? <NewDepartment />: ''} />
-               <Route exact path="/admin/department-edit/:departmentId" element={user &&  user.role ==='admin' ? <NewDepartment />: ''} />
-               <Route exact path="/admin/all-departments" element={user &&  user.role ==='admin' ? <AllDepartment />: ''} />
+               <Route exact path="/admin/create-test" element={user &&  user.role ==='admin' ? <AdminNewTest />: <AdminLogin/>} />
+               <Route exact path="/admin/edit-test/:testId" element={user &&  user.role ==='admin' ? <AdminNewTest />: <AdminLogin/>} />
+               <Route exact path="/admin/all-tests" element={user &&  user.role ==='admin' ? <AdminAllTests />: <AdminLogin/>} />
+               <Route exact path="/admin/doctors" element={user &&  user.role ==='admin' ? <AdminDoctors />: <AdminLogin/>} />
+               <Route exact path="/admin/create-disease" element={user &&  user.role ==='admin' ? <NewDisease />: <AdminLogin/>} />
+               <Route exact path="/admin/disease-edit/:diseaseId" element={user &&  user.role ==='admin' ? <NewDisease />: <AdminLogin/>} />
+               <Route exact path="/admin/all-diseases" element={user &&  user.role ==='admin' ? <AllDisease />: <AdminLogin/>} />
+               <Route exact path="/admin/create-department" element={user &&  user.role ==='admin' ? <NewDepartment />: <AdminLogin/>} />
+               <Route exact path="/admin/department-edit/:departmentId" element={user &&  user.role ==='admin' ? <NewDepartment />: <AdminLogin/>} />
+               <Route exact path="/admin/all-departments" element={user &&  user.role ==='admin' ? <AllDepartment />: <AdminLogin/>} />
               {/* CMS */}
-              <Route exact path="/admin/create-faq" element={user &&  user.role ==='admin' ? <NewFaq />: ''} />
-               <Route exact path="/admin/faq-edit/:faqId" element={user &&  user.role ==='admin' ? <NewFaq />: ''} />
-               <Route exact path="/admin/all-faqs" element={user &&  user.role ==='admin' ? <AllFaqs />: ''} />
+              <Route exact path="/admin/create-faq" element={user &&  user.role ==='admin' ? <NewFaq />: <AdminLogin/>} />
+               <Route exact path="/admin/faq-edit/:faqId" element={user &&  user.role ==='admin' ? <NewFaq />: <AdminLogin/>} />
+               <Route exact path="/admin/all-faqs" element={user &&  user.role ==='admin' ? <AllFaqs />: <AdminLogin/>} />
 
-               <Route exact path="/admin/create-news" element={user &&  user.role ==='admin' ? <AddNews />: ''} />
-               <Route exact path="/admin/news-edit/:newsId" element={user &&  user.role ==='admin' ? <AddNews />: ''} />
-               <Route exact path="/admin/all-newses" element={user &&  user.role ==='admin' ? <AllNews />: ''} />
+               <Route exact path="/admin/create-news" element={user &&  user.role ==='admin' ? <AddNews />: <AdminLogin/>} />
+               <Route exact path="/admin/news-edit/:newsId" element={user &&  user.role ==='admin' ? <AddNews />: <AdminLogin/>} />
+               <Route exact path="/admin/all-newses" element={user &&  user.role ==='admin' ? <AllNews />: <AdminLogin/>} />
             </Routes>
 
        </Router>)}

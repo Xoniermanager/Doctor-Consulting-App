@@ -151,7 +151,7 @@ const Report = require('../models/reportModel');
             foreignField: "_id",
             as: "doctors"
           }
-        },{$sort : {appointmentDate : -1}}
+        },{$sort : {createdAt : -1}}
       ])
 
        res.status(200).json({
@@ -389,16 +389,16 @@ const Report = require('../models/reportModel');
   exports.submitTestReport = catchAsyncErrors(async(req, res) => {
     try {
       let {formData} = req.body;
-      let prescription = await Prescription.findOne({_id : formData[0].prescriptionId});
-      await Report.deleteMany({prescriptionId : { $eq: formData[0].prescriptionId }});
+      let indexId = formData.indexId;
+      let prescription = await Prescription.findOne({_id : formData.prescriptionId});
+      await Report.deleteOne({prescriptionId : { $eq: formData.prescriptionId }, testId : { $eq: formData.testId }});
      
       let testArr = [];
       if(prescription && prescription.tests){
         testArr = prescription.tests.map((test)=> test.testId.toString());
       }
 
-      formData.forEach(async (data, indexId)=>{
-        let datas = {...data};
+        let datas = {...formData};
         let myCloud = {};
         if(datas.report){
           if(datas.docs.public_id)
@@ -428,9 +428,6 @@ const Report = require('../models/reportModel');
           } 
         }
         await Report.create(datas);
-      })
-
-      
 
       res.status(200).json({
         success : true,

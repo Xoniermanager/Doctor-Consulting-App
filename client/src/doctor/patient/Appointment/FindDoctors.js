@@ -118,7 +118,7 @@ const FindDoctors = () => {
             </div>
             </>
             )) : (<div className="col-xl-12 col-xxl-12 col-lg-12">
-              <div className="card"> Not Found </div></div>)}
+              <div className="card"> </div></div>)}
           </div>
                 </div>
               </div>

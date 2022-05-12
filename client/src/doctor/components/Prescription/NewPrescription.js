@@ -135,20 +135,6 @@ const NewPrescription = () => {
               </div>
             </div>
 
-
-
-            <div className="col-md-12">
-              <div className="card mb-3">
-                <div className="card-body">
-                  <h4 className="text-primary mb-4">Next Appointment</h4>
-                  <div className="form-group-custom">
-                  <input type="date" name="nextAppointment"  onChange={handleOnChange} min={dt} value={Moment(selectPatient.nextAppointment).format('YYYY-MM-DD')} className="form-control" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
             <div className="col-md-12">
               <div className="card mb-4">
                 <div className="card-body">
@@ -171,6 +157,19 @@ const NewPrescription = () => {
                   </fieldset>
                 </div>
               </div>
+
+              <div className="col-md-12">
+              <div className="card mb-3">
+                <div className="card-body">
+                  <h4 className="text-primary mb-4">Next Appointment</h4>
+                  <div className="form-group-custom">
+                  <input type="date" name="nextAppointment"  onChange={handleOnChange} min={dt} value={Moment(selectPatient.nextAppointment).format('YYYY-MM-DD')} className="form-control" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
             </div>
           </div>
           </form>
