@@ -79,6 +79,8 @@ import UpcommingAppointment from './doctor/patient/Appointment/UpcommingAppointm
 import FollowupAppointment from './doctor/patient/Appointment/FollowupAppointment';
 import CompletedAppointment from './doctor/patient/Appointment/CompletedAppointment';
 import PatientWiseAppointments from './doctor/components/Appointment/PatientWiseAppointments';
+import UpdatePassword from './components/UpdatePassword';
+import SetAdminPassword from './doctor/admin/Auth/SetAdminPassword';
 
 const App = () => {
  const dispatch = useDispatch();
@@ -112,6 +114,7 @@ const App = () => {
               <Route exact path="/login" element={<Login />} />
               <Route exact path="/signup" element={<Signup />} />
               <Route exact path="/forget-password" element={<Forgetpassword />} />
+              <Route exact path="/set-password" element={<UpdatePassword />} />
               <Route exact path="/reset-password" element={<ResetPassword />} />
               <Route exact path="/join-meeting" element={<JoinMeeting />} />
               <Route exact path="/faqs" element={<Faqs />} />
@@ -163,6 +166,7 @@ const App = () => {
                <Route exact path="/admin/login" element={<AdminLogin />} />
                <Route exact path="/admin/forget-password" element={<AdminForgetpassword />} />
                <Route exact path="/admin/reset-password" element={<AdminResetPassword />} />
+               <Route exact path="/admin/set-password" element={<SetAdminPassword />} />
                <Route exact path="/admin" element={user &&  user.role ==='admin' ? <AdminDashboard /> : <AdminLogin/>} />
                <Route exact path="/admin/patients" element={user &&  user.role ==='admin' ? <AdminPatients />: <AdminLogin/>} />
                <Route exact path="/admin/create-doctor" element={user &&  user.role ==='admin' ? <AddDoctor />: <AdminLogin/>} />

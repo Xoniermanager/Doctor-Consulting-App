@@ -264,7 +264,7 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
   
       res.status(200).json({
         success: true,
-        user,
+        userId : user._id,
         message: "Validated otp",
       });
     } catch (error) {
@@ -290,7 +290,6 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
         await user.save();
         res.status(200).json({
           success: true,
-          user,
           message: "Password Updated",
         });
       } catch (error) {

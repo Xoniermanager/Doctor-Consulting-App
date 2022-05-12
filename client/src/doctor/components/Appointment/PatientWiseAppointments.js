@@ -66,7 +66,7 @@ const PatientWiseAppointments = () => {
     },
     {
       cell:(row) => <div className="d-flex">
-      { row.isPrescription ? (<> <Link to={`/patient/view-prescription/${row.prescriptionId}`} className="btn btn-success shadow btn-sm sharp mr-1"><i className="fa fa-eye"></i></Link> </>) : (<button className='btn btn-danger'>No</button>)}
+      { row.isPrescription ? (<> <Link to={`/view-prescription/${row.prescriptionId}`} className="btn btn-success shadow btn-sm sharp mr-1"><i className="fa fa-eye"></i></Link> </>) : (<button className='btn btn-danger'>No</button>)}
       </div>,
       name: "Prescription",
     }

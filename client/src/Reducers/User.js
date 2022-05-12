@@ -690,4 +690,22 @@ export const getSearchDoctorReducer = createReducer(initialState, {
   },
 });
 
-
+export const getUserIdReducer = createReducer(initialState, {
+  SetPasswordRequest : (state) => {
+    state.loading = true;
+  },
+  SetPasswordSuccess : (state, action) =>{
+    state.loading = false;
+    state.userIdForPassword = action.payload;
+  },
+  SetPasswordFailure : (state, action) =>{
+      state.loading = false;
+      state.error = action.payload;
+  },
+  clearErrors: (state) => {
+    state.error = null;
+  },
+  clearMessage: (state) => {
+    state.message = null;
+  },
+});

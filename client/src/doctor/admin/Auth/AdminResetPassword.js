@@ -12,7 +12,7 @@ const AdminResetPassword = () => {
   const alert = useAlert();
   const { error, message, loading } = useSelector((state) => state.apiStatus);
 
-  const initialValue = { otp: "", password:"", conf_password:"" };
+  const initialValue = { otp: ""};
   const [formValues, setFormValues] = useState(initialValue); 
   const [formErrors, setFormErrors] = useState({});
 
@@ -23,10 +23,10 @@ const AdminResetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormErrors(validate(formValues));
-    let { otp, password} = formValues;
-    await dispatch(resetPassword(otp, password));
-    if(!error) {
-	    history('/admin/login');
+    let { otp} = formValues;
+    await dispatch(resetPassword(otp));
+    if(!error && otp) {
+	    history('/admin/set-password');
     }
     return false;
   };
@@ -46,18 +46,9 @@ const AdminResetPassword = () => {
 
   const validate = (values) => {
     const errors = {};
-	const passwordRegex =  /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
     if (!values.otp) {
       errors.otp = "OPT is required!";
     }
-    if (!values.password) {
-      errors.password = "Password is required";
-    }  
-	if(!passwordRegex.test(values.password)){
-		errors.password = "Password should be strong and min 6 characters";
-	}if(values.password !== values.conf_password){
-		errors.conf_password = "Password and confirm password should be matched.";
-	}
     return errors;
   };
 
@@ -76,16 +67,8 @@ const AdminResetPassword = () => {
 									<form onSubmit={handleSubmit}>
 										<div className="form-group">
 											<input type="number" className="form-control" placeholder="OTP" name="otp" value={formValues.otp} onChange={handleChange}/>
-                      						<span className='text-danger'>{formErrors.otp}</span>
+                      <span className='text-danger'>{formErrors.otp}</span>
 										</div>
-										<div className="form-group">
-											<input type="password" className="form-control" placeholder="Password" name="password" value={formValues.password} onChange={handleChange} />
-                      						<span className='text-danger'>{formErrors.password}</span>
-										</div>
-										<div className="form-group">
-											<input type="password" className="form-control" placeholder="Confirm Password" name="conf_password" value={formValues.conf_password} onChange={handleChange} />
-                      						<span className='text-danger'>{formErrors.conf_password}</span>
-										</div>	
 										<div className="form-group">
 											<button type="submit" className="btn btn-primary w-100 radius-xl">Submit</button>
 										</div>		

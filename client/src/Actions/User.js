@@ -168,22 +168,49 @@ export const updatePassword =
 
 // Reset password
 
-export const resetPassword = (otp, password) => async (dispatch) => {
+export const resetPassword = (otp) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "SetPasswordRequest",
+    });
+    const { data } = await axios.post(
+      "/api/v1/otp/validate",
+      { otp },
+      {
+        headers: {
+          "Content-Type": "application/json"
+        },
+      }
+    );
+
+    dispatch({
+      type: "SetPasswordSuccess",
+      payload: data.userId,
+    });
+  } catch (error) {
+    dispatch({
+      type: "SetPasswordFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// set password
+
+export const setPassword = (patientId, password) => async (dispatch) => {
   try {
     dispatch({
       type: "ResetPasswordRequest",
     });
     const { data } = await axios.put(
-      "/api/v1/password/reset",
-      { otp, password },
+      `/api/v1/password/reset/${patientId}`,
+      { password },
       {
         headers: {
-          "Content-Type": "application/json",
-          "auth-token": localStorage.getItem("token"),
+          "Content-Type": "application/json"
         },
       }
     );
-
     dispatch({
       type: "ResetPasswordSuccess",
       payload: data.message,

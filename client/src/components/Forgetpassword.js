@@ -4,6 +4,7 @@ import logo from '../images/logo.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { forgetPassword } from '../Actions/User';
 import Loader from './Loader';
+import { useAlert } from 'react-alert';
 
 const Forgetpassword = () => {
   let history = useNavigate();
@@ -13,6 +14,8 @@ const Forgetpassword = () => {
   const [isSubmit, setIsSubmit] = useState(false);
 
   const { error, message, loading } = useSelector((state) => state.apiStatus);
+
+  const alert = useAlert();
 
   // forget password
   const forgetInitialValue = { forget_email:""};
@@ -25,15 +28,22 @@ const Forgetpassword = () => {
     setFormErrors(validate_forget(forgetValues));
     setIsSubmit(true);
     let { forget_email } = forgetValues;
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
     await dispatch(forgetPassword(forget_email));
-    window.location.href="/reset-password";
+    if(!error && forget_email && !regex.test(forget_email)){
+      window.location.href="/reset-password";
+    }
     return false;
   };
 
   const validate_forget = (values) => {
     const errors = {};
+    
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
     if (!values.forget_email) {
       errors.forget_email = "Email is required!";
+    } else if (!regex.test(values.forget_email)) {
+      errors.forget_email = "This is not a valid email format!";
     }
     return errors;
   };

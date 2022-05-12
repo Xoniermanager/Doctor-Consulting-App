@@ -4,12 +4,15 @@ import logo from '../../../images/logo.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { forgetPassword } from '../../../Actions/User';
 import Loader from '../../../components/Loader';
+import { useAlert } from 'react-alert';
 
 const AdminForgetpassword = () => {
   let history = useNavigate();
   const dispatch = useDispatch();
   const [formErrors, setFormErrors] = useState({});
   const { error, message, loading } = useSelector((state) => state.apiStatus);
+
+  const alert = useAlert();
   // forget password
   const forgetInitialValue = { forget_email:""};
   const [forgetValues, setForgetValues] = useState(forgetInitialValue); 
@@ -20,8 +23,11 @@ const AdminForgetpassword = () => {
     e.preventDefault();
     setFormErrors(validate_forget(forgetValues));
     let { forget_email } = forgetValues;
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
     await dispatch(forgetPassword(forget_email));
-    window.location.href="/admin/reset-password";
+    if(!error && forget_email){
+      window.location.href="/admin/reset-password";
+    }
     return false;
   };
 
