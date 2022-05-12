@@ -198,14 +198,14 @@ export const resetPassword = (otp, password) => async (dispatch) => {
 
 // update doctor profile
 export const updateDoctorProfile =
-  (name, academic, specialist, about, patientNo, surgery, experienceYear, profileImage) => async (dispatch) => {
+  (name, academic, specialist,departmentId, department, about, patientNo, surgery, experienceYear, profileImage) => async (dispatch) => {
     try {
       dispatch({
         type: "UpdateDoctorRequest",
       });
       const { data } = await axios.put(
         "/api/v1/doctor/update",
-        { name, academic, specialist, about, patientNo, surgery, experienceYear, profileImage },
+        { name, academic, specialist, departmentId, department, about, patientNo, surgery, experienceYear, profileImage },
         {
           headers: {
             "Content-Type": "application/json",
@@ -1130,12 +1130,12 @@ export const getDoctors = () => async (dispatch) => {
 };
 
 // get all patient appointments
-export const getPatientAppointments = () => async (dispatch) => {
+export const getPatientAppointments = (patientId) => async (dispatch) => {
   try {
     dispatch({
       type: "GetPatientAppointmentsRequest",
     });
-    const { data } = await axios.get("/api/v1/patient/appointments", {
+    const { data } = await axios.get(`/api/v1/patient/appointments/${patientId}`, {
       headers: {
         "auth-token": localStorage.getItem("token"),
       },

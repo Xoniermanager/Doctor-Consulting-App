@@ -52,9 +52,9 @@ const PatientSideBar = () => {
                 <li>
                   <Link to="/patient/completed-appointment">Completed</Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link to="/patient/followup-appointment">Followup</Link>
-                </li>
+                </li> */}
                 <li>
                   <Link to="/patient/appointments">All Appointments</Link>
                 </li>

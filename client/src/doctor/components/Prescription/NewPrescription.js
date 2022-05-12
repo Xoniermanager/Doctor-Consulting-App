@@ -163,7 +163,7 @@ const NewPrescription = () => {
                 <div className="card-body">
                   <h4 className="text-primary mb-4">Next Appointment</h4>
                   <div className="form-group-custom">
-                  <input type="date" name="nextAppointment"  onChange={handleOnChange} min={dt} value={Moment(selectPatient.nextAppointment).format('YYYY-MM-DD')} className="form-control" />
+                  <input type="date" name="nextAppointment"  onChange={handleOnChange} min={dt}  className="form-control" />
                   </div>
                 </div>
               </div>

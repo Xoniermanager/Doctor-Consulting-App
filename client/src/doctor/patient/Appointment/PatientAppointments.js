@@ -18,8 +18,9 @@ const PatientAppointments = () => {
   
   const alert = useAlert();
   const { error, message } = useSelector((state) => state.apiStatus);
+  let { user } = useSelector((state) => state.user);
   useEffect(() => {
-    dispatch(getPatientAppointments());
+    dispatch(getPatientAppointments(user._id));
     if (error) {
       alert.error(error);
       dispatch({ type: "clearErrors" });
@@ -136,7 +137,7 @@ const PatientAppointments = () => {
     handleModalClick();
   }
 
-
+console.log(editData);
   return (
     <>
     <Header title={'Appointments'}/>
@@ -211,8 +212,10 @@ const PatientAppointments = () => {
                     </div>
                    </div>
                   ))}
-                  <button type="submit" className="btn btn-primary text-right">
-                    Upload
+                  { editData.tests.length > 0 ? '' :  <div className="form-row">
+                    <div className="form-group col-md-12 text-center"> No test available in this appointment </div> </div> }
+                  <button type="submit" className="btn btn-danger float-right">
+                    Close
                   </button>
                 </form>
               </div>

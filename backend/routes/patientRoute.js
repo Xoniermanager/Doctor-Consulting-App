@@ -11,7 +11,7 @@ router.route('/').get(isAuthenticatedUser, getPatient);
 
 router.route('/doctors').get(isAuthenticatedUser, getDoctors);
 
-router.route('/appointments').get(isAuthenticatedUser, getAppointments);
+router.route('/appointments/:userId').get(isAuthenticatedUser, getAppointments);
 router.route('/upcomming-appointments').get(isAuthenticatedUser, getUpcommingAppointments);
 router.route('/completed-appointments').get(isAuthenticatedUser, getCompletedAppointments);
 

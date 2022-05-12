@@ -58,8 +58,8 @@ exports.registerUser = catchAsyncErrors(async (req, res, next)=>{
           url: myCloud.secure_url,
         };
         uData.status = 0;
-        uData.departmentId;
-        uData.department;
+        uData.departmentId = departmentId;
+        uData.department = department;
     }
 
     const user = await User.create(uData);
@@ -343,7 +343,7 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
  exports.updateProfile = catchAsyncErrors(async( req, res) => {
    try {
       const user = await User.findById(req.user._id);
-      const {name, academic, specialist, about, profileImage, patientNo, surgery, experienceYear} = req.body;
+      const {name, academic, specialist, departmentId, department, about, profileImage, patientNo, surgery, experienceYear} = req.body;
       if(name){
         user.name = name;
       }
@@ -352,6 +352,12 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
       } 
       if(specialist){
         user.specialist = specialist;
+      }
+      if(departmentId){
+        user.departmentId = departmentId;
+      } 
+      if(department){
+        user.department = department;
       }
       if(about){
         user.about = about;
@@ -607,7 +613,7 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
     exports.getDrugs = catchAsyncErrors(async( req, res) => {
       try {
         //{owner : req.user._id}
-         const drug = await Drug.find();
+         const drug = await Drug.find().sort({drugName:1});
          res.status(200).json({
              success : true,
              drug
@@ -689,7 +695,7 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
     exports.getTests = catchAsyncErrors(async( req, res) => {
       try {
         //{owner : req.user._id}
-         const tests = await Test.find();
+         const tests = await Test.find().sort({testName:1});;
          if(!tests){
             return res.status(404).json({
                 success : false,
@@ -769,12 +775,17 @@ exports.verifyEmail = catchAsyncErrors(async (req, res, next)=>{
   exports.createPrescription = catchAsyncErrors(async( req, res) => {
     try {
         const { selectPatient, drugValue, testValue } = req.body;
+    
         const appointment = await Appointment.findById(selectPatient.appointmentId);
+        let testData = [];
+        if(testValue[0].testId){
+          testData = testValue;
+        }
 
         const prescriptionData = {
           ...selectPatient,
           drugs : drugValue,
-          tests : testValue,
+          tests : testData,
           doctorId : req.user._id,               
       }
      let presData =  await Prescription.create(prescriptionData);

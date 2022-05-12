@@ -78,6 +78,7 @@ import FindDoctors from './doctor/patient/Appointment/FindDoctors';
 import UpcommingAppointment from './doctor/patient/Appointment/UpcommingAppointment';
 import FollowupAppointment from './doctor/patient/Appointment/FollowupAppointment';
 import CompletedAppointment from './doctor/patient/Appointment/CompletedAppointment';
+import PatientWiseAppointments from './doctor/components/Appointment/PatientWiseAppointments';
 
 const App = () => {
  const dispatch = useDispatch();
@@ -141,6 +142,7 @@ const App = () => {
 
               <Route exact path='/create-appointment' element={ user &&  user.role ==='doctor' ? <CreateAppointment/> : <Login/>} />
               <Route exact path='/doctor-appointments' element={ user &&  user.role ==='doctor' ? <Appointments/> : <Login/>} />
+              <Route exact path='/doctor-patient-appointments/:patientId' element={ user &&  user.role ==='doctor' ? <PatientWiseAppointments/> : <Login/>} />
 
               {/* Patient module */}
               <Route exact path='/patient' element={ user &&  user.role ==='patient' ? <PatientDashboard/> : <Login/>} />

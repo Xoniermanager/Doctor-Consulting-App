@@ -142,8 +142,10 @@ const Report = require('../models/reportModel');
    // appointments list
    exports.getAppointments = catchAsyncErrors(async( req, res) => {
     try {
+        const ObjectId = mongoose.Types.ObjectId;
+       let userId = req.params.userId ?  ObjectId(req.params.userId) : req.user._id;
        const patientAppointments = await Appointment.aggregate([
-        { $match: {  patientId : req.user._id} },
+        { $match: {  patientId : userId} },
         {
           $lookup: {
             from: "users",
@@ -333,7 +335,7 @@ const Report = require('../models/reportModel');
    // reports list
    exports.getReports = catchAsyncErrors(async( req, res) => {
     try {
-       const patientReports = await Report.find({patientId : req.user._id});
+       const patientReports = await Report.find({patientId : req.user._id}).sort({reportDate:-1});
        res.status(200).json({
            success : true,
            patientReports

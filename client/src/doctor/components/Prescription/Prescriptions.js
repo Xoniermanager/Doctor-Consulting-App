@@ -40,21 +40,22 @@ const Prescriptions = () => {
     }
   }
 
-  let allPrescriptions = prescriptions && prescriptions.map((element)=>{
+  let allPrescriptions = prescriptions && prescriptions.map((element, index)=>{
     let cdate = Moment(element.createdAt).format('DD MMMM YYYY HH:mm');
     let contents = `${element.drugs.length} Drugs ${element.drugs.length} Tests`;
     element = {
       ...element,
       cdate : cdate,
-      contents : contents
+      contents : contents,
+      sno : index + 1
     }
     return element;
   })
 
   const columns = [
     {
-      name: "ID",
-      selector: "_id",
+      name: "S.No.",
+      selector: "sno",
       sortable: true,
     },
     {
@@ -117,11 +118,6 @@ const Prescriptions = () => {
                       data={allPrescriptions}
                       defaultSortField="name"
                       pagination
-                      selectableRows
-                      selectableRowsComponent={Checkbox}
-                      selectableRowsComponentProps={
-                        selectableRowsComponentProps
-                      }
                     />
                   </Paper>
                 </div>

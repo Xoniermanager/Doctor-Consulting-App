@@ -65,8 +65,8 @@ const Patients = () => {
       sortable: true,
     },
     {
-      cell:(row) =>  <Link to="view-prescription.html" className="btn btn-outline-primary btn-sm"><i className="fa fa-eye"></i> View</Link>,
-      name: "PRESCRIPTIONS",
+      cell:(row) =>  <Link to={`/doctor-patient-appointments/${row._id}`} className="btn btn-outline-primary btn-sm"><i className="fa fa-eye"></i> View</Link>,
+      name: "APPOINTMENTS",
     },
     // {
     //   cell:(row) => <div className="d-flex"> <Link to="view-patient.html" className="btn btn-success shadow btn-sm sharp mr-1"><i className="fa fa-eye"></i></Link>

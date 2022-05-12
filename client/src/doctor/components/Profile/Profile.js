@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useAlert } from "react-alert";
 import { useSelector, useDispatch } from "react-redux";
 import { getDepartments } from "../../../Actions/Admin";
 import { updateDoctorProfile, loadUser, updateDoctorLanguage, updateDoctorExperience, updateClinicAwards } from "../../../Actions/User";
@@ -18,21 +19,37 @@ const Profile = () => {
 
   const [profileImage, setProfileImage] = useState({});
 
+  const alert = useAlert();
+  const { error, message } = useSelector((state) => state.apiStatus);
+
+  const [formErrors, setFormErrors] = useState({});
+
    // profile data update
-  const intialValue = { name : user.name, academic: user.academic, specialist : user.specialist, about : user.about, patientNo: user.patientNo, surgery : user.surgery, experienceYear : user.experienceYear};
+  const intialValue = { name : user.name, academic: user.academic, specialist : user.specialist, about : user.about, patientNo: user.patientNo, surgery : user.surgery, experienceYear : user.experienceYear, departmentId : user.departmentId, department : user.department};
   const [profileValue, setProfileValue] = useState(intialValue);
   const handleChange = (e) =>{
-    setProfileValue({...profileValue, [e.target.name]: e.target.value});
+    if(e.target.name === 'departmentId'){
+      let index = e.nativeEvent.target.selectedIndex;
+      profileValue.departmentId = e.target.value;
+      profileValue.department =  e.nativeEvent.target[index].text;
+      profileValue.specialist = e.nativeEvent.target[index].text;
+      setProfileValue({...profileValue});
+    }else{
+      setProfileValue({...profileValue, [e.target.name]: e.target.value});
+    }
   }
   const handleProfileSubmit = async (e) =>{
     e.preventDefault();
-    let { name, academic, specialist, about, patientNo, surgery, experienceYear } = profileValue;
-   await dispatch(updateDoctorProfile(name, academic, specialist, about, patientNo, surgery, experienceYear, profileImage));
+    let { name, academic, specialist, departmentId, department, about, patientNo, surgery, experienceYear } = profileValue;
+   await setFormErrors(validate(profileValue));
+   if(Object.keys(formErrors).length === 0){
+   await dispatch(updateDoctorProfile(name, academic, specialist, departmentId, department, about, patientNo, surgery, experienceYear, profileImage));
+     handleLanguageClick();
     dispatch(loadUser());
-    handleLanguageClick();
+   }
   }
 // experience popup
-const [expValue, setExpValue] = useState(user.experiences?user.experiences : [{experience:'', expYear:''}]);
+const [expValue, setExpValue] = useState(user.experiences ? user.experiences : [{experience:'', expYear:''}]);
  const handleExperienceSubmit = async (e) =>{
    e.preventDefault();
    await dispatch(updateDoctorExperience(expValue));
@@ -99,10 +116,55 @@ const [expValue, setExpValue] = useState(user.experiences?user.experiences : [{e
     };
   };
 
-  useEffect(async() => {
-   await dispatch(getDepartments());
-  }, [dispatch]);
   let { departments } = useSelector((state) => state.departments);
+
+  const validate = (values) => {
+    const errors = {};
+    const nameRegex = /^[A-Za-z ]+$/i;
+    const numRegex = /^\d+$/i;
+    const alphaNumRegex = /^[a-zA-Z0-9\s,'-]*$/i;
+
+    if (!values.name) {
+      errors.name = "Name is required!";
+    }
+    if (!nameRegex.test(values.name)) {
+      errors.name = "Name is not valid!";
+    }
+   
+    if (!numRegex.test(values.patientNo)) {
+      errors.patientNo = "This is not a valid patient number!";
+    }
+    if (!numRegex.test(values.surgery)) {
+      errors.surgery = "This is not a valid surgery number!";
+    }
+    if (!numRegex.test(values.experienceYear)) {
+      errors.experienceYear = "This is not a valid experience number!";
+    }
+
+    if (!values.departmentId) {
+        errors.departmentId = "Department is required!";
+
+    } 
+    if (!values.about) {
+      errors.about = "Valid about detail!";
+     } 
+     if (!alphaNumRegex.test(values.academic)) {
+      errors.academic = "Valid academic detail!";
+     } 
+    return errors;
+  };
+
+  useEffect(async() => {
+    await dispatch(getDepartments());
+    if (error) {
+      alert.error(error);
+      dispatch({ type: "clearErrors" });
+    }
+    if (message) {
+      alert.success(message);
+      dispatch({ type: "clearMessage" });
+    }
+  }, [formErrors, alert, error, dispatch, message]);
   
   return (
     <>
@@ -133,6 +195,7 @@ const [expValue, setExpValue] = useState(user.experiences?user.experiences : [{e
                         value={profileValue.name}
                         onChange={handleChange}
                       />
+                      <span className="text-danger">{formErrors.name}</span>
                     </div>
                     <div className="form-group col-md-6">
                       <label>Academic </label>
@@ -144,23 +207,17 @@ const [expValue, setExpValue] = useState(user.experiences?user.experiences : [{e
                         value={profileValue.academic}
                         onChange={handleChange}
                       />
+                      <span className="text-danger">{formErrors.academic}</span>
                     </div>
                     <div className="form-group col-md-6">
                       <label>Specialist</label>
-                      <select className="form-control" name="specialist" value={profileValue.specialist} onChange={handleChange}>
+                      <select className="form-control" name="departmentId" value={profileValue.departmentId} onChange={handleChange}>
                       <option value="">Select Department</option>
                         { departments && departments.map((depat)=> (
                           <option value={depat._id}>{depat.departmentName}</option>
                           ))}
                     </select>
-                      {/* <input
-                        type="text"
-                        className="form-control"
-                        placeholder=""
-                        name="specialist"
-                        value={profileValue.specialist}
-                        onChange={handleChange}
-                      /> */}
+                    <span className="text-danger">{formErrors.departmentId}</span>
                     </div>
                     <div className="form-group col-md-6">
                       <label>About doctor</label>
@@ -171,6 +228,7 @@ const [expValue, setExpValue] = useState(user.experiences?user.experiences : [{e
                         value={profileValue.about}
                         onChange={handleChange}
                       ></textarea>
+                      <span className="text-danger">{formErrors.about}</span>
                     </div>
 
                     <div className="form-group col-md-6">
@@ -183,6 +241,7 @@ const [expValue, setExpValue] = useState(user.experiences?user.experiences : [{e
                         value={profileValue.patientNo}
                         onChange={handleChange}
                       />
+                       <span className="text-danger">{formErrors.patientNo}</span>
                     </div>
 
                     <div className="form-group col-md-6">
@@ -195,6 +254,7 @@ const [expValue, setExpValue] = useState(user.experiences?user.experiences : [{e
                         value={profileValue.surgery}
                         onChange={handleChange}
                       />
+                       <span className="text-danger">{formErrors.surgery}</span>
                     </div>
 
                     <div className="form-group col-md-6">
@@ -207,6 +267,7 @@ const [expValue, setExpValue] = useState(user.experiences?user.experiences : [{e
                         value={profileValue.experienceYear}
                         onChange={handleChange}
                       />
+                       <span className="text-danger">{formErrors.experienceYear}</span>
                     </div>
 
                   <div className="form-group col-md-6">
