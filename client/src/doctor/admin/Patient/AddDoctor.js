@@ -26,7 +26,6 @@ const AddDoctor = () => {
     department : "",
     departmentId : "",
     academic: "",
-    specialist: "",
     about: "",
     address: "",
     isVerify: 1,
@@ -46,6 +45,7 @@ const AddDoctor = () => {
       let index = e.nativeEvent.target.selectedIndex;
       userValue.departmentId = e.target.value;
       userValue.department =  e.nativeEvent.target[index].text;
+      userValue.specialist =  e.nativeEvent.target[index].text;
     }else{
       setUserValue({ ...userValue, [e.target.name]: e.target.value });
     }
@@ -89,9 +89,6 @@ const AddDoctor = () => {
     }
     if (!values.academic) {
       errors.academic = "Academic is required!";
-    }
-    if (!values.specialist) {
-      errors.specialist = "Specialist is required!";
     }
     if (!values.about) {
       errors.about = "About is required!";
@@ -207,21 +204,6 @@ const AddDoctor = () => {
                         </div>
                       </div>
 
-                      <div className="form-group row">
-                        <label
-                          for="specialist"
-                          className="col-sm-12 col-form-label"
-                        > Specialist </label>
-                        <div className="col-sm-12">
-                          <input
-                            type="text"
-                            onChange={handleOnChange}
-                            name="specialist"
-                            className="form-control"
-                          />
-                        </div>
-                        <span className="text-danger">{formErrors.specialist}</span>
-                      </div>
                       <div className="form-group row">
                         <label
                           for="academic"

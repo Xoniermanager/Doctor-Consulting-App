@@ -63,6 +63,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next)=>{
         uData.status = 0;
         uData.departmentId = req.body.departmentId;
         uData.department = req.body.department;
+        uData.specialist = req.body.department;
        user = await User.create(uData);
       }
     }else if(role === 'patient'){

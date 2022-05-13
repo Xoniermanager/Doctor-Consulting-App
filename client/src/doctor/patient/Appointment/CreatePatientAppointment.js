@@ -152,8 +152,7 @@ const CreatePatientAppointment = () => {
                         </div>
                         <div className="modal-body">
                         <h5>Dear {patientDetail.patientName}, </h5>
-                        <p> We have successfully schedule your appointment for:</p>     
-                       
+                        <p> We have successfully schedule your appointment on :</p>     
                         <p className="text-info"> {formData.appointmentDate +' '+formData.appointmentTime } </p>
                     </div>                      
                 </div>

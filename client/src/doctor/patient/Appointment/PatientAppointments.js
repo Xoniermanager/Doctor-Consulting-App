@@ -211,7 +211,7 @@ const PatientAppointments = () => {
                     </div>
                    </div>
                   ))}
-                  { editData.tests.length > 0 ? '' :  <div className="form-row">
+                  {modalShow === 'block' && editData && editData.tests.length > 0 ? '' :  <div className="form-row">
                     <div className="form-group col-md-12 text-center"> No test available in this appointment </div> </div> }
                   <button type="submit" className="btn btn-danger float-right">
                     Close

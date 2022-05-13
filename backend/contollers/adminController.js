@@ -10,7 +10,7 @@ const { sendEmail } = require('../middleware/sendEmail');
  // all users
  exports.getPatients = catchAsyncErrors(async( req, res) => {
   try {
-     const adminPatients = await User.find({ role: req.params.userType});
+     const adminPatients = await User.find({ role: req.params.userType}).sort({createdAt : -1});
      res.status(200).json({
          success : true,
          adminPatients

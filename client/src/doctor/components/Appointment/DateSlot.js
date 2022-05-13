@@ -32,7 +32,7 @@ const DateSlot = () => {
   
   return (
     <>
-      <Header title={'Datewise Slots'}/>
+      <Header title={'My Slots'}/>
       <DoctSideBar />
      { loading === true ? <Loader /> : (<div class="content-body">
         <div class="container-fluid">

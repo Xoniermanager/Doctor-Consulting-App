@@ -95,7 +95,7 @@ const DoctorDetails = ({ user }) => {
                   >
                     <ul className="timeline">
                     {user.experiences && user.experiences.map((item, index)=>(
-                        <Experience key={index} items={{experience :item.experience, expYear :item.expYear  }}/>
+                        <Experience key={item._id} items={{experience :item.experience, expYear :item.expYear  }}/>
                     ))}
                     </ul>
                     <div
@@ -140,7 +140,7 @@ const DoctorDetails = ({ user }) => {
                       </Link>
                     </h4>
                    {user.languages && user.languages.map((item, index)=>(
-                    <Link key={index} to="#" className="btn btn-primary light btn-xs mb-1">
+                    <Link key={item._id} to="#" className="btn btn-primary light btn-xs mb-1">
                       <i className="flag-icon flag-icon-us"></i> {item.value}
                     </Link>
                    ))}
