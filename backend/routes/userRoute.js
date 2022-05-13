@@ -1,6 +1,6 @@
 const express = require('express');
 const { registerUser, loginUser, myProfile, verifyEmail, forgotPassword,
-     resetPassword, updatePassword, updateProfile, updateLanguage, updateExperience, updateAccademicAward, createDrug, getDrugs, createTest, getTests, createPrescription, getPrescriptions, deleteDrug, deleteTest, getDrugDetails, getTestDetails, updateDrug, updateTest, deletePrescription, getPrescriptionDetails, updatePrescription, createSlots, getSlots, getSlotDetails, updateSlot, deleteSlot, getSlotsByDate, createDoctorAppointment, getDoctorAppointments, deleteDoctorAppointment, getDoctorAppointmentById, updateDoctorAppointment, searchDoctors, userEnquiry, resetOTP, getDoctorDetails, newCreateDoctorAppointment } = require('../contollers/userController');
+     resetPassword, updatePassword, updateProfile, updateLanguage, updateExperience, updateAccademicAward, createDrug, getDrugs, createTest, getTests, createPrescription, getPrescriptions, deleteDrug, deleteTest, getDrugDetails, getTestDetails, updateDrug, updateTest, deletePrescription, getPrescriptionDetails, updatePrescription, createSlots, getSlots, getSlotDetails, updateSlot, deleteSlot, getSlotsByDate, createDoctorAppointment, getDoctorAppointments, deleteDoctorAppointment, getDoctorAppointmentById, updateDoctorAppointment, searchDoctors, userEnquiry, resetOTP, getDoctorDetails, newCreateDoctorAppointment, getTodayDoctorAppointments } = require('../contollers/userController');
 const { isAuthenticatedUser } = require('../middleware/auth');
 
 const router = express.Router();
@@ -50,6 +50,8 @@ router.route('/create-appointment').post(isAuthenticatedUser, createDoctorAppoin
 router.route('/doctor-appointments').get(isAuthenticatedUser, getDoctorAppointments);
 router.route('/delete-appointment/:appId').delete(isAuthenticatedUser, deleteDoctorAppointment);
 router.route('/appointment-detail/:appId').get(isAuthenticatedUser, getDoctorAppointmentById);
+
+router.route('/today-doctor-appointments').get(isAuthenticatedUser, getTodayDoctorAppointments);
 
 
 router.route('/new-create-appointment').post(isAuthenticatedUser, newCreateDoctorAppointment);

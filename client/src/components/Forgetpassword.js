@@ -28,9 +28,7 @@ const Forgetpassword = () => {
     setFormErrors(validate_forget(forgetValues));
     setIsSubmit(true);
     let { forget_email } = forgetValues;
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-    await dispatch(forgetPassword(forget_email));
-    if(!error && forget_email && !regex.test(forget_email)){
+    if(!error && forget_email){
       window.location.href="/reset-password";
     }
     return false;

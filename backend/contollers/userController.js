@@ -9,6 +9,7 @@ const Appointment = require('../models/appointmentModel');
 const Prescription = require('../models/prescriptionModel');
 const { sendEmail } = require('../middleware/sendEmail');
 const cloudinary = require('cloudinary');
+const moment = require('moment');
 
 const mongoose  = require('mongoose');
 
@@ -45,12 +46,14 @@ exports.userEnquiry = catchAsyncErrors(async (req, res)=>{
 // register user
 exports.registerUser = catchAsyncErrors(async (req, res, next)=>{
     try{
-    const {name, email,  password, role, phone,departmentId,department, certificate} = req.body;
+    const {name, email,  password, role, phone } = req.body;
+    let user  = '';
     const uData = {
       name, email,  password, role, phone
     }
-    if(certificate && role === 'doctor'){
-        const myCloud = await cloudinary.v2.uploader.upload(certificate, {
+    if(role === 'doctor'){
+      if(req.body.certificate){
+        const myCloud = await cloudinary.v2.uploader.upload(req.body.certificate, {
           folder: "certificate",
         });
         uData.certificate = {
@@ -58,11 +61,15 @@ exports.registerUser = catchAsyncErrors(async (req, res, next)=>{
           url: myCloud.secure_url,
         };
         uData.status = 0;
-        uData.departmentId = departmentId;
-        uData.department = department;
+        uData.departmentId = req.body.departmentId;
+        uData.department = req.body.department;
+       user = await User.create(uData);
+      }
+    }else if(role === 'patient'){
+       user = await User.create(uData);
     }
 
-    const user = await User.create(uData);
+   
 
     const resetUrl = `${req.protocol}://${req.get(
         "host"
@@ -1244,24 +1251,6 @@ exports.newCreateDoctorAppointment = catchAsyncErrors(async( req, res) => {
       const doctor = await User.findById(formData.doctorId);
       const user = await User.findById(req.user._id);
 
-    //   const slot = await Slot.find(
-    //     { 'manageSlots.slots._id': formData.slotId},
-    //     { 'slot.$': 1 }
-    // )
-
-    //   const appointmentData = {
-    //     ...formData,
-    //     ...patientDetail,
-    //     createdBy : req.user._id,                
-    // }
-
-    //   await Appointment.create(appointmentData);
-    //   doctor.patients.includes(patientDetail.patientId) ? doctor.patients : doctor.patients.push(patientDetail.patientId);
-    //   user.doctors.includes(formData.doctorId) ? user.doctors : user.doctors.push(formData.doctorId);
-
-    //   await doctor.save();
-    //   await user.save();
-
       res.status(201).json({
           success : true,
           slot,
@@ -1296,6 +1285,30 @@ exports.newCreateDoctorAppointment = catchAsyncErrors(async( req, res) => {
       })
       }
   });
+
+
+    // get todays Doctor Appointments
+    exports.getTodayDoctorAppointments = catchAsyncErrors(async( req, res) => {
+      try {
+          const appointments = await Appointment.find({doctorId : req.user._id, appointmentDate : {$eq : moment(new Date()).format('YYYY-MM-DD')}}).sort({_id : -1});
+          if(!appointments){
+            return res.status(404).json({
+                success : false,
+                message : 'No appointments found'
+            });
+          }
+          res.status(200).json({
+              success : true,
+              appointments
+          });
+        } catch (error) {
+          res.status(500).json({
+            success : false,
+            message : error.message
+        })
+        }
+    });
+  
 
   // get test details by id
   exports.getDoctorAppointmentById = catchAsyncErrors(async( req, res) => {

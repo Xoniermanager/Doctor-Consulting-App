@@ -1082,6 +1082,29 @@ export const getDoctorAppointments = () => async (dispatch) => {
   }
 };
 
+// get all doctor appointments
+export const getTodaysDoctorAppointments = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "GetTodayDoctorAppointmentsRequest",
+    });
+    const { data } = await axios.get("/api/v1/today-doctor-appointments", {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "GetTodayDoctorAppointmentsSuccess",
+      payload: data.appointments,
+    });
+  } catch (error) {
+    dispatch({
+      type: "GetTodayDoctorAppointmentsFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
 // Get Doctor Appointment details by id
 export const getAppointmentDetailsById = (appId) => async (dispatch) => {
   try {

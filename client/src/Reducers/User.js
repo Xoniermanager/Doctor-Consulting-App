@@ -536,6 +536,17 @@ export const appointmentsReducer = createReducer(initialState, {
       state.loading = false;
       state.error = action.payload;
   },
+  GetTodayDoctorAppointmentsRequest : (state) => {
+    state.loading = true;
+  },
+  GetTodayDoctorAppointmentsSuccess : (state, action) =>{
+    state.loading = false;
+    state.doctorAppointments = action.payload;
+  },
+  GetTodayDoctorAppointmentsFailure : (state, action) =>{
+      state.loading = false;
+      state.error = action.payload;
+  },
   clearErrors: (state) => {
     state.error = null;
   },
