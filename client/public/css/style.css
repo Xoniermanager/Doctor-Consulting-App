@@ -12438,10 +12438,8 @@ label.error {
       margin: 30px auto 0; } }
 
 .account-wraper2 {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  background-color: #f5f5fc; }
+  padding: 50px 0;
+}
   .account-wraper2 .appointment-form {
     padding: 50px 40px; }
     .account-wraper2 .appointment-form button {
@@ -13991,9 +13989,7 @@ blockquote {
   height: 105px;
   position: relative;
   z-index: 9; }
-  .menu-logo a {
-    display: table-cell;
-    vertical-align: middle; }
+   
   .menu-logo img {
     height: auto;
     width: 100%; }
@@ -14010,7 +14006,9 @@ blockquote {
     .menu-logo {
       height: 75px;
       width: 150px; } }
-
+      header.header.header-transparent.rs-nav {
+        padding: 0 !important;
+    }
 .header {
   position: relative;
   z-index: 9999; }
@@ -14022,7 +14020,7 @@ blockquote {
     position: relative; }
   .header .secondary-menu {
     float: right;
-    height: 105px;
+    padding: 15px 0;
     display: flex;
     align-items: center;
     position: relative;
@@ -14183,7 +14181,7 @@ blockquote {
       .menu-links .nav > li > a {
         color: #1f2278;
         font-size: 16px;
-        padding: 45px 20px;
+        padding: 25px 20px;
         cursor: pointer;
         font-weight: 600;
         display: inline-block;

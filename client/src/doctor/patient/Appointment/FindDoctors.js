@@ -110,10 +110,11 @@ const FindDoctors = () => {
                       >
                          {user.experienceYear} year Experience
                       </a>
+                      <button type="button" onClick={(e)=>{ showSlots(user._id)}} className="btn btn btn-primary float-right">Make An Appointment</button>
                     </div>
                   </div>
                 </div>
-                 <button type="button" onClick={(e)=>{ showSlots(user._id)}} className="btn btn-primary">Make An Appointment</button>
+                
               </div>
             </div>
             </>

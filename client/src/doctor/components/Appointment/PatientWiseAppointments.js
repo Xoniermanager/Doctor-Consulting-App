@@ -51,7 +51,7 @@ const PatientWiseAppointments = () => {
       sortable: true,
     },
     {
-      name: "DATE",
+      name: "APPOINTMENT DATE",
       selector: "appDate",
       sortable: true,
     },

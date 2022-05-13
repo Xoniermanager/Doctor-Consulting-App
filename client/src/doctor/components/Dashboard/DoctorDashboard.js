@@ -47,17 +47,17 @@ const DoctorDashboard = () => {
       sortable: true,
     },
     {
-      name: "DATE",
+      name: "APPOINTMENT DATE",
       selector: "appDate",
       sortable: true,
     },
     {
-        name: "Slot Time",
+        name: "SLOT TIME",
         selector: "appointmentTime",
         sortable: true,
     },
     {
-      name: "Created Date",
+      name: "CREATED DATE",
       selector: "cdate"
     },
     {

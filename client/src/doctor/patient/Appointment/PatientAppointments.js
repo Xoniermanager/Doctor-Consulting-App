@@ -66,7 +66,7 @@ const PatientAppointments = () => {
       sortable: true,
     },
     {
-      name: "DATE",
+      name: "APPOINTMENT DATE",
       selector: "appDate",
       sortable: true,
     },
@@ -137,7 +137,6 @@ const PatientAppointments = () => {
     handleModalClick();
   }
 
-console.log(editData);
   return (
     <>
     <Header title={'Appointments'}/>
