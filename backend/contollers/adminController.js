@@ -6,6 +6,9 @@ const Department = require('../models/departmentModel');
 const News = require('../models/newsModel');
 const cloudinary = require('cloudinary');
 const { sendEmail } = require('../middleware/sendEmail');
+const Appointment = require('../models/appointmentModel');
+const Drug = require('../models/drugModel');
+const Test = require('../models/testModel');
 
  // all users
  exports.getPatients = catchAsyncErrors(async( req, res) => {
@@ -630,6 +633,36 @@ const { sendEmail } = require('../middleware/sendEmail');
         res.status(200).json({
             success : true,
             message : 'News deleted successfully.'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+// dashboard data
+
+  // get faq details by id
+  exports.getDashbordDetails = catchAsyncErrors(async( req, res) => {
+    try {
+      const patients = await User.find({ role: 'patient'});
+      const doctors = await User.find({ role: 'doctor'});
+      const appointments = await Appointment.find();
+      const drugs = await Drug.find();
+      const tests = await Test.find();
+      const departments = await Department.find();
+      let dashboardData = {
+        patientCount : patients.length,
+        doctorCount : doctors.length,
+        appointmentCount : appointments.length,
+        drugCount : drugs.length,
+        testCount : tests.length,
+        departmentCount : departments.length
+      }
+        res.status(200).json({
+            success : true,
+            dashboardData
         });
       } catch (error) {
         res.status(500).json({

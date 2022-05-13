@@ -328,3 +328,26 @@ export const enquiryReducer = createReducer(initialState, {
     state.message = null;
   },
 });
+
+
+export const adminDashboardReducer = createReducer(initialState, {
+  GetDashboardDetailsRequest: (state) => {
+    state.loading = true;
+  },
+  GetDashboardDetailsSuccess: (state, action) => {
+    state.loading = false;
+    state.dashboardData = action.payload;
+  },
+  GetDashboardDetailsFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  },
+  clearErrors: (state) => {
+    state.error = null;
+  },
+  clearMessage: (state) => {
+    state.message = null;
+  },
+});
+
+

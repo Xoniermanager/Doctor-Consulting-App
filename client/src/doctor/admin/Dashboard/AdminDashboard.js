@@ -1,16 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import SideBar from "../Layout/SideBar";
 import Footer from "../Layout/Footer";
 import Header from "../Layout/Header";
 import MediaItem from "./MediaItem";
+import { useDispatch, useSelector } from "react-redux";
+import { getDashboardData } from "../../../Actions/Admin";
+import Loader from "../Layout/Loader";
 
 const AdminDashboard = () => {
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getDashboardData());
+  }, [dispatch]);
+
+  let { loading, dashboardData } = useSelector((state) => state.dashboardData);
+  console.log(dashboardData);
+
   return (
     <>
       <Header title={'Dashboard'} />
       <SideBar />
-      <div className="content-body">
+      { loading === true ? <Loader/> : (<div className="content-body">
         {/* <!-- row --> */}
         <div className="container-fluid">
           <div className="row">
@@ -18,7 +30,7 @@ const AdminDashboard = () => {
               data={{
                 bcolor: "#cb779359",
                 title: "Total Patient",
-                dataCount: "783k",
+                dataCount: dashboardData ? dashboardData.patientCount : 0,
                 sign: "M8.56244 9.25C6.35869 11.6256 2.26214 16.0091 0.999939 17.5H26.4374V1L16.8124 13.375L8.56244 9.25Z",
                 sign2: "M0.999939 17.5C2.26214 16.0091 6.35869 11.6256 8.56244 9.25L16.8124 13.375L26.4374 1",
                 incDcr: "+4",
@@ -31,7 +43,7 @@ const AdminDashboard = () => {
               data={{
                 bcolor: "#5ec967",
                 title: "Doctor",
-                dataCount: "76",
+                dataCount: dashboardData ?  dashboardData.doctorCount : 0,
                 sign: "M18.875 9.25C21.0787 11.6256 25.1753 16.0091 26.4375 17.5H1V1L10.625 13.375L18.875 9.25Z",
                 sign2: "M26.4375 17.5C25.1753 16.0091 21.0787 11.6256 18.875 9.25L10.625 13.375L1 1",
                 incDcr: "-4",
@@ -44,7 +56,7 @@ const AdminDashboard = () => {
               data={{
                 bcolor: "#7b7dd7",
                 title: "Appointment",
-                dataCount: "76",
+                dataCount: dashboardData ? dashboardData.appointmentCount : 0,
                 sign: "M18.875 9.25C21.0787 11.6256 25.1753 16.0091 26.4375 17.5H1V1L10.625 13.375L18.875 9.25Z",
                 sign2: "M26.4375 17.5C25.1753 16.0091 21.0787 11.6256 18.875 9.25L10.625 13.375L1 1",
                 incDcr: "+4",
@@ -56,8 +68,8 @@ const AdminDashboard = () => {
             <MediaItem
               data={{
                 bcolor: "#775cc7",
-                title: "Hospital Earning",
-                dataCount: "$56k",
+                title: "Total Drugs",
+                dataCount: dashboardData ? dashboardData.drugCount : 0,
                 sign: "M8.56244 9.25C6.35869 11.6256 2.26214 16.0091 0.999939 17.5H26.4374V1L16.8124 13.375L8.56244 9.25Z",
                 sign2: "M0.999939 17.5C2.26214 16.0091 6.35869 11.6256 8.56244 9.25L16.8124 13.375L26.4374 1",
                 incDcr: "+4",
@@ -69,8 +81,8 @@ const AdminDashboard = () => {
             <MediaItem
               data={{
                 bcolor: "#7b7dd7",
-                title: "New Patients",
-                dataCount: "76",
+                title: "Total Tests",
+                dataCount: dashboardData ? dashboardData.testCount : 0,
                 sign: "M18.875 9.25C21.0787 11.6256 25.1753 16.0091 26.4375 17.5H1V1L10.625 13.375L18.875 9.25Z",
                 sign2: "M26.4375 17.5C25.1753 16.0091 21.0787 11.6256 18.875 9.25L10.625 13.375L1 1",
                 incDcr: "-4",
@@ -82,8 +94,8 @@ const AdminDashboard = () => {
             <MediaItem
               data={{
                 bcolor: "#5ec967",
-                title: "Prescriptions",
-                dataCount: "76",
+                title: "Total Departments",
+                dataCount: dashboardData ? dashboardData.departmentCount : 0,
                 sign: "M18.875 9.25C21.0787 11.6256 25.1753 16.0091 26.4375 17.5H1V1L10.625 13.375L18.875 9.25Z",
                 sign2: "M26.4375 17.5C25.1753 16.0091 21.0787 11.6256 18.875 9.25L10.625 13.375L1 1",
                 incDcr: "-4",
@@ -91,89 +103,9 @@ const AdminDashboard = () => {
                   "M37.3333 15.6666C37.3383 14.7488 37.0906 13.8473 36.6174 13.061C36.1441 12.2746 35.4635 11.6336 34.6501 11.2084C33.8368 10.7831 32.9221 10.5899 32.0062 10.65C31.0904 10.7101 30.2087 11.021 29.4579 11.5489C28.707 12.0767 28.1159 12.8011 27.7494 13.6425C27.3829 14.484 27.255 15.4101 27.3799 16.3194C27.5047 17.2287 27.8774 18.086 28.4572 18.7976C29.0369 19.5091 29.8013 20.0473 30.6667 20.3533V25.6666C30.6667 27.8768 29.7887 29.9964 28.2259 31.5592C26.6631 33.122 24.5435 34 22.3333 34C20.1232 34 18.0036 33.122 16.4408 31.5592C14.878 29.9964 14 27.8768 14 25.6666V23.8666C16.7735 23.4642 19.3097 22.0777 21.1456 19.9603C22.9815 17.8429 23.9946 15.1358 24 12.3333V2.33329C24 1.89127 23.8244 1.46734 23.5118 1.15478C23.1993 0.842221 22.7754 0.666626 22.3333 0.666626H17.3333C16.8913 0.666626 16.4674 0.842221 16.1548 1.15478C15.8423 1.46734 15.6667 1.89127 15.6667 2.33329C15.6667 2.77532 15.8423 3.19924 16.1548 3.5118C16.4674 3.82436 16.8913 3.99996 17.3333 3.99996H20.6667V12.3333C20.6667 14.5434 19.7887 16.663 18.2259 18.2258C16.6631 19.7887 14.5435 20.6666 12.3333 20.6666C10.1232 20.6666 8.00358 19.7887 6.44077 18.2258C4.87797 16.663 4 14.5434 4 12.3333V3.99996H7.33333C7.77536 3.99996 8.19928 3.82436 8.51184 3.5118C8.8244 3.19924 9 2.77532 9 2.33329C9 1.89127 8.8244 1.46734 8.51184 1.15478C8.19928 0.842221 7.77536 0.666626 7.33333 0.666626H2.33333C1.8913 0.666626 1.46738 0.842221 1.15482 1.15478C0.842259 1.46734 0.666664 1.89127 0.666664 2.33329V12.3333C0.672024 15.1358 1.68515 17.8429 3.52106 19.9603C5.35697 22.0777 7.8932 23.4642 10.6667 23.8666V25.6666C10.6667 28.7608 11.8958 31.7283 14.0837 33.9162C16.2717 36.1041 19.2391 37.3333 22.3333 37.3333C25.4275 37.3333 28.395 36.1041 30.5829 33.9162C32.7708 31.7283 34 28.7608 34 25.6666V20.3533C34.9723 20.0131 35.8151 19.3797 36.4122 18.5402C37.0092 17.7008 37.3311 16.6967 37.3333 15.6666Z",
               }}
             />
-
-            <div className="col-md-12">
-              <div className="card shadow mb-4">
-                <div className="card-header d-block py-3">
-                  <div className="row">
-                    <div className="col-7">
-                      <h6 className="m-0 font-weight-bold text-primary w-75 p-2">
-                        Today's Appointment - 15 Mar 2022
-                      </h6>
-                    </div>
-                    <div className="col-5">
-                      <Link
-                        to="/create-appointment"
-                        className="btn btn-primary float-right mr-2"
-                      >
-                        <i className="fa fa-plus"></i> New Appointment
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-                <div className="card-body">
-                  <div className="table-responsive">
-                    <table
-                      id="dataTable"
-                      width="100%"
-                      cellspacing="0"
-                      className="table table-bordered"
-                    >
-                      <thead>
-                        <tr>
-                          <th className="text-center">ID</th>
-                          <th>Patient Name</th>
-                          <th>Date</th>
-                          <th>Time Slot</th>
-                          <th className="text-center">Status</th>
-                          <th className="text-center">Created at</th>
-                          <th className="text-center">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td className="text-center">410</td>
-                          <td>
-                            <a href="#"> Abhay Kumar Dubey</a>
-                          </td>
-                          <td>
-                            <label className="badge badge-primary-soft">
-                              <i className="fa fa-calendar"></i> 15 Mar 2022{" "}
-                            </label>
-                          </td>
-                          <td>
-                            <label className="badge badge-primary-soft">
-                              <i className="fa fa-clock"></i> 14:30 - 15:00
-                            </label>
-                          </td>
-                          <td className="text-center">
-                            <label className="badge badge-success-soft">
-                              <i className="fa fa-check"></i> Treated
-                            </label>
-                          </td>
-                          <td className="text-center">01 Mar 2022 13:52</td>
-                          <td align="center">
-                            <a
-                              data-rdv_id="410"
-                              data-rdv_date="15 Mar 2022"
-                              className="btn btn-outline-success btn-circle btn-sm"
-                            >
-                              <i className="fa fa-check"></i>
-                            </a>
-                            <a className="btn btn-outline-danger btn-circle btn-sm">
-                              <i className="fa fa-trash"></i>
-                            </a>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
-      </div>
+      </div>)}
       <Footer />
     </>
   );

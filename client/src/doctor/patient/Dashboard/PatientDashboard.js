@@ -151,7 +151,7 @@ const PatientDashboard = () => {
                   <div className="row">
                     <div className="col-7">
                       <h6 className="m-0 font-weight-bold text-primary w-75 p-2">
-                       Upcomming  Appointment's
+                       Upcoming  Appointment's
                       </h6>
                     </div>
                     <div className="col-5">

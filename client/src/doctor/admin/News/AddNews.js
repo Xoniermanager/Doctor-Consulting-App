@@ -37,12 +37,12 @@ const AddNews = () => {
     const handleToSubmit = async(e) =>{
       e.preventDefault();
       setFormErrors(validate(newsValue));
-      if(newsId){
+      if(newsId && Object.keys(formErrors).length === 0){
         await dispatch(updateNews(newsId, newsValue,newsImage));
-      }else{
+      }else if(Object.keys(formErrors).length === 0){
         await dispatch(createNews(newsValue,newsImage));
       }
-      if(!error){
+      if(!error && Object.keys(formErrors).length === 0){
        history('/admin/all-newses')
       }
     }
@@ -60,12 +60,20 @@ const AddNews = () => {
   
     const validate = (values) => {
       const errors = {};
+      const regex = /^[A-Za-z ]+$/i;
+
       if (!values.newsTitle) {
-        errors.newsTitle = "News Title is required!";
+        errors.newsTitle = "News title is required!";
+      }
+      if (!regex.test(values.newsTitle)) {
+        errors.newsTitle = "News title is invalid!";
       }
       if (!values.newsDescription) {
           errors.newsDescription = "News description is required!";
       } 
+      if (!regex.test(values.newsDescription)) {
+        errors.newsDescription = "News description is invalid!";
+      }
       return errors;
     };
 

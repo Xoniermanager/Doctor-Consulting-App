@@ -36,12 +36,12 @@ console.log(dataDetails);
     const handleToSubmit = async(e) =>{
       e.preventDefault();
       setFormErrors(validate(faqValue));
-      if(faqId){
+      if(faqId && Object.keys(formErrors).length === 0){
         await dispatch(updateFaq(faqId, faqValue));
-      }else{
+      }else if(Object.keys(formErrors).length === 0){
         await dispatch(createFaq(faqValue));
       }
-      if(!error){
+      if(!error && Object.keys(formErrors).length === 0){
         history('/admin/all-faqs')
       }
     }
@@ -59,12 +59,19 @@ console.log(dataDetails);
   
     const validate = (values) => {
       const errors = {};
+      const regex = /^[A-Za-z ]+$/i;
       if (!values.faqQues) {
         errors.faqQues = "Faq question is required!";
       }
+      if (!regex.test(values.faqQues)) {
+        errors.faqQues = "Question is not valid!";
+      }
       if (!values.faqDescription) {
-          errors.faqDescription = "Faq description is required!";
+        errors.faqDescription = "Faq description is required!";
       } 
+      if (!regex.test(values.faqDescription)) {
+        errors.faqDescription = "Faq description is not valid!";
+      }
       return errors;
     };
   

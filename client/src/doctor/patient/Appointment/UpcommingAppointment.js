@@ -74,7 +74,7 @@ const UpcommingAppointment = () => {
 
   return (
     <>
-    <Header title={'Upcomming Appointments'}/>
+    <Header title={'Upcoming Appointments'}/>
     <PatientSideBar/>
     { loading === true ? <Loader /> :(<div className="content-body">
         <div className="container-fluid">
@@ -85,7 +85,7 @@ const UpcommingAppointment = () => {
                 <div className="card-header d-block">
                   <div className="row">
                     <div className="col-md-6">
-                      <h4 className="card-title">Upcomming Appointments</h4>
+                      <h4 className="card-title">Upcoming Appointments</h4>
                     </div>
                   </div>
                 </div>

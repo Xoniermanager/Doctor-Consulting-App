@@ -653,3 +653,26 @@ export const getEnquiries = () => async (dispatch) => {
     });
   }
 };
+
+// get dashboard details
+export const getDashboardData = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "GetDashboardDetailsRequest",
+    });
+    const { data } = await axios.get("/api/v1/admin/dashboard-details", {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "GetDashboardDetailsSuccess",
+      payload: data.dashboardData,
+    });
+  } catch (error) {
+    dispatch({
+      type: "GetDashboardDetailsFailure",
+      payload: error.response.data.message,
+    });
+  }
+};

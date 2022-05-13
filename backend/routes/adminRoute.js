@@ -1,5 +1,5 @@
 const express = require('express');
-const { getPatients, createDisease, getDiseases, deleteDisease, getDiseaseDetails, updateDisease, updateUserStatus, createDepartment, getDepartments, deleteDepartment, getDepartmentDetails, updateDepartment, createDoctor, createFaq, getFaqs, getFaqDetails, updateFaq, deletefaq, createNews, getNewses, getNewsDetails, updateNews, deleteNews } = require('../contollers/adminController');
+const { getPatients, createDisease, getDiseases, deleteDisease, getDiseaseDetails, updateDisease, updateUserStatus, createDepartment, getDepartments, deleteDepartment, getDepartmentDetails, updateDepartment, createDoctor, createFaq, getFaqs, getFaqDetails, updateFaq, deletefaq, createNews, getNewses, getNewsDetails, updateNews, deleteNews, getDashbordDetails } = require('../contollers/adminController');
 const { isAuthenticatedUser } = require('../middleware/auth');
 
 const router = express.Router();
@@ -30,5 +30,7 @@ router.route('/all-newses').get(getNewses);
 router.route('/delete-news/:id').delete(isAuthenticatedUser, deleteNews);
 router.route('/edit-news/:id').get(isAuthenticatedUser, getNewsDetails);
 router.route('/update-news/:id').put(isAuthenticatedUser, updateNews);
+
+router.route('/dashboard-details').get(isAuthenticatedUser, getDashbordDetails);
 
 module.exports = router;
