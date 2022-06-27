@@ -12,7 +12,7 @@ import Header from "../Layout/Header"
 import "./VideoConference.css"
 
 
-const socket = io.connect('http://localhost:5000')
+const socket = io.connect('https://xoniertest.herokuapp.com')
 const VideoConference = () => {
 	const [ me, setMe ] = useState("")
 	const [ stream, setStream ] = useState()
