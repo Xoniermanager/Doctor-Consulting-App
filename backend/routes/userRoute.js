@@ -21,8 +21,6 @@ router.route('/doctor/language').put(isAuthenticatedUser, updateLanguage);
 router.route('/doctor/experience').put(isAuthenticatedUser, updateExperience);
 router.route('/doctor/awardclinic').post(isAuthenticatedUser, updateAccademicAward);
 
-router.route('/doctor-monthly-earning/:doctorId').get(isAuthenticatedUser, getDoctorMontlyEarning);
-
 router.route('/create-drug').post(isAuthenticatedUser, createDrug);
 router.route('/drugs').get(isAuthenticatedUser, getDrugs);
 router.route('/delete-drug/:id').delete(isAuthenticatedUser, deleteDrug);

@@ -43,34 +43,6 @@ exports.userEnquiry = catchAsyncErrors(async (req, res)=>{
 }
 })
 
-exports.getDoctorMontlyEarning = catchAsyncErrors(async (req, res) => {
-  
-
-  try {
-
-    const payment = await Payment.find({
-    doctorId: req.params.doctorId
-    });
-
-    if (!payment) {
-      return res.status(404).json({
-        success: false,
-        message: 'No result found'
-      });
-    }
-    res.status(200).json({
-      success: true,
-      payment
-    });
-    //console.log(payment);
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    })
-  }
-});
-
 // register user
 exports.registerUser = catchAsyncErrors(async (req, res)=>{
     try{
@@ -79,7 +51,6 @@ exports.registerUser = catchAsyncErrors(async (req, res)=>{
     const uData = {
       name, email,  password, role, phone
     }
-    //console.log(role);
     if(role === 'doctor'){
       if(req.body.certificate){
         const myCloud = await cloudinary.v2.uploader.upload(req.body.certificate, {
