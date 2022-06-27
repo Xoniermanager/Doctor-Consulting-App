@@ -103,30 +103,43 @@ exports.registerUser = catchAsyncErrors(async (req, res)=>{
   }
 })
 
-export const getDoctorMonthlyEarning = (doctorId) => async (dispatch) => {
-  //console.log(doctorId);
+exports.getDoctorMontlyEarning = catchAsyncErrors(async (req, res) => {
+  // let dts = new Date();
+  
+  // let date1 = dts.getFullYear() + '-' + (dts.getUTCMonth() > 10 ? dts.getUTCMonth() + 1 : '0' + (dts.getUTCMonth() + 1)) + '-' + '01';
+  
+  // let date2 = dts.getFullYear() + '-' + (dts.getUTCMonth() > 10 ? dts.getUTCMonth() + 1 : '0' + (dts.getUTCMonth() + 1)) + '-' + (dts.getDate() > 10 ? dts.getDate() : '0' + dts.getDate());
+  // let year = dts.getFullYear();
+  // let month = (dts.getUTCMonth() > 10 ? dts.getUTCMonth() + 1 : '0' + (dts.getUTCMonth() + 1));
+
   try {
-    dispatch({
-      type: "GetDoctorMonthlyEarningRequest",
+    
+    //const payment = await Payment.find({ doctorId: req.params.doctorId,createdAt:{$gte: date1, $lte: date2}});
+    // let d = new Date(date1);
+    // let n = new Date(date1);
+
+    const payment = await Payment.find({
+    doctorId: req.params.doctorId
     });
-    const { data } = await axios.get(`/api/v1/doctor-monthly-earning/${doctorId}`, {
-      headers: {
-        "auth-token": localStorage.getItem("token"),
-      },
+
+    if (!payment) {
+      return res.status(404).json({
+        success: false,
+        message: 'No result found'
+      });
+    }
+    res.status(200).json({
+      success: true,
+      payment
     });
-    //console.log(data.appointments);
-    dispatch({
-      type: "GetDoctorMonthlyEarningSuccess",
-      payload: data.payment,
-    });
-    //console.log('testing',data);
+    //console.log(payment);
   } catch (error) {
-    dispatch({
-      type: "GetDoctorMonthlyEarningFailure",
-      payload: error.response.data.message,
-    });
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
   }
-}; 
+});
 
 // login user
 exports.loginUser = catchAsyncErrors(async (req, res, next)=>{
