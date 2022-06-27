@@ -9,6 +9,7 @@ const Appointment = require('../models/appointmentModel');
 const Prescription = require('../models/prescriptionModel');
 const { sendEmail } = require('../middleware/sendEmail');
 const cloudinary = require('cloudinary');
+const Payment = require('../models/paymentModel');
 const moment = require('moment');
 
 const mongoose  = require('mongoose');
@@ -101,6 +102,31 @@ exports.registerUser = catchAsyncErrors(async (req, res)=>{
     });
   }
 })
+
+export const getDoctorMonthlyEarning = (doctorId) => async (dispatch) => {
+  //console.log(doctorId);
+  try {
+    dispatch({
+      type: "GetDoctorMonthlyEarningRequest",
+    });
+    const { data } = await axios.get(`/api/v1/doctor-monthly-earning/${doctorId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    //console.log(data.appointments);
+    dispatch({
+      type: "GetDoctorMonthlyEarningSuccess",
+      payload: data.payment,
+    });
+    //console.log('testing',data);
+  } catch (error) {
+    dispatch({
+      type: "GetDoctorMonthlyEarningFailure",
+      payload: error.response.data.message,
+    });
+  }
+}; 
 
 // login user
 exports.loginUser = catchAsyncErrors(async (req, res, next)=>{
