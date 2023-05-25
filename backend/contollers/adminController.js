@@ -9,7 +9,11 @@ const { sendEmail } = require('../middleware/sendEmail');
 const Appointment = require('../models/appointmentModel');
 const Drug = require('../models/drugModel');
 const Test = require('../models/testModel');
-
+const Services = require('../models/servicesModel');
+const Stories = require('../models/storiesModel');
+const Clients = require('../models/clientsModel');
+const Approach = require('../models/approachModel');
+const About = require('../models/aboutModel');
  // all users
  exports.getPatients = catchAsyncErrors(async( req, res) => {
   try {
@@ -500,9 +504,678 @@ const Test = require('../models/testModel');
       }
   });
 
+  //service 
+  exports.createService = catchAsyncErrors(async( req, res) => {
+    try {
+        const {serviceValue, serviceImage} = req.body;
+        const serviceData = {...serviceValue};
+        let title = serviceValue.serviceTitle;
+        let slug;
+        slug = title.toLowerCase();
+        slug = slug.replace(/\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi, '');
+        slug = slug.replace(/ /gi, "-");
+        slug = slug.replace(/\-\-\-\-\-/gi, '-');
+        slug = slug.replace(/\-\-\-\-/gi, '-');
+        slug = slug.replace(/\-\-\-/gi, '-');
+        slug = slug.replace(/\-\-/gi, '-');
+        slug = '@' + slug + '@';
+        slug = slug.replace(/\@\-|\-\@|\@/gi, '');
+        serviceData.slug = slug;
+
+        if(serviceImage){
+         const myCloud = await cloudinary.v2.uploader.upload(serviceImage, {
+           folder: "service",
+         });
+         serviceData.image = {
+           public_id: myCloud.public_id,
+           url: myCloud.secure_url,
+         };
+        }  
+        const newService =  await Services.create(serviceData);
+        res.status(201).json({
+            success : true,
+            newService,
+            message : 'Service added successfully.'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+  exports.updateService = catchAsyncErrors(async( req, res) => {
+    try {
+      const service = await Services.findById(req.params.id);
+      const {serviceValue, serviceImage} = req.body;
+
+      let title = serviceValue.serviceTitle;
+      let slug;
+      slug = title.toLowerCase();
+      slug = slug.replace(/\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi, '');
+      slug = slug.replace(/ /gi, "-");
+      slug = slug.replace(/\-\-\-\-\-/gi, '-');
+      slug = slug.replace(/\-\-\-\-/gi, '-');
+      slug = slug.replace(/\-\-\-/gi, '-');
+      slug = slug.replace(/\-\-/gi, '-');
+      slug = '@' + slug + '@';
+      slug = slug.replace(/\@\-|\-\@|\@/gi, '');
+      service.slug = slug;
+    
+      if(!service){
+          return res.status(404).json({
+              success : false,
+              message : 'Service not found'
+          })
+      }
+      if(serviceValue.serviceTitle){
+        service.serviceTitle = serviceValue.serviceTitle;
+      }
+      if(serviceValue.serviceDescription){
+        service.serviceDescription = serviceValue.serviceDescription;
+      }        
+      if(serviceImage){
+          if(service.image)
+          await cloudinary.v2.uploader.destroy('service/'+service.image.public_id);
+           const myCloud = await cloudinary.v2.uploader.upload(serviceImage, {
+           folder: "service",
+          });
+          service.image = {
+          public_id: myCloud.public_id,
+          url: myCloud.secure_url,
+        };
+    }
+      await service.save();
+
+        res.status(201).json({
+            success : true,
+            message : 'Service updated successfully.'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+  exports.getService = catchAsyncErrors(async( req, res) => {
+    try {
+       const service = await Services.find().sort({ _id: -1 });
+       if(!service){
+          return res.status(404).json({
+              success : false,
+              message : 'No service found'
+          });
+       }
+       res.status(200).json({
+           success : true,
+           service
+       });
+     } catch (error) {
+       res.status(500).json({
+         success : false,
+         message : error.message
+      })
+     }
+  });
+
+  exports.deleteService = catchAsyncErrors(async( req, res) => {
+    try {
+      const service = await Services.findById(req.params.id);
+        if(!service){
+            return res.status(404).json({
+                success : false,
+                message : 'news not found'
+            })
+        }
+      await service.remove();
+        res.status(200).json({
+            success : true,
+            message : 'Service deleted successfully.'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+  exports.getServiceDetails = catchAsyncErrors(async( req, res) => {
+    //console.log(req.params.id);
+    try {
+        //owner : req.user._id,
+        const service = await Services.findOne({ _id : req.params.id});
+        if(!service){
+          return res.status(404).json({
+              success : false,
+              message : 'No service found'
+          });
+        }
+        res.status(200).json({
+            success : true,
+            service
+        });
+        console.log(service);
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+  
+
+  //service
+
+  //approach
+  exports.updateApproach = catchAsyncErrors(async( req, res) => {
+    try {
+      const approach = await Approach.findById(req.params.id);
+      const {approachValue, approachImage} = req.body;
+    
+      if(!approach){
+          return res.status(404).json({
+              success : false,
+              message : 'Approach not found'
+          })
+      }
+      if(approachValue.Title){
+        approach.Title = approachValue.Title;
+      }
+      if(approachValue.Description){
+        approach.Description = approachValue.Description;
+      }        
+      if(approachImage){
+          if(approach.image)
+          await cloudinary.v2.uploader.destroy('approach/'+approach.image.public_id);
+           const myCloud = await cloudinary.v2.uploader.upload(approachImage, {
+           folder: "approach",
+          });
+          approach.image = {
+          public_id: myCloud.public_id,
+          url: myCloud.secure_url,
+        };
+    }
+      await approach.save();
+
+        res.status(201).json({
+            success : true,
+            message : 'Approach updated successfully.'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+  exports.getApproachDetails = catchAsyncErrors(async( req, res) => {
+   // console.log(req.params.id);
+    try {
+        //owner : req.user._id,
+        const approach = await Approach.findOne({ _id : req.params.id});
+        if(!approach){
+          return res.status(404).json({
+              success : false,
+              message : 'No approach found'
+          });
+        }
+        res.status(200).json({
+            success : true,
+            approach
+        });
+        //console.log(approach);
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+  exports.createApproach = catchAsyncErrors(async( req, res) => {
+    try {
+        const {approachValue, approachImage} = req.body;
+        const approachData = {...approachValue};
+        
+        if(approachImage){
+         const myCloud = await cloudinary.v2.uploader.upload(approachImage, {
+           folder: "approach",
+         });
+         approachData.image = {
+           public_id: myCloud.public_id,
+           url: myCloud.secure_url,
+         };
+        }  
+        const newApproach =  await Approach.create(approachData);
+        res.status(201).json({
+            success : true,
+            newApproach,
+            message : 'Approach added successfully.'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+  //end approach
+
+  //about
+  exports.updateAbout = catchAsyncErrors(async( req, res) => {
+    try {
+      const about = await About.findById(req.params.id);
+      const {approachValue, approachImage} = req.body;
+    
+      if(!about){
+          return res.status(404).json({
+              success : false,
+              message : 'About not found'
+          })
+      }
+      if(approachValue.Title){
+        about.Title = approachValue.Title;
+      }
+      if(approachValue.Description){
+        about.Description = approachValue.Description;
+      }        
+      if(approachImage){
+          if(about.image)
+          await cloudinary.v2.uploader.destroy('about/'+about.image.public_id);
+           const myCloud = await cloudinary.v2.uploader.upload(approachImage, {
+           folder: "about",
+          });
+          about.image = {
+          public_id: myCloud.public_id,
+          url: myCloud.secure_url,
+        };
+    }
+      await about.save();
+
+        res.status(201).json({
+            success : true,
+            message : 'About updated successfully.'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+  exports.getAboutDetails = catchAsyncErrors(async( req, res) => {
+   // console.log(req.params.id);
+    try {
+        //owner : req.user._id,
+        const about = await About.findOne({ _id : req.params.id});
+        if(!about){
+          return res.status(404).json({
+              success : false,
+              message : 'No about found'
+          });
+        }
+        res.status(200).json({
+            success : true,
+            about
+        });
+        //console.log(approach);
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+  exports.createAbout = catchAsyncErrors(async( req, res) => {
+    try {
+        const {aboutValue, aboutImage} = req.body;
+        const aboutData = {...aboutValue};
+        
+        if(aboutImage){
+         const myCloud = await cloudinary.v2.uploader.upload(aboutImage, {
+           folder: "about",
+         });
+         aboutData.image = {
+           public_id: myCloud.public_id,
+           url: myCloud.secure_url,
+         };
+        }  
+        const newAbout =  await About.create(aboutData);
+        res.status(201).json({
+            success : true,
+            newAbout,
+            message : 'About added successfully.'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+  //end about
+
+
+  //stories 
+  exports.createStories = catchAsyncErrors(async( req, res) => {
+    try {
+        const {storiesValue, storiesImage} = req.body;
+        const storiesData = {...storiesValue};
+        let title = storiesValue.storiesTitle;
+        let slug;
+        slug = title.toLowerCase();
+        slug = slug.replace(/\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi, '');
+        slug = slug.replace(/ /gi, "-");
+        slug = slug.replace(/\-\-\-\-\-/gi, '-');
+        slug = slug.replace(/\-\-\-\-/gi, '-');
+        slug = slug.replace(/\-\-\-/gi, '-');
+        slug = slug.replace(/\-\-/gi, '-');
+        slug = '@' + slug + '@';
+        slug = slug.replace(/\@\-|\-\@|\@/gi, '');
+        storiesData.slug = slug;
+
+        if(storiesImage){
+         const myCloud = await cloudinary.v2.uploader.upload(storiesImage, {
+           folder: "stories",
+         });
+         storiesData.image = {
+           public_id: myCloud.public_id,
+           url: myCloud.secure_url,
+         };
+        }  
+        const newStories =  await Stories.create(storiesData);
+        res.status(201).json({
+            success : true,
+            newStories,
+            message : 'Stories added successfully.'
+        });
+       // console.log('newStories',newStories);
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+  exports.updateStories = catchAsyncErrors(async( req, res) => {
+    try {
+      const stories = await Stories.findById(req.params.id);
+      const {storiesValue, storiesImage} = req.body;
+
+      let title = storiesValue.storiesTitle;
+      let slug;
+      slug = title.toLowerCase();
+      slug = slug.replace(/\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi, '');
+      slug = slug.replace(/ /gi, "-");
+      slug = slug.replace(/\-\-\-\-\-/gi, '-');
+      slug = slug.replace(/\-\-\-\-/gi, '-');
+      slug = slug.replace(/\-\-\-/gi, '-');
+      slug = slug.replace(/\-\-/gi, '-');
+      slug = '@' + slug + '@';
+      slug = slug.replace(/\@\-|\-\@|\@/gi, '');
+      stories.slug = slug;
+    
+      if(!stories){
+          return res.status(404).json({
+              success : false,
+              message : 'Stories not found'
+          })
+      }
+      if(storiesValue.storiesTitle){
+        stories.storiesTitle = storiesValue.storiesTitle;
+      }
+      if(storiesValue.storiesAuthor){
+        stories.storiesAuthor = storiesValue.storiesAuthor;
+      }
+      if(storiesValue.storiesDescription){
+        stories.storiesDescription = storiesValue.storiesDescription;
+      }        
+      if(storiesImage){
+          if(stories.image)
+          await cloudinary.v2.uploader.destroy('stories/'+stories.image.public_id);
+           const myCloud = await cloudinary.v2.uploader.upload(storiesImage, {
+           folder: "stories",
+          });
+          stories.image = {
+          public_id: myCloud.public_id,
+          url: myCloud.secure_url,
+        };
+    }
+      await stories.save();
+
+        res.status(201).json({
+            success : true,
+            message : 'Stories updated successfully.'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+  exports.getStories = catchAsyncErrors(async( req, res) => {
+    try {
+       const stories = await Stories.find().sort({ _id: -1 });
+       if(!stories){
+          return res.status(404).json({
+              success : false,
+              message : 'No stories found'
+          });
+       }
+       res.status(200).json({
+           success : true,
+           stories
+       });
+     } catch (error) {
+       res.status(500).json({
+         success : false,
+         message : error.message
+      })
+     }
+  });
+
+  exports.deleteStories = catchAsyncErrors(async( req, res) => {
+    try {
+      const stories = await Services.findById(req.params.id);
+        if(!stories){
+            return res.status(404).json({
+                success : false,
+                message : 'stories not found'
+            })
+        }
+      await stories.remove();
+        res.status(200).json({
+            success : true,
+            message : 'Stories deleted successfully.'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+  exports.getStoriesDetails = catchAsyncErrors(async( req, res) => {
+    //console.log(req.params.id);
+    try {
+        //owner : req.user._id,
+        const stories = await Stories.findOne({ _id : req.params.id});
+        if(!stories){
+          return res.status(404).json({
+              success : false,
+              message : 'No stories found'
+          });
+        }
+        res.status(200).json({
+            success : true,
+            stories
+        });
+       // console.log(stories);
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+  
+
+  //stories
+
+
+  //client 
+  exports.createClient = catchAsyncErrors(async( req, res) => {
+    try {
+        const {clientValue, clientImage} = req.body;
+        const clientData = {...clientValue};
+        if(clientImage){
+         const myCloud = await cloudinary.v2.uploader.upload(clientImage, {
+           folder: "client",
+         });
+         clientData.image = {
+           public_id: myCloud.public_id,
+           url: myCloud.secure_url,
+         };
+        }  
+        const newClients =  await Clients.create(clientData);
+        res.status(201).json({
+            success : true,
+            newClients,
+            message : 'Clients added successfully.'
+        });
+       // console.log('newStories',newStories);
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+  exports.updateClient = catchAsyncErrors(async( req, res) => {
+    try {
+      const clients = await Clients.findById(req.params.id);
+      const {clientValue, clientImage} = req.body;
+    
+      if(!clients){
+          return res.status(404).json({
+              success : false,
+              message : 'Clients not found'
+          })
+      }
+      if(clientValue.clientTitle){
+        clients.clientTitle = clientValue.clientTitle;
+      }     
+      if(clientImage){
+          if(clients.image)
+          await cloudinary.v2.uploader.destroy('client/'+clients.image.public_id);
+           const myCloud = await cloudinary.v2.uploader.upload(clientImage, {
+           folder: "client",
+          });
+          clients.image = {
+          public_id: myCloud.public_id,
+          url: myCloud.secure_url,
+        };
+    }
+      await clients.save();
+
+        res.status(201).json({
+            success : true,
+            message : 'Clients updated successfully.'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+  exports.getClient = catchAsyncErrors(async( req, res) => {
+    try {
+       const clients = await Clients.find().sort({ _id: -1 });
+       if(!clients){
+          return res.status(404).json({
+              success : false,
+              message : 'No stories found'
+          });
+       }
+       res.status(200).json({
+           success : true,
+           clients
+       });
+     } catch (error) {
+       res.status(500).json({
+         success : false,
+         message : error.message
+      })
+     }
+  });
+
+  exports.deleteClient = catchAsyncErrors(async( req, res) => {
+    try {
+      const clients = await Clients.findById(req.params.id);
+        if(!clients){
+            return res.status(404).json({
+                success : false,
+                message : 'Clients not found'
+            })
+        }
+      await clients.remove();
+        res.status(200).json({
+            success : true,
+            message : 'Clients deleted successfully.'
+        });
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+
+  exports.getClientDetails = catchAsyncErrors(async( req, res) => {
+    //console.log(req.params.id);
+    try {
+        //owner : req.user._id,
+        const clients = await Clients.findOne({ _id : req.params.id});
+        if(!clients){
+          return res.status(404).json({
+              success : false,
+              message : 'No clients found'
+          });
+        }
+        res.status(200).json({
+            success : true,
+            clients
+        });
+       //console.log(clients);
+      } catch (error) {
+        res.status(500).json({
+          success : false,
+          message : error.message
+      })
+      }
+  });
+  
+
+  //client
 
    // create news
-   exports.createNews = catchAsyncErrors(async( req, res) => {
+  exports.createNews = catchAsyncErrors(async( req, res) => {
     try {
         const {newsValue, newsImage} = req.body;
         const newsData = {...newsValue};
@@ -576,7 +1249,49 @@ const Test = require('../models/testModel');
     // get faqs details
     exports.getNewses = catchAsyncErrors(async( req, res) => {
       try {
-         const newses = await News.find();
+         const newses = await News.find().sort({ _id: -1 });
+         if(!newses){
+            return res.status(404).json({
+                success : false,
+                message : 'No news found'
+            });
+         }
+         res.status(200).json({
+             success : true,
+             newses
+         });
+       } catch (error) {
+         res.status(500).json({
+           success : false,
+           message : error.message
+        })
+       }
+    });
+
+    exports.getLatestNewses = catchAsyncErrors(async( req, res) => {
+      try {
+         const newses = await News.find().sort({ _id: -1 }).limit(3);
+         if(!newses){
+            return res.status(404).json({
+                success : false,
+                message : 'No news found'
+            });
+         }
+         res.status(200).json({
+             success : true,
+             newses
+         });
+       } catch (error) {
+         res.status(500).json({
+           success : false,
+           message : error.message
+        })
+       }
+    });
+
+    exports.getBlogsDetails = catchAsyncErrors(async( req, res) => {
+      try {
+         const newses = await News.findOne({ _id : req.params.id});
          if(!newses){
             return res.status(404).json({
                 success : false,
@@ -596,8 +1311,11 @@ const Test = require('../models/testModel');
     });
 
 
+
+
   // get faq details by id
   exports.getNewsDetails = catchAsyncErrors(async( req, res) => {
+    //console.log(req.params.id);
     try {
         //owner : req.user._id,
         const news = await News.findOne({ _id : req.params.id});
@@ -611,6 +1329,7 @@ const Test = require('../models/testModel');
             success : true,
             news
         });
+        //console.log(news);
       } catch (error) {
         res.status(500).json({
           success : false,
@@ -620,7 +1339,7 @@ const Test = require('../models/testModel');
   });
 
   // detele faq
-    exports.deleteNews = catchAsyncErrors(async( req, res) => {
+  exports.deleteNews = catchAsyncErrors(async( req, res) => {
     try {
       const news = await News.findById(req.params.id);
         if(!news){

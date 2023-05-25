@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import './Style.css';
 import logo from '../../../images/doc_logo.png';
 import { Link, useNavigate } from 'react-router-dom';
@@ -11,6 +11,12 @@ const Header = ({title}) => {
 	const token = localStorage.getItem('token');
 	const [mebOpen, setMebOpen] = useState(false);
 	const {menuToggle} = useSelector((state)=>state.menuToggle);
+
+	const toggleData = {
+        isActive : '',
+        isToggle : ''
+    }
+	const toogle  = menuToggle ? menuToggle:toggleData;
 	
 	const dispatch = useDispatch();
 
@@ -28,6 +34,7 @@ const Header = ({title}) => {
 		setMebOpen(!mebOpen);
 		dispatch(toggleMenus(mebOpen));
 	}
+	//console.log(menuToggle);
 
   return (
     <>
@@ -38,7 +45,7 @@ const Header = ({title}) => {
             	</Link>
 
             	<div className="nav-control" onClick={handleBurger}>
-            		<div className={`hamburger ${menuToggle.isActive}`}>
+            		<div className={`hamburger ${toogle.isActive}`}>
             			<span className="line"></span><span className="line"></span><span className="line"></span>
             		</div>
             	</div>
@@ -56,7 +63,7 @@ const Header = ({title}) => {
             						</button>
             						<div className="dropdown-menu shadow">
             							<Link to="/patient/create" className="dropdown-item">Add Patient</Link>
-            							<Link to="/create-appointment" className="dropdown-item">Create Appointment</Link> 
+            							{/* <Link to="/create-appointment" className="dropdown-item">Create Appointment</Link>  */}
             							<Link to="/create-slot" className="dropdown-item">Create Time Slot</Link>
             							<Link to="/create-test" className="dropdown-item">Add Diagnosis Test</Link>
 										<Link to="/create-drug" className="dropdown-item">Add Drug</Link>
@@ -71,9 +78,9 @@ const Header = ({title}) => {
 							{ token && token !=='' ? (<ul className="navbar-nav header-right">
             					<li className="nav-item dropdown header-profile">
             						<Link className="nav-link" to="#" role="button" data-toggle="dropdown">
-            							<img  src={user.profileImage ? user.profileImage.url : require("../../../images/profile/12.png")} width="20" alt=""/>
+            							<img  src={user && user.profileImage ? user.profileImage.url : require("../../../images/profile/12.png")} width="20" alt=""/>
             							<div className="header-info">
-            								<span>Hello,<strong> {user.name.split(' ')[0]}</strong></span>
+            								<span>Hello,<strong> {user && user.name.split(' ')[0]}</strong></span>
             							</div>
             						</Link>
             						<div className="dropdown-menu dropdown-menu-right">

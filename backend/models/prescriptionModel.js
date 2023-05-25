@@ -37,7 +37,7 @@ const prescriptionSchema = new mongoose.Schema({
                  public_id : String,
                  url : String
              }
-        }
+        } 
     ],
     appointmentId : {
         type : mongoose.Schema.Types.ObjectId,
@@ -45,6 +45,10 @@ const prescriptionSchema = new mongoose.Schema({
     },
     nextAppointment : Date,
     createdAt : {
+        type : Date,
+        default : Date.now
+    },
+    appointmentDates : {
         type : Date,
         default : Date.now
     } 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { createDoctorAppointment, getPatient, getSlotByDate } from "../../../Actions/User";
+import { createDoctorAppointment, getPatient, getSlotByDate ,doctorDetailById } from "../../../Actions/User";
 import DoctSideBar from "../Layout/DoctSideBar";
 import Footer from "../Layout/Footer";
 import Header from "../Layout/Header";
@@ -37,7 +37,10 @@ const CreateAppointment = () => {
   useEffect(() => {
     dispatch(getPatient());
     dispatch(getSlotByDate(dt));
+    dispatch(doctorDetailById('626cd04a857ce8a353529632'));
   }, []);
+
+  const { doctorDetails } = useSelector((state) => state.doctorDetails);
 
   let { patients } = useSelector((state) => state.patients);
 
@@ -45,15 +48,83 @@ const CreateAppointment = () => {
 
   const handleOnChange = async (e) => {
     let index = e.nativeEvent.target.selectedIndex;
-    setPatientDetail({ ...patientDetail, patientId : e.target.value, patientName : e.nativeEvent.target[index].text });
+    let val = e.target.value;
+    let value = val.split(',');
+    setPatientDetail({ ...patientDetail, patientId : value[0], patientName : e.nativeEvent.target[index].text ,patientEmail:value[1],phone:value[2]});
   };
+
+  function isDate(val) {
+    // Cross realm comptatible
+    return Object.prototype.toString.call(val) === '[object Date]'
+  }
+
+  function isObj(val) {
+    return typeof val === 'object'
+  }
+
+  function stringifyValue(val) {
+    if (isObj(val) && !isDate(val)) {
+      return JSON.stringify(val)
+    } else {
+      return val
+    }
+  }
+  function post(details) {
+    const form = buildForm(details)
+    document.body.appendChild(form)
+    form.submit()
+    form.remove()
+  }
+  function buildForm({ action, params }) {
+
+    //console.log(action);
+    const form = document.createElement('form')
+    form.setAttribute('method', 'post')
+    form.setAttribute('action', action)
+
+    Object.keys(params).forEach(key => {
+      const input = document.createElement('input')
+      input.setAttribute('type', 'hidden')
+      input.setAttribute('name', key)
+      input.setAttribute('value', stringifyValue(params[key]))
+      form.appendChild(input)
+    })
+    //console.log('front_form',form);
+
+    //return false; 
+    return form
+  }
+  const getData = (data) => {
+
+    return fetch(`https://single-doctor-app.herokuapp.com/api/v1/payments/paymentByDoctor`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    }).then(response => response.json()).catch(err => console.log(err))
+  }
 
   const submitData = async (e) => {
     e.preventDefault();
-    await dispatch(createDoctorAppointment(formData, patientDetail));
-    if(!error){
-      history('/doctor-appointments')
-    }
+    // console.log(formData);
+    // console.log(formData.doctorId);
+    // console.log(patientDetail);
+    //await dispatch(createDoctorAppointment(formData, patientDetail));
+    // if(!error){
+    //   history('/doctor-appointments')
+    // }
+
+    getData({amount:doctorDetails.fee,email:patientDetail.patientEmail,name:patientDetail.patientName,phone:patientDetail.phone,orderId:formData.slotId,doctorId:formData.doctorId,patientId:patientDetail.patientId}).then(response=>{
+      var information={
+        action:"https://securegw-stage.paytm.in/order/process",
+        params:response
+      }
+      //console.log(information);
+      post(information)
+
+    })
   }; 
 
   const getSlotDetails = (e) =>{
@@ -105,7 +176,7 @@ const CreateAppointment = () => {
                         >
                           <option value=""> Select Patient...</option>
                          { patients && patients.map(patient => (
-                          <option value={patient._id}>
+                          <option value={patient._id+','+patient.email+','+patient.phone}>
                           {patient.name}
                           </option>
                          ))}

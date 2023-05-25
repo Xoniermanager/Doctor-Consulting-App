@@ -25,7 +25,7 @@ const AddNews = () => {
       }
     }, [dispatch]);
 
-
+    //console.log('newsValue',newsValue);
 
     const handleOnChange = (e) =>{
       setNewsValue({...newsValue, [e.target.name] : e.target.value});

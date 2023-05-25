@@ -87,14 +87,19 @@ const Appointments = () => {
         sortable: true,
     },
     {
-      name: "CREATED DATE",
+      name: "CREATED AT",
       selector: "cdate"
     },
-    {
+    { 
       cell:(row) => <div className="d-flex">
-      { row.isPrescription ? (<> <Link to={`/edit-prescription/${row._id}`} className="btn btn-primary shadow btn-sm sharp mr-1"><i className="fa fa-pencil"></i></Link> <Link to={`/view-prescription/${row.prescriptionId}`} className="btn btn-success shadow btn-sm sharp mr-1"><i className="fa fa-eye"></i></Link></>) : (<Link to={`/create-prescription/${row._id}`} className="btn btn-primary shadow btn-sm sharp mr-1"><i className="fa fa-plus"></i></Link>)}
+      { row.isPrescription ? (<> <Link to={`/edit-prescription/${row._id}`} className="btn btn-primary shadow btn-sm sharp mr-1"><i className="fa fa-pencil"></i></Link> 
+      <Link to={`/view-prescription/${row._id}`} className="btn btn-success shadow btn-sm sharp mr-1"><i className="fa fa-eye"></i></Link></>) : (<Link to={`/create-prescription/${row._id}`} className="btn btn-primary shadow btn-sm sharp mr-1"><i className="fa fa-plus"></i></Link>)}
       </div>,
       name: "Prescription",
+    },
+    {
+      cell:(row) => <div className="d-flex"><a href={`${row.joinUrl}`} target="_blank" className="btn btn-primary shadow btn-sm sharp mr-1">Join</a></div>,
+      name: "Meeting",
     },
   ];
 
@@ -118,12 +123,12 @@ const Appointments = () => {
                       <h4 className="card-title">All Appointments</h4>
                     </div>
                     <div className="col-md-6 text-right">
-                      <Link
+                      {/* <Link
                         to="/create-appointment"
                         className="btn btn-primary btn-sm"
                       >
                         <i className="fa fa-plus"></i> Create Appointment
-                      </Link>
+                      </Link> */}
                     </div>
                   </div>
                 </div>

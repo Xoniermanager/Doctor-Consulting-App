@@ -47,7 +47,7 @@ const AddMoreDrug = ({drugValue, setDrugValue, drugs}) => {
                 autocomplete="off"
               />
               <label className="control-label"></label>
-              <i className="bar"></i>
+              <i className="bars"></i>
             </div>
           </div>
           <div className="col-md-3 pr-0">
@@ -80,7 +80,7 @@ const AddMoreDrug = ({drugValue, setDrugValue, drugs}) => {
                 placeholder="Dose"
               />
               <label className="control-label"></label>
-              <i className="bar"></i>
+              <i className="bars"></i>
             </div>
           </div>
           <div className="col-md-2 pl-0">

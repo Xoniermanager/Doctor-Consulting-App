@@ -11,7 +11,13 @@ const Header = ({title}) => {
 	const token = localStorage.getItem('token');
 	const [mebOpen, setMebOpen] = useState(false);
 	const {menuToggle} = useSelector((state)=>state.menuToggle);
-	
+
+	const toggleData = {
+        isActive : '',
+        isToggle : ''
+    }
+	const toogle  = menuToggle ? menuToggle:toggleData;
+	//console.log('toggle',toogle);
 	const dispatch = useDispatch();
 
 	const {user} = useSelector((state)=>state.user);
@@ -25,6 +31,7 @@ const Header = ({title}) => {
 	 };
 
 	const handleBurger = () =>{
+		console.log('test');
 		setMebOpen(!mebOpen);
 		dispatch(toggleMenus(mebOpen));
 	}
@@ -38,7 +45,7 @@ const Header = ({title}) => {
             	</Link>
 
             	<div className="nav-control" onClick={handleBurger}>
-            		<div className={`hamburger ${menuToggle.isActive}`}>
+            		<div className={`hamburger ${toogle.isActive}`}>
             			<span className="line"></span><span className="line"></span><span className="line"></span>
             		</div>
             	</div>

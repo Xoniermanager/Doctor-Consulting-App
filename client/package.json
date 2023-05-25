@@ -30,6 +30,7 @@
     "react-to-print": "^2.14.6",
     "simple-peer": "^9.11.1",
     "socket.io-client": "^4.4.1",
+    "styled-components": "^5.3.10",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -57,5 +58,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://xoniertest.herokuapp.com"
+  "proxy": "http://localhost:5000"
 }

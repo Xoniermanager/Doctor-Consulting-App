@@ -17,15 +17,15 @@ const DoctorDetails = ({ user }) => {
                       alt="image"
                       className="rounded mr-sm-4 mr-0"
                       width="130"
-                      src={user.profileImage ? user.profileImage.url : require("../../../images/profile/12.png")}
+                      src={user && user.profileImage ? user.profileImage.url : require("../../../images/profile/12.png")}
                     />
                     <div className="media-body align-items-center">
                       <div className="d-sm-flex d-block justify-content-between my-3 my-sm-0">
                         <div>
                           <h3 className="fs-22 text-black font-w600 mb-2">
-                            Dr. {user.name}
+                            Dr. {user && user.name}
                           </h3>
-                          <p className="mb-1"> {user.academic} </p>
+                          <p className="mb-1"> {user && user.academic} </p>
 
                           <p className="mb-1 mb-sm-1">
                             <svg
@@ -41,9 +41,9 @@ const DoctorDetails = ({ user }) => {
                                 fill="#004bad"
                               ></path>
                             </svg>{" "}
-                            {user.specialist}{" "}
+                            {user && user.specialist}{" "}
                           </p>
-                          <p className="mb-1">{user.about}</p>
+                          <p className="mb-1">{user && user.about}</p>
                           <p className="mb-2">
                             <i className="fa fa-star text-warning"></i> 4.8 (200
                             Review)
@@ -61,19 +61,19 @@ const DoctorDetails = ({ user }) => {
                         to="#"
                         className="btn bgl-primary btn-rounded text-black mb-2 mr-2"
                       >
-                        {user.patientNo} Patients
+                        {user && user.patientNo} Patients
                       </Link>
                       <Link
                         to="#"
                         className="btn bgl-primary btn-rounded mb-2 text-black"
                       >
-                        {user.surgery} Surgery
+                        {user && user.surgery} Surgery
                       </Link>
                       <Link
                         to="#"
                         className="btn bgl-primary btn-rounded text-black mb-2 mr-2"
                       >
-                         {user.experienceYear} year Experience
+                         {user && user.experienceYear} year Experience
                       </Link>
                     </div>
                   </div>
@@ -94,7 +94,7 @@ const DoctorDetails = ({ user }) => {
                     className="widget-media dz-scroll ps ps--active-y"
                   >
                     <ul className="timeline">
-                    {user.experiences && user.experiences.map((item, index)=>(
+                    {user && user.experiences.map((item, index)=>(
                         <Experience key={item._id} items={{experience :item.experience, expYear :item.expYear  }}/>
                     ))}
                     </ul>
@@ -139,7 +139,7 @@ const DoctorDetails = ({ user }) => {
                         <span className="fa fa-edit"></span>
                       </Link>
                     </h4>
-                   {user.languages && user.languages.map((item, index)=>(
+                   {user && user.languages.map((item, index)=>(
                     <Link key={item._id} to="#" className="btn btn-primary light btn-xs mb-1">
                       <i className="flag-icon flag-icon-us"></i> {item.value}
                     </Link>
@@ -151,7 +151,7 @@ const DoctorDetails = ({ user }) => {
                       <iframe
                         width="100%"
                         height="250"
-                        src={user.videoIntroUrl}
+                        src={user && user.videoIntroUrl}
                         title="YouTube video player"
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -211,7 +211,7 @@ const DoctorDetails = ({ user }) => {
                           className="tab-pane fade active show"
                         >
                           <div className="my-post-content pt-4">
-                          {user.academic_details && user.academic_details.map((item)=>(
+                          {user && user.academic_details.map((item)=>(
                             <div key={item._id} className="profile-uoloaded-post pb-2 mb-3 border-bottom">
                               <h4>
                                {item.academic}
@@ -223,7 +223,7 @@ const DoctorDetails = ({ user }) => {
                         <div id="about-me" className="tab-pane fade">
                           <div className="profile-personal-info mt-4">
                             <h4 className="text-primary mb-4">Awards</h4>
-                            {user.awards && user.awards.map((item)=>(
+                            {user && user.awards.map((item)=>(
                             <div key={item._id} className="row mb-2">
                               <div className="col-2">
                                 <img
@@ -245,7 +245,7 @@ const DoctorDetails = ({ user }) => {
                               <h4 className="text-primary">Clinic Details:</h4>
                               <div className="row mt-3">
                                 <div className="col-12">
-                                  <span>{user.clinic_details} </span>
+                                  <span>{user && user.clinic_details} </span>
                                 </div>
                               </div>
                             </div>

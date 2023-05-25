@@ -1,42 +1,103 @@
 import axios from "axios";
 
 export const userEnquiry = (userData) => async (dispatch) => {
-    try {
-      dispatch({
-        type: "EnquiryRequest",
-      });
-      const { data } = await axios.post(
-        "/api/v1/enquiry",
-        { ...userData },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      localStorage.setItem("token", data.authToken);
-      dispatch({
-        type: "EnquirySuccess",
-        payload: data.message,
-      });
-    } catch (error) {
-      localStorage.setItem("token", "");
-      dispatch({
-        type: "EnquiryFailure",
-        payload: error.response.data.message,
-      });
-    }
-  };
+  try {
+    dispatch({
+      type: "EnquiryRequest",
+    });
+    const { data } = await axios.post(
+      "/api/v1/enquiry",
+      { ...userData },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    localStorage.setItem("token", data.authToken);
+    dispatch({
+      type: "EnquirySuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    localStorage.setItem("token", "");
+    dispatch({
+      type: "EnquiryFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const getDoctorMonSlotByDate = (monDayValue) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getMondaySlotRequest",
+    });
+    const { data } = await axios.post(
+      "/api/v1/get-mon-slot",
+      { ...monDayValue },
+      {
+        headers: {
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+    dispatch({
+      type: "getMondaySlotSuccess",
+      payload: data.monslots,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getMondaySlotFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+export const getDoctorTueSlotByDate = (monDayValue) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getTuesdaySlotRequest",
+    });
+    const { data } = await axios.post(
+      "/api/v1/get-mon-slot",
+      { ...monDayValue },
+      {
+        headers: {
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+    dispatch({
+      type: "getTuesdaySlotSuccess",
+      payload: data.monslots,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getTuesdaySlotFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
 
 export const registerUser =
-  (name, email, password, role, phone, departmentId,department, certificate) => async (dispatch) => {
+  (name, email, password, role, phone, departmentId, department, certificate) =>
+  async (dispatch) => {
     try {
       dispatch({
         type: "RegisterRequest",
       });
       const { data } = await axios.post(
         "/api/v1/register",
-        { name, email, password, role, phone,departmentId,department, certificate },
+        {
+          name,
+          email,
+          password,
+          role,
+          phone,
+          departmentId,
+          department,
+          certificate,
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -110,8 +171,10 @@ export const loadUser = () => async (dispatch) => {
 };
 
 // forget password
-export const forgetPassword = (email) => async (dispatch) => {
+export const forgetPassword = (value) => async (dispatch) => {
   try {
+    let email = value.email;
+    console.log(value.email);
     dispatch({
       type: "ForgetPasswordRequest",
     });
@@ -166,6 +229,35 @@ export const updatePassword =
     }
   };
 
+export const updateCredentail =
+  (marchantId, marchantKey) => async (dispatch) => {
+    try {
+      dispatch({
+        type: "updateCredentialRequest",
+      });
+      const { data } = await axios.put(
+        "/api/v1/update/credential",
+        { marchantId, marchantKey },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+        }
+      );
+      dispatch({
+        type: "updateCredentialSuccess",
+        payload: data.message,
+      });
+      console.log(data.message);
+    } catch (error) {
+      dispatch({
+        type: "updateCredentialFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };
+
 // Reset password
 
 export const resetPassword = (otp) => async (dispatch) => {
@@ -178,7 +270,7 @@ export const resetPassword = (otp) => async (dispatch) => {
       { otp },
       {
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
       }
     );
@@ -207,7 +299,7 @@ export const setPassword = (patientId, password) => async (dispatch) => {
       { password },
       {
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
       }
     );
@@ -225,14 +317,37 @@ export const setPassword = (patientId, password) => async (dispatch) => {
 
 // update doctor profile
 export const updateDoctorProfile =
-  (name, academic, specialist,departmentId, department, about, patientNo, surgery, experienceYear, profileImage) => async (dispatch) => {
+  (
+    name,
+    academic,
+    specialist,
+    departmentId,
+    department,
+    about,
+    patientNo,
+    surgery,
+    experienceYear,
+    profileImage
+  ) =>
+  async (dispatch) => {
     try {
       dispatch({
         type: "UpdateDoctorRequest",
       });
       const { data } = await axios.put(
         "/api/v1/doctor/update",
-        { name, academic, specialist, departmentId, department, about, patientNo, surgery, experienceYear, profileImage },
+        {
+          name,
+          academic,
+          specialist,
+          departmentId,
+          department,
+          about,
+          patientNo,
+          surgery,
+          experienceYear,
+          profileImage,
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -248,6 +363,66 @@ export const updateDoctorProfile =
     } catch (error) {
       dispatch({
         type: "UpdateDoctorFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };
+
+export const updateDoctorFee = (fee) => async (dispatch) => {
+  //console.log(fee);
+  try {
+    dispatch({
+      type: "UpdateDoctorFeeRequest",
+    });
+    const { data } = await axios.put(
+      "/api/v1/doctor/updateFee",
+      { fee },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+
+    dispatch({
+      type: "UpdateDoctorFeeSuccess",
+      payload: data.message,
+    });
+    //console.log(data.message);
+  } catch (error) {
+    dispatch({
+      type: "UpdateDoctorFeeFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const updateDoctorEmailTemplate =
+  (email_template) => async (dispatch) => {
+    try {
+      dispatch({
+        type: "UpdateDoctorEmailTemplateRequest",
+      });
+      const { data } = await axios.put(
+        "/api/v1/doctor/updateemailtemplate",
+        { email_template },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+        }
+      );
+
+      dispatch({
+        type: "UpdateDoctorEmailTemplateSuccess",
+        payload: data.message,
+      });
+      console.log(data.message);
+    } catch (error) {
+      dispatch({
+        type: "UpdateDoctorEmailTemplateFailure",
         payload: error.response.data.message,
       });
     }
@@ -341,12 +516,12 @@ export const updateClinicAwards =
     }
   };
 
-
-  // Doctor details by id
+// Doctor details by id
 export const doctorDetailById = (userId) => async (dispatch) => {
+  //console.log('cddascsdcsd',userId);
   try {
     dispatch({
-      type: "GetUserDetailsRequest",
+      type: "GetUsersDetailsRequest",
     });
     const { data } = await axios.get(`/api/v1/doctor-details/${userId}`, {
       headers: {
@@ -354,16 +529,69 @@ export const doctorDetailById = (userId) => async (dispatch) => {
       },
     });
     dispatch({
-      type: "GetUserDetailsSuccess",
+      type: "GetUsersDetailsSuccess",
       payload: data.doctor,
     });
+    //console.log(data.doctor);
   } catch (error) {
     dispatch({
-      type: "GetUserDetailsFailure",
+      type: "GetUsersDetailsFailure",
       payload: error.response.data.message,
     });
   }
 };
+
+export const getPaymentDetails = (orderId) => async (dispatch) => {
+  //console.log('order',orderId);
+  try {
+    dispatch({
+      type: "GetUsersPaymentRequest",
+    });
+    const { data } = await axios.get(`/api/v1/payment-details/${orderId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "GetUsersPaymentSuccess",
+      payload: data.payment,
+    });
+    //console.log(data);
+  } catch (error) {
+    dispatch({
+      type: "GetUsersPaymentFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// export const createPaytmPayment = (amount,email) => (dispatch) =>{
+//   try {
+//     dispatch({
+//       type: "getPaytmPaymentRequest",
+//     });
+//     const { data } = await axios.post(
+//       "/api/v1/paytm",
+//       { amount, email},
+//       {
+//         headers: {
+//           "Content-Type": "application/json",
+//           "auth-token": localStorage.getItem("token"),
+//         },
+//       }
+//     );
+
+//     dispatch({
+//       type: "getPaytmPaymentSuccess",
+//       payload: data,
+//     });
+//   } catch (error) {
+//     dispatch({
+//       type: "getPaytmPaymentFailure",
+//       payload: error.response.data.message,
+//     });
+//   }
+// };
 
 // create patient
 export const createPatient = (userValue) => async (dispatch) => {
@@ -394,16 +622,69 @@ export const createPatient = (userValue) => async (dispatch) => {
   }
 };
 
-
 // create patient
-export const updatePatient = (patientId, userValue, profileImage) => async (dispatch) => {
+export const updatePatient =
+  (patientId, userValue, profileImage) => async (dispatch) => {
+    try {
+      dispatch({
+        type: "UpdatePatientRequest",
+      });
+      const { data } = await axios.post(
+        "/api/v1/patient/update",
+        { userValue, patientId, profileImage },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+        }
+      );
+
+      dispatch({
+        type: "UpdatePatientSuccess",
+        payload: data.message,
+      });
+    } catch (error) {
+      dispatch({
+        type: "UpdatePatientFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };
+
+export const getBlogDetails = (newsId) => async (dispatch) => {
+  //console.log('newsId',newsId)
   try {
     dispatch({
-      type: "UpdatePatientRequest",
+      type: "GetBlogDetailsRequest",
+    });
+    const { data } = await axios.get(`/api/v1/blog-details/${newsId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "GetBlogDetailsSuccess",
+      payload: data.newses,
+    });
+    //console.log('news',data.newses);
+  } catch (error) {
+    dispatch({
+      type: "GetBlogDetailsFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const getDoctorSlotById = (selectedDate,doctorId) => async (dispatch) => {
+  //console.log('newsId',doctorId);
+  try {
+    dispatch({
+      type: "GetDoctorSlotsByIdRequest",
     });
     const { data } = await axios.post(
-      "/api/v1/patient/update",
-      { userValue, patientId, profileImage },
+      `/api/v1/get-all-slot`,
+      { selectedDate, doctorId: doctorId },
       {
         headers: {
           "Content-Type": "application/json",
@@ -411,18 +692,20 @@ export const updatePatient = (patientId, userValue, profileImage) => async (disp
         },
       }
     );
-
     dispatch({
-      type: "UpdatePatientSuccess",
-      payload: data.message,
+      type: "GetDoctorSlotsByIdSuccess",
+      payload: data.slot,
     });
   } catch (error) {
     dispatch({
-      type: "UpdatePatientFailure",
+      type: "GetDoctorSlotsByIdFailure",
       payload: error.response.data.message,
     });
   }
+  
 };
+
+
 
 // get patient
 export const getPatient = () => async (dispatch) => {
@@ -499,7 +782,6 @@ export const getDrug = () => async (dispatch) => {
   }
 };
 
-
 // update drug
 export const updateDrug = (drugId, drugValue) => async (dispatch) => {
   try {
@@ -557,14 +839,11 @@ export const deleteDrug = (drugId) => async (dispatch) => {
     dispatch({
       type: "DeleteDrugRequest",
     });
-    const { data } = await axios.delete(
-      `/api/v1/delete-drug/${drugId}`,
-      {
-        headers: {
-          "auth-token": localStorage.getItem("token"),
-        },
-      }
-    );
+    const { data } = await axios.delete(`/api/v1/delete-drug/${drugId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
 
     dispatch({
       type: "DeleteDrugSuccess",
@@ -606,7 +885,6 @@ export const createTest = (testValue) => async (dispatch) => {
     });
   }
 };
-
 
 // update test
 export const updateTest = (testId, testValue) => async (dispatch) => {
@@ -689,14 +967,11 @@ export const deleteTest = (testId) => async (dispatch) => {
     dispatch({
       type: "DeleteTestRequest",
     });
-    const { data } = await axios.delete(
-      `/api/v1/delete-test/${testId}`,
-      {
-        headers: {
-          "auth-token": localStorage.getItem("token"),
-        },
-      }
-    );
+    const { data } = await axios.delete(`/api/v1/delete-test/${testId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
 
     dispatch({
       type: "DeleteTestSuccess",
@@ -709,7 +984,6 @@ export const deleteTest = (testId) => async (dispatch) => {
     });
   }
 };
-
 
 // create prescription
 export const createPrescription =
@@ -764,7 +1038,6 @@ export const getPrescription = () => async (dispatch) => {
   }
 };
 
-
 // delete test
 export const deletePrescription = (presId) => async (dispatch) => {
   try {
@@ -792,7 +1065,6 @@ export const deletePrescription = (presId) => async (dispatch) => {
   }
 };
 
-
 // edit prescription data
 export const editPrescription = (presId) => async (dispatch) => {
   try {
@@ -816,91 +1088,116 @@ export const editPrescription = (presId) => async (dispatch) => {
   }
 };
 
-// update test
-export const updatePrescription =  (presId, selectPatient, drugValue, testValue) => async (dispatch) => {
+export const getAllPrescriptionDetails = (patientId) => async (dispatch) => {
   try {
     dispatch({
-      type: "UpdatePrescriptionRequest",
+      type: "GetAllPrescriptionRequest",
     });
-    const { data } = await axios.put(
-      `/api/v1/update-prescription/${presId}`,
-      { selectPatient, drugValue, testValue },
+    const { data } = await axios.get(
+      `/api/v1/get-all-prescription/${patientId}`,
       {
         headers: {
-          "Content-Type": "application/json",
           "auth-token": localStorage.getItem("token"),
         },
       }
     );
-
+    //console.log(data);
     dispatch({
-      type: "UpdatePrescriptionSuccess",
-      payload: data.message,
+      type: "GetAllPrescriptionSuccess",
+      payload: data,
     });
   } catch (error) {
     dispatch({
-      type: "UpdatePrescriptionFailure",
+      type: "GetAllPrescriptionFailure",
       payload: error.response.data.message,
     });
   }
 };
 
+// update test
+export const updatePrescription =
+  (presId, selectPatient, drugValue, testValue) => async (dispatch) => {
+    try {
+      dispatch({
+        type: "UpdatePrescriptionRequest",
+      });
+      const { data } = await axios.put(
+        `/api/v1/update-prescription/${presId}`,
+        { selectPatient, drugValue, testValue },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+        }
+      );
+
+      dispatch({
+        type: "UpdatePrescriptionSuccess",
+        payload: data.message,
+      });
+    } catch (error) {
+      dispatch({
+        type: "UpdatePrescriptionFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };
 
 // status data
 export const toggleMenus = (mebOpen) => async (dispatch) => {
   try {
     let toggleData = {
-      isActive : '',
-      isToggle : ''
+      isActive: "",
+      isToggle: "",
+    };
+    if (mebOpen) {
+      toggleData = {
+        isActive: "is-active",
+        isToggle: "menu-toggle",
+      };
+    } else {
+      toggleData = {
+        isActive: "",
+        isToggle: "",
+      };
     }
-    if(mebOpen){
-      toggleData = {
-        isActive : 'is-active',
-        isToggle : 'menu-toggle'
-      }
-		 }else{
-      toggleData = {
-        isActive : '',
-        isToggle : ''
-      }
-		}
     dispatch({
       type: "toggleSuccess",
       payload: toggleData,
     });
-  } catch (error) {
-
-  }
+  } catch (error) {}
 };
 
-// slot creation 
-export const createSlots =  (manageSlots, slotValue, fieldValue) => async (dispatch) => {
-  try {
-    dispatch({
-      type: "CreateSlotRequest",
-    });
-    const { data } = await axios.post(
-      "/api/v1/create-slots",
-      { manageSlots, slotValue, fieldValue },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": localStorage.getItem("token"),
-        },
-      }
-    );
+// slot creation
+export const createSlots =
+  (manageSlots, slotValue, fieldValue) => async (dispatch) => {
+    try {
+      dispatch({
+        type: "CreateSlotRequest",
+      });
+      const { data } = await axios.post(
+        "/api/v1/create-slots",
+        { manageSlots, slotValue, fieldValue },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+        }
+      );
 
-    dispatch({
-      type: "CreateSlotSuccess",
-      payload: data.message,
-    });
-  } catch (error) {
-    dispatch({
-      type: "CreateSlotFailure",
-      payload: error.response.data.message,
-    });
-  }
-}
+      dispatch({
+        type: "CreateSlotSuccess",
+        payload: data.message,
+      });
+    } catch (error) {
+      dispatch({
+        type: "CreateSlotFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };
 
 // get slots
 export const getSlots = () => async (dispatch) => {
@@ -949,34 +1246,34 @@ export const editSlot = (slotId) => async (dispatch) => {
 };
 
 // update Slot
-export const updateSlot =  (slotId, manageSlots, slotValue, fieldValue) => async (dispatch) => {
-  try {
-    dispatch({
-      type: "UpdateSlotRequest",
-    });
-    const { data } = await axios.put(
-      `/api/v1/update-slot/${slotId}`,
-      { manageSlots, slotValue, fieldValue },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": localStorage.getItem("token"),
-        },
-      }
-    );
+export const updateSlot =
+  (slotId, manageSlots, slotValue, fieldValue) => async (dispatch) => {
+    try {
+      dispatch({
+        type: "UpdateSlotRequest",
+      });
+      const { data } = await axios.put(
+        `/api/v1/update-slot/${slotId}`,
+        { manageSlots, slotValue, fieldValue },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+        }
+      );
 
-    dispatch({
-      type: "UpdateSlotSuccess",
-      payload: data.message,
-    });
-  } catch (error) {
-    dispatch({
-      type: "UpdateSlotFailure",
-      payload: error.response.data.message,
-    });
-  }
-};
-
+      dispatch({
+        type: "UpdateSlotSuccess",
+        payload: data.message,
+      });
+    } catch (error) {
+      dispatch({
+        type: "UpdateSlotFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };
 
 // delete slot
 export const deleteSlot = (slotId) => async (dispatch) => {
@@ -984,14 +1281,11 @@ export const deleteSlot = (slotId) => async (dispatch) => {
     dispatch({
       type: "DeleteSlotRequest",
     });
-    const { data } = await axios.delete(
-      `/api/v1/delete-slot/${slotId}`,
-      {
-        headers: {
-          "auth-token": localStorage.getItem("token"),
-        },
-      }
-    );
+    const { data } = await axios.delete(`/api/v1/delete-slot/${slotId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
     dispatch({
       type: "DeleteSlotSuccess",
       payload: data.message,
@@ -1010,14 +1304,16 @@ export const getSlotByDate = (selectedDate, doctorId) => async (dispatch) => {
     dispatch({
       type: "DateWiseSlotRequest",
     });
-    const { data } = await axios.post(`/api/v1/my-slot`,  
-    { selectedDate, doctorId : doctorId },
-    {
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("token"),
-      },
-    });
+    const { data } = await axios.post(
+      `/api/v1/my-slot`,
+      { selectedDate, doctorId: doctorId },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
     dispatch({
       type: "DateWiseSlotSuccess",
       payload: data.slot,
@@ -1031,33 +1327,33 @@ export const getSlotByDate = (selectedDate, doctorId) => async (dispatch) => {
 };
 
 // appointment creation by doctor
-export const createDoctorAppointment =  (formData, patientDetail) => async (dispatch) => {
-  try {
-    dispatch({
-      type: "CreateAppointmentRequest",
-    });
-    const { data } = await axios.post(
-      "/api/v1/create-appointment",
-      { formData, patientDetail },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": localStorage.getItem("token"),
-        },
-      }
-    );
-    dispatch({
-      type: "CreateAppointmentSuccess",
-      payload: data.message,
-    });
-  } catch (error) {
-    dispatch({
-      type: "CreateAppointmentFailure",
-      payload: error.response.data.message,
-    });
-  }
-}
-
+export const createDoctorAppointment =
+  (formData, patientDetail) => async (dispatch) => {
+    try {
+      dispatch({
+        type: "CreateAppointmentRequest",
+      });
+      const { data } = await axios.post(
+        "/api/v1/create-appointment",
+        { formData, patientDetail },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+        }
+      );
+      dispatch({
+        type: "CreateAppointmentSuccess",
+        payload: data.message,
+      });
+    } catch (error) {
+      dispatch({
+        type: "CreateAppointmentFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };
 
 // get all doctor appointments
 export const getDoctorAppointments = () => async (dispatch) => {
@@ -1070,6 +1366,7 @@ export const getDoctorAppointments = () => async (dispatch) => {
         "auth-token": localStorage.getItem("token"),
       },
     });
+    //console.log(data.appointments);
     dispatch({
       type: "GetDoctorAppointmentsSuccess",
       payload: data.appointments,
@@ -1081,6 +1378,76 @@ export const getDoctorAppointments = () => async (dispatch) => {
     });
   }
 };
+
+export const getDoctorMonthlyEarning = (doctorId) => async (dispatch) => {
+  //console.log(doctorId);
+  try {
+    dispatch({
+      type: "GetDoctorMonthlyEarningRequest",
+    });
+    const { data } = await axios.get(
+      `/api/v1/doctor-monthly-earning/${doctorId}`,
+      {
+        headers: {
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+    //console.log(data.appointments);
+    dispatch({
+      type: "GetDoctorMonthlyEarningSuccess",
+      payload: data.payment,
+    });
+    //console.log('testing',data);
+  } catch (error) {
+    dispatch({
+      type: "GetDoctorMonthlyEarningFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const getPatientPayment = (patientId) => async (dispatch) => {
+  //console.log(doctorId);
+  try {
+    dispatch({
+      type: "GetPatientPaymentRequest",
+    });
+    const { data } = await axios.get(
+      `/api/v1/patient-payment/${patientId}`,
+      {
+        headers: {
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+    //console.log(data.appointments);
+    dispatch({
+      type: "GetPatientPaymentSuccess",
+      payload: data.payment,
+    });
+    //console.log('testing',data);
+  } catch (error) {
+    dispatch({
+      type: "GetPatientPaymentFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+
+// export const getDoctorAppointments = () => async (dispatch) => {
+//   try {
+//       const { data } = await axios.get('/api/v1/doctor-appointments',{
+//               headers: {
+//                 "auth-token": localStorage.getItem("token"),
+//               }});
+//       //console.log(data.appointments);
+//       dispatch({ type: "FETCH_Appointment", payload: data.appointments });
+//   } catch (error) {
+//       console.log('casdcasdcsad',error);
+//   }
+// };
 
 // get all doctor appointments
 export const getTodaysDoctorAppointments = () => async (dispatch) => {
@@ -1134,14 +1501,11 @@ export const deleteAppointmentById = (appId) => async (dispatch) => {
     dispatch({
       type: "DeleteAppointmentRequest",
     });
-    const { data } = await axios.delete(
-      `/api/v1/delete-appointment/${appId}`,
-      {
-        headers: {
-          "auth-token": localStorage.getItem("token"),
-        },
-      }
-    );
+    const { data } = await axios.delete(`/api/v1/delete-appointment/${appId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
     dispatch({
       type: "DeleteAppointmentSuccess",
       payload: data.message,
@@ -1154,7 +1518,7 @@ export const deleteAppointmentById = (appId) => async (dispatch) => {
   }
 };
 
-////Patients 
+////Patients
 
 // get all doctors
 export const getDoctors = () => async (dispatch) => {
@@ -1185,11 +1549,14 @@ export const getPatientAppointments = (patientId) => async (dispatch) => {
     dispatch({
       type: "GetPatientAppointmentsRequest",
     });
-    const { data } = await axios.get(`/api/v1/patient/appointments/${patientId}`, {
-      headers: {
-        "auth-token": localStorage.getItem("token"),
-      },
-    });
+    const { data } = await axios.get(
+      `/api/v1/patient/appointments/${patientId}`,
+      {
+        headers: {
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
     dispatch({
       type: "GetPatientAppointmentsSuccess",
       payload: data.patientAppointments,
@@ -1248,7 +1615,6 @@ export const getPatientCompletedAppointments = () => async (dispatch) => {
   }
 };
 
-
 // get Patient prescriptions
 export const getPatientPrescription = () => async (dispatch) => {
   try {
@@ -1272,7 +1638,6 @@ export const getPatientPrescription = () => async (dispatch) => {
   }
 };
 
-
 // get Patient prescription details By Id
 export const getPatientPrescriptionDetails = (presId) => async (dispatch) => {
   try {
@@ -1291,15 +1656,13 @@ export const getPatientPrescriptionDetails = (presId) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "GetPatientPrescriptionByIdFailure",
-    //  payload: error.response.data.message,
+      //  payload: error.response.data.message,
     });
   }
 };
 
-
-
 // report creation by patient
-export const createReport =  (formData, reportDocument) => async (dispatch) => {
+export const createReport = (formData, reportDocument) => async (dispatch) => {
   try {
     dispatch({
       type: "CreateReportRequest",
@@ -1324,8 +1687,7 @@ export const createReport =  (formData, reportDocument) => async (dispatch) => {
       payload: error.response.data.message,
     });
   }
-}
-
+};
 
 // get all doctor appointments
 export const getPatientReports = () => async (dispatch) => {
@@ -1350,22 +1712,22 @@ export const getPatientReports = () => async (dispatch) => {
   }
 };
 
-
-
 // get all doctor appointments
 export const getPatientDashboard = (selectedDate) => async (dispatch) => {
   try {
     dispatch({
       type: "GetPatientDashboardDataRequest",
     });
-    const { data } = await axios.post("/api/v1/patient/dashboard",
-    { selectedDate },
-    {
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("token"),
-      },
-    });
+    const { data } = await axios.post(
+      "/api/v1/patient/dashboard",
+      { selectedDate },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
     dispatch({
       type: "GetPatientDashboardDataSuccess",
       payload: data.patientDashBoard,
@@ -1378,9 +1740,7 @@ export const getPatientDashboard = (selectedDate) => async (dispatch) => {
   }
 };
 
-
-
-// get search doctor 
+// get search doctor
 export const getSearchDoctor = (key) => async (dispatch) => {
   try {
     dispatch({
@@ -1403,10 +1763,10 @@ export const getSearchDoctor = (key) => async (dispatch) => {
   }
 };
 
-// submit test reports 
-export const submitTestReport =  (formData) => async (dispatch) => {
+// submit test reports
+export const submitTestReport = (formData) => async (dispatch) => {
   try {
-    console.log('action',  formData);
+    console.log("action", formData);
     dispatch({
       type: "SubmitTestReportRequest",
     });
@@ -1429,5 +1789,5 @@ export const submitTestReport =  (formData) => async (dispatch) => {
       type: "SubmitTestReportFailure",
       payload: error.response.data.message,
     });
-  }
-}
+  } 
+};

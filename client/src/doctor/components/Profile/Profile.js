@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAlert } from "react-alert";
 import { useSelector, useDispatch } from "react-redux";
 import { getDepartments } from "../../../Actions/Admin";
@@ -15,6 +16,8 @@ import DoctorDetails from "./DoctorDetails";
 
 const Profile = () => {
   const dispatch = useDispatch();
+  const history = useNavigate();
+
   const { loading, user} = useSelector((state)=>state.user);
 
   const [profileImage, setProfileImage] = useState({});
@@ -25,7 +28,11 @@ const Profile = () => {
   const [formErrors, setFormErrors] = useState({});
 
    // profile data update
-  const intialValue = { name : user.name, academic: user.academic, specialist : user.specialist, about : user.about, patientNo: user.patientNo, surgery : user.surgery, experienceYear : user.experienceYear, departmentId : user.departmentId, department : user.department};
+
+
+  //console.log('user',user);
+
+  const intialValue = { name : user && user.name, academic: user && user.academic, specialist : user && user.specialist, about : user && user.about, patientNo: user && user.patientNo, surgery : user && user.surgery, experienceYear : user && user.experienceYear, departmentId : user && user.departmentId, department : user && user.department};
   const [profileValue, setProfileValue] = useState(intialValue);
   const handleChange = (e) =>{
     if(e.target.name === 'departmentId'){
@@ -38,6 +45,8 @@ const Profile = () => {
       setProfileValue({...profileValue, [e.target.name]: e.target.value});
     }
   }
+  
+
   const handleProfileSubmit = async (e) =>{
     e.preventDefault();
     let { name, academic, specialist, departmentId, department, about, patientNo, surgery, experienceYear } = profileValue;
@@ -49,28 +58,32 @@ const Profile = () => {
    }
   }
 // experience popup
-const [expValue, setExpValue] = useState(user.experiences ? user.experiences : [{experience:'', expYear:''}]);
+const [expValue, setExpValue] = useState(user && user.experiences ? user.experiences : [{experience:'', expYear:''}]);
  const handleExperienceSubmit = async (e) =>{
    e.preventDefault();
    await dispatch(updateDoctorExperience(expValue));
-   dispatch(loadUser());
+
+   //history("/doctor/profile");
    handleExpClick();
+   dispatch(loadUser());
+   
  }
 
  // language popup
- const [introVideo,setIntroVideo] = useState(user.videoIntroUrl ? user.videoIntroUrl : null)
- const [langValue, setLangValue] = useState(user.languages ? user.languages : [{value:null}]);
+ const [introVideo,setIntroVideo] = useState(user && user.videoIntroUrl ? user.videoIntroUrl : null)
+ const [langValue, setLangValue] = useState(user && user.languages ? user.languages : [{value:null}]);
   const handleLanguageSubmit = async (e) =>{
     e.preventDefault();
     await dispatch(updateDoctorLanguage(introVideo,langValue));
-    dispatch(loadUser());
     handleDetailClick();
+    dispatch(loadUser());
+    
   }
   // academic awards
-  const [clinicAddr, setClinicAddr] = useState(user.clinic_details ? user.clinic_details : '');
-  const [docterAcademic, setDocterAcademic] = useState(user.academic_details ? user.academic_details : [{academic : null}]);
+  const [clinicAddr, setClinicAddr] = useState(user && user.clinic_details ? user.clinic_details : '');
+  const [docterAcademic, setDocterAcademic] = useState(user && user.academic_details ? user.academic_details : [{academic : null}]);
 
-  let list = user.awards && user.awards.map((element)=>{
+  let list = user && user.awards.map((element)=>{
     element = {
       ...element,
       awardImage : element.awardImage.url
@@ -165,6 +178,8 @@ const [expValue, setExpValue] = useState(user.experiences ? user.experiences : [
       dispatch({ type: "clearMessage" });
     }
   }, [formErrors, alert, error, dispatch, message]);
+
+ 
   
   return (
     <>
@@ -192,7 +207,7 @@ const [expValue, setExpValue] = useState(user.experiences ? user.experiences : [
                         className="form-control"
                         placeholder=""
                         name="name"
-                        value={profileValue.name}
+                        value={profileValue && profileValue.name}
                         onChange={handleChange}
                       />
                       <span className="text-danger">{formErrors.name}</span>
@@ -280,6 +295,7 @@ const [expValue, setExpValue] = useState(user.experiences ? user.experiences : [
                       accept="image/*"
                     />
                   </div>
+                  
 
                   </div>
                   <button type="submit" className="btn btn-primary">

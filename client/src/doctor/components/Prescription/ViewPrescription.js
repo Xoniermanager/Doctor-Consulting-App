@@ -14,6 +14,8 @@ const ViewPrescription = () => {
   const { presId } = useParams();
   const dispatch = useDispatch();
   let { loading, editData } = useSelector((state) => state.editData);
+
+  //console.log(presId);
   useEffect(async() => {
     if(presId) 
     await dispatch(editPrescription(presId));
@@ -70,7 +72,7 @@ const ViewPrescription = () => {
                   </div>
                   <div className="row justify-content-center">
                     <div className="col">
-                    <h3> Drugs </h3>
+                    <h3> Drugs </h3>{console.log(editData)}
                     {editData.drugs && editData.drugs.map(drug=>(
                       <p>
                         {drug.drugId.drugName}

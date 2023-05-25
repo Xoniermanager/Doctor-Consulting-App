@@ -42,9 +42,13 @@ const PatientSideBar = () => {
                 <i className="flaticon-381-calendar"></i>
                 <span className="nav-text">Appointment</span>
               </a>
+              
               <ul aria-expanded="false" className={`mm-collapse  ${getIndex == 1 ? 'mm-show' : ''}`}>
-                <li>
+                {/* <li>
                   <Link to="/patient/doctor-list">Book Appointment</Link>
+                </li> */}
+                <li>
+                  <Link to="/patient/create-appointment/626cd04a857ce8a353529632">Book Appointment</Link>
                 </li>
                 <li>
                   <Link to="/patient/upcomming-appointment">Upcomming</Link>

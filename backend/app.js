@@ -25,9 +25,11 @@ const errorMiddleware = require('./middleware/error');
 const user = require('./routes/userRoute');
 const patient = require('./routes/patientRoute');
 const admin = require('./routes/adminRoute');
+const paymentRoute = require('./paymentRoute');
 app.use('/api/v1',user);
 app.use('/api/v1/patient',patient);
 app.use('/api/v1/admin',admin);
+app.use('/api/v1/payments',paymentRoute);
 
 
 app.use(express.static(path.join(__dirname, "../client/build")));

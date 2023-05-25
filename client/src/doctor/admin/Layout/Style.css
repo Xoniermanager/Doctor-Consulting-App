@@ -9812,7 +9812,7 @@ svg.pulse-svg {
   top: 0;
   width: 100%; }
 [data-header-position="fixed"] .content-body {
-  padding-top: 0rem; }
+  padding-top: 4rem; }
   @media only screen and (max-width: 1199px) {
     [data-header-position="fixed"] .content-body {
       padding-top: 3rem; } }
@@ -12099,7 +12099,8 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
       height: calc(100% - 80px); } }
   @media only screen and (max-width: 1400px) {
     .deznav {
-      width: 18rem; } }
+      width: 18rem;
+     } }
   .deznav .deznav-scroll {
     position: relative;
     height: 100%; }
@@ -12107,10 +12108,16 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
     padding: 0;
     margin: 0;
     list-style: none; }
+    
   .deznav .metismenu {
     display: flex;
     flex-direction: column;
-    padding-top: 15px; }
+    padding-top: 15px;
+    
+    overflow-y: scroll;
+    height: 100vh;
+    padding-bottom: 100px;
+   }
     .deznav .metismenu.fixed {
       position: fixed;
       top: 0;
@@ -30270,4 +30277,73 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 }
 .select2-container--default .select2-selection--single .select2-selection__rendered {
     color: #777 !important; 
+}
+ul.prescription-list {
+        margin-bottom: 20px;
+    }
+    ul.prescription-list li { 
+      font-size: 13px;
+      padding: 5px 0;
+      list-style: initial;
+      margin-left: 30px;
+      color: #000;
+  }
+  .bg-gray{
+    box-shadow: rgb(50 50 93 / 25%) 0px 30px 60px -12px inset, rgb(0 0 0 / 30%) 0px 18px 36px -18px inset;
+    margin-bottom: 20px;
+  }
+  .bb-u{
+    text-decoration: underline;
+  }
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+
+ ::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+}
+ 
+
+ ::-webkit-scrollbar-thumb {
+  background: #f6fbf8; 
+  border-radius: 10px;
+}
+
+
+ ::-webkit-scrollbar-thumb:hover {
+ background: #f6fbf8; 
+}
+
+
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+
+ ::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+}
+
+ ::-webkit-scrollbar-thumb {
+  background: #f6fbf8; 
+  border-radius: 10px;
+}
+
+
+ ::-webkit-scrollbar-thumb:hover {
+ background: #f6fbf8; 
 }

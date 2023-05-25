@@ -14,6 +14,11 @@ const Header = ({title}) => {
 	
 	const dispatch = useDispatch();
 
+	const toggleData = {
+        isActive : '',
+        isToggle : ''
+    }
+	const toogle  = menuToggle ? menuToggle:toggleData;
 	const {user} = useSelector((state)=>state.user);
 	const history = useNavigate();
 	const alert = useAlert();
@@ -38,7 +43,7 @@ const Header = ({title}) => {
             	</Link>
 
             	<div className="nav-control" onClick={handleBurger}>
-            		<div className={`hamburger ${menuToggle.isActive}`}>
+            		<div className={`hamburger ${toogle.isActive}`}>
             			<span className="line"></span><span className="line"></span><span className="line"></span>
             		</div>
             	</div>

@@ -22,14 +22,30 @@ const ChangePassword = () => {
   };
 
   const {loading, error, message } = useSelector((state) => state.apiStatus);
+  const alerts = useAlert();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormErrors(validate(formValues));
     let { oldPassword, newPassword } = formValues;
-    await dispatch(updatePassword(oldPassword, newPassword));
-    if(!error){
-      history('/patient');
+
+    const passwordRegex =
+      /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+
+    if (!formValues.oldPassword) {
+      //alerts.show("Old password is required");
+    }else if (!passwordRegex.test(formValues.newPassword)) {
+      //alerts.show("Password should be alpha-numeric and min 6 characters");
+    }else if (formValues.newPassword !== formValues.conPassword) {
+      //alerts.show("Password and confirm password should be matched.");
+    }else if (formValues.oldPassword === formValues.newPassword && formValues.newPassword!=='') {
+      //alerts.show("New Password is not same as the old one.");
+    }else{
+      await dispatch(updatePassword(oldPassword, newPassword));
+   
+      if(!error){
+        history('/patient');
+      }
     }
   };
 
@@ -56,6 +72,9 @@ const ChangePassword = () => {
     }
     if (values.newPassword !== values.conPassword) {
       errors.conPassword = "Password and confirm password should be matched.";
+    }
+    if (values.oldPassword === values.newPassword && values.newPassword!=='') {
+      errors.newPassword = "New Password is not same as the old one.";
     }
     return errors;
   };

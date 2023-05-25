@@ -19,6 +19,9 @@ const AdminPatients = () => {
   }, [dispatch]);
   
   let {loading, adminPatients } = useSelector((state) => state.adminPatients);
+
+
+  //console.log(adminPatients);
   
   const getDifferenceInDays = (date1, date2) => {
     const diffInMs = Math.abs(date2 - date1);

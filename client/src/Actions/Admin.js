@@ -1,6 +1,5 @@
 import axios from "axios";
 
-
 // create Doctor
 export const createDoctor = (userValue, certificate) => async (dispatch) => {
   try {
@@ -9,7 +8,7 @@ export const createDoctor = (userValue, certificate) => async (dispatch) => {
     });
     const { data } = await axios.post(
       "/api/v1/admin/create-doctor",
-      { userValue, certificate  },
+      { userValue, certificate },
       {
         headers: {
           "Content-Type": "application/json",
@@ -28,7 +27,6 @@ export const createDoctor = (userValue, certificate) => async (dispatch) => {
     });
   }
 };
-
 
 // get patient
 export const getPatients = (usertype) => async (dispatch) => {
@@ -53,21 +51,17 @@ export const getPatients = (usertype) => async (dispatch) => {
   }
 };
 
-
 // update user status
 export const updateUserStatus = (userId) => async (dispatch) => {
   try {
     dispatch({
       type: "UpdateUserStatusRequest",
     });
-    const { data } = await axios.get(
-      `/api/v1/admin/update-status/${userId}`,
-      {
-        headers: {
-          "auth-token": localStorage.getItem("token"),
-        },
-      }
-    );
+    const { data } = await axios.get(`/api/v1/admin/update-status/${userId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
     dispatch({
       type: "UpdateUserStatusSuccess",
       payload: data.message,
@@ -79,7 +73,6 @@ export const updateUserStatus = (userId) => async (dispatch) => {
     });
   }
 };
-
 
 // create disease
 export const createDisease = (diseaseValue) => async (dispatch) => {
@@ -109,7 +102,6 @@ export const createDisease = (diseaseValue) => async (dispatch) => {
     });
   }
 };
-
 
 // update disease
 export const updateDisease = (diseaseId, diseaseValue) => async (dispatch) => {
@@ -169,11 +161,14 @@ export const editDisease = (diseaseId) => async (dispatch) => {
     dispatch({
       type: "EditDiseaseRequest",
     });
-    const { data } = await axios.get(`/api/v1/admin/edit-disease/${diseaseId}`, {
-      headers: {
-        "auth-token": localStorage.getItem("token"),
-      },
-    });
+    const { data } = await axios.get(
+      `/api/v1/admin/edit-disease/${diseaseId}`,
+      {
+        headers: {
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
     dispatch({
       type: "EditDiseaseSuccess",
       payload: data.disease,
@@ -242,35 +237,35 @@ export const createDepartment = (departmentValue) => async (dispatch) => {
   }
 };
 
-
 // update department
-export const updateDepartment = (departmentId, departmentValue,deptIcon) => async (dispatch) => {
-  try {
-    dispatch({
-      type: "UpdateDepartmentRequest",
-    });
-    const { data } = await axios.put(
-      `/api/v1/admin/update-department/${departmentId}`,
-      { ...departmentValue, deptIcon },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": localStorage.getItem("token"),
-        },
-      }
-    );
+export const updateDepartment =
+  (departmentId, departmentValue, deptIcon) => async (dispatch) => {
+    try {
+      dispatch({
+        type: "UpdateDepartmentRequest",
+      });
+      const { data } = await axios.put(
+        `/api/v1/admin/update-department/${departmentId}`,
+        { ...departmentValue, deptIcon },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+        }
+      );
 
-    dispatch({
-      type: "UpdateDepartmentSuccess",
-      payload: data.message,
-    });
-  } catch (error) {
-    dispatch({
-      type: "UpdateDepartmentFailure",
-      payload: error.response.data.message,
-    });
-  }
-};
+      dispatch({
+        type: "UpdateDepartmentSuccess",
+        payload: data.message,
+      });
+    } catch (error) {
+      dispatch({
+        type: "UpdateDepartmentFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };
 
 // get departments
 export const getDepartments = () => async (dispatch) => {
@@ -301,11 +296,14 @@ export const editDepartment = (departmentId) => async (dispatch) => {
     dispatch({
       type: "EditDepartmentRequest",
     });
-    const { data } = await axios.get(`/api/v1/admin/edit-department/${departmentId}`, {
-      headers: {
-        "auth-token": localStorage.getItem("token"),
-      },
-    });
+    const { data } = await axios.get(
+      `/api/v1/admin/edit-department/${departmentId}`,
+      {
+        headers: {
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
     dispatch({
       type: "EditDepartmentSuccess",
       payload: data.department,
@@ -345,7 +343,6 @@ export const deleteDepartment = (departmentId) => async (dispatch) => {
   }
 };
 
-
 // create Faq
 export const createFaq = (faqValue) => async (dispatch) => {
   try {
@@ -374,7 +371,6 @@ export const createFaq = (faqValue) => async (dispatch) => {
     });
   }
 };
-
 
 // update faq
 export const updateFaq = (faqId, faqValue) => async (dispatch) => {
@@ -477,6 +473,564 @@ export const deleteFaq = (diseaseId) => async (dispatch) => {
   }
 };
 
+//create service
+export const createService = (serviceValue, serviceImage) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "CreateServiceRequest",
+    });
+    const { data } = await axios.post(
+      "/api/v1/admin/create-service",
+      { serviceValue, serviceImage },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+
+    dispatch({
+      type: "CreateServiceSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "CreateServiceFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const updateService = (serviceId, serviceValue, serviceImage) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "UpdateServiceRequest",
+    });
+    const { data } = await axios.put(
+      `/api/v1/admin/update-service/${serviceId}`,
+      { serviceValue, serviceImage },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+
+    dispatch({
+      type: "UpdateServiceSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "UpdateServiceFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+
+export const editService = (serviceId) => async (dispatch) => {
+  //console.log('newsId',serviceId)
+  try {
+    dispatch({
+      type: "EditServiceRequest",
+    });
+    const { data } = await axios.get(`/api/v1/admin/edit-service/${serviceId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "EditServiceSuccess",
+      payload: data.service,
+    });
+    //console.log('ser',data.service);
+  } catch (error) {
+    dispatch({
+      type: "EditServiceFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const deleteService = (serviceId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "DeleteServiceRequest",
+    });
+    const { data } = await axios.delete(`/api/v1/admin/delete-service/${serviceId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "DeleteServiceSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "DeleteServiceFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+export const getService = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "GetServiceRequest",
+    });
+    const { data } = await axios.get("/api/v1/admin/all-service", {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "GetServiceSuccess",
+      payload: data.service,
+    });
+  } catch (error) {
+    dispatch({
+      type: "GetServiceFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+
+//end create service
+
+
+//our approach
+
+export const createOurApproach = (approachValue, approachImage) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "CreateApproachRequest",
+    });
+    const { data } = await axios.post(
+      "/api/v1/admin/create-approach",
+      { approachValue, approachImage },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+
+    dispatch({
+      type: "CreateApproachSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "CreateApproachFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const updateOurApproach = (approachId,approachValue, approachImage) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "UpdateApproachRequest",
+    });
+    const { data } = await axios.put(
+      `/api/v1/admin/update-approach/${approachId}`,
+      { approachValue, approachImage },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+
+    dispatch({
+      type: "UpdateApproachSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "UpdateApproachFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+
+export const editOurApproach = (approachId) => async (dispatch) => {
+  //console.log('newsId',approachId)
+  try {
+    dispatch({
+      type: "EditApproachRequest",
+    });
+    const { data } = await axios.get(`/api/v1/admin/edit-approach/${approachId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    }); 
+    dispatch({
+      type: "EditApproachSuccess",
+      payload: data.approach,
+    });
+    //console.log('ser',data);
+  } catch (error) {
+    dispatch({
+      type: "EditApproachFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+//end our approach
+
+//our about
+
+export const createAbout = (aboutValue, aboutImage) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "CreateAboutRequest",
+    });
+    const { data } = await axios.post(
+      "/api/v1/admin/create-about",
+      { aboutValue, aboutImage },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+
+    dispatch({
+      type: "CreateAboutSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "CreateAboutFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const updateAbout = (aboutId,aboutValue, aboutImage) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "UpdateAboutRequest",
+    });
+    const { data } = await axios.put(
+      `/api/v1/admin/update-about/${aboutId}`,
+      { aboutValue, aboutImage },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+
+    dispatch({
+      type: "UpdateAboutSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "UpdateAboutFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+
+export const editAbout = (aboutId) => async (dispatch) => {
+  //console.log('newsId',approachId)
+  try {
+    dispatch({
+      type: "EditAboutsRequest",
+    });
+    const { data } = await axios.get(`/api/v1/admin/edit-about/${aboutId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    }); 
+    dispatch({
+      type: "EditAboutsSuccess",
+      payload: data.about,
+    });
+    //console.log('ser',data);
+  } catch (error) {
+    dispatch({
+      type: "EditAboutsFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+//end our about
+
+
+//our client 
+export const createClient = (clientValue, clientImage) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "CreateClientRequest",
+    });
+    const { data } = await axios.post(
+      "/api/v1/admin/create-client",
+      { clientValue, clientImage },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+
+    dispatch({
+      type: "CreateClientSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "CreateClientFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const updateClient = (clientId, clientValue, clientImage) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "UpdateClientRequest",
+    });
+    const { data } = await axios.put(
+      `/api/v1/admin/update-client/${clientId}`,
+      { clientValue, clientImage },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+
+    dispatch({
+      type: "UpdateClientSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "UpdateClientFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+
+export const editClient = (clientId) => async (dispatch) => {
+  //console.log('newsId',serviceId)
+  try {
+    dispatch({
+      type: "EditClientRequest",
+    });
+    const { data } = await axios.get(`/api/v1/admin/edit-client/${clientId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "EditClientSuccess",
+      payload: data.clients,
+    });
+    console.log('ser',data);
+  } catch (error) {
+    dispatch({
+      type: "EditClientFailure", 
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const deleteClient = (clientId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "DeleteClientRequest",
+    });
+    const { data } = await axios.delete(`/api/v1/admin/delete-client/${clientId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "DeleteClientSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "DeleteClientFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+export const getClient = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "GetClientRequest",
+    });
+    const { data } = await axios.get("/api/v1/admin/all-client", {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "GetClientSuccess",
+      payload: data.clients,
+    });
+    //console.log('data',data);
+  } catch (error) {
+    dispatch({
+      type: "GetClientFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+//end our client
+
+//start stories
+
+
+export const createStories = (storiesValue, storiesImage) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "CreateStoriesRequest",
+    });
+    const { data } = await axios.post(
+      "/api/v1/admin/create-stories",
+      { storiesValue, storiesImage },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+
+    dispatch({
+      type: "CreateStoriesSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "CreateStoriesFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const updateStories = (storiesId, storiesValue, storiesImage) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "UpdateStoriesRequest",
+    });
+    const { data } = await axios.put(
+      `/api/v1/admin/update-stories/${storiesId}`,
+      { storiesValue, storiesImage },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+
+    dispatch({
+      type: "UpdateStoriesSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "UpdateStoriesFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+
+export const editStories = (storiesId) => async (dispatch) => {
+ // console.log('newsId',storiesId)
+  try {
+    dispatch({
+      type: "EditStoriesRequest",
+    });
+    const { data } = await axios.get(`/api/v1/admin/edit-stories/${storiesId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "EditStoriesSuccess",
+      payload: data.stories,
+    });
+    //console.log('ser',data);
+  } catch (error) {
+    dispatch({
+      type: "EditStoriesFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+export const deleteStories = (storiesId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "DeleteStoriesRequest",
+    });
+    const { data } = await axios.delete(`/api/v1/admin/delete-stories/${storiesId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "DeleteStoriesSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "DeleteStoriesFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+export const getStories = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "GetStoriesRequest",
+    });
+    const { data } = await axios.get("/api/v1/admin/all-stories", {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "GetStoriesSuccess",
+      payload: data.stories,
+    });
+  } catch (error) {
+    dispatch({
+      type: "GetStoriesFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+
+
+//end stories
+
 // create news
 export const createNews = (newsValue, newsImage) => async (dispatch) => {
   try {
@@ -485,7 +1039,7 @@ export const createNews = (newsValue, newsImage) => async (dispatch) => {
     });
     const { data } = await axios.post(
       "/api/v1/admin/create-news",
-      { newsValue, newsImage},
+      { newsValue, newsImage },
       {
         headers: {
           "Content-Type": "application/json",
@@ -507,31 +1061,31 @@ export const createNews = (newsValue, newsImage) => async (dispatch) => {
 };
 // update news
 export const updateNews = (newsId, newsValue, newsImage) => async (dispatch) => {
-  try {
-    dispatch({
-      type: "UpdateNewsRequest",
-    });
-    const { data } = await axios.put(
-      `/api/v1/admin/update-news/${newsId}`,
-      { newsValue, newsImage },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": localStorage.getItem("token"),
-        },
-      }
-    );
+    try {
+      dispatch({
+        type: "UpdateNewsRequest",
+      });
+      const { data } = await axios.put(
+        `/api/v1/admin/update-news/${newsId}`,
+        { newsValue, newsImage },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+        }
+      );
 
-    dispatch({
-      type: "UpdateNewsSuccess",
-      payload: data.message,
-    });
-  } catch (error) {
-    dispatch({
-      type: "UpdateNewsFailure",
-      payload: error.response.data.message,
-    });
-  }
+      dispatch({
+        type: "UpdateNewsSuccess",
+        payload: data.message,
+      });
+    } catch (error) {
+      dispatch({
+        type: "UpdateNewsFailure",
+        payload: error.response.data.message,
+      });
+    }
 };
 // get newses
 export const getNewses = () => async (dispatch) => {
@@ -555,8 +1109,31 @@ export const getNewses = () => async (dispatch) => {
     });
   }
 };
+export const getLatestNews = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "GetLatesNewsRequest",
+    });
+    const { data } = await axios.get("/api/v1/admin/all-latest-newses", {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    dispatch({
+      type: "GetLatestNewsSuccess",
+      payload: data.newses,
+    });
+  } catch (error) {
+    dispatch({
+      type: "GetLatestNewsFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
 // edit news data
 export const editNews = (newsId) => async (dispatch) => {
+  //console.log('newsId',newsId)
   try {
     dispatch({
       type: "EditNewsRequest",
@@ -570,6 +1147,7 @@ export const editNews = (newsId) => async (dispatch) => {
       type: "EditNewsSuccess",
       payload: data.news,
     });
+    //console.log('newsdfsaf',data.news);
   } catch (error) {
     dispatch({
       type: "EditNewsFailure",
@@ -583,14 +1161,11 @@ export const deleteNews = (newsId) => async (dispatch) => {
     dispatch({
       type: "DeleteNewsRequest",
     });
-    const { data } = await axios.delete(
-      `/api/v1/admin/delete-news/${newsId}`,
-      {
-        headers: {
-          "auth-token": localStorage.getItem("token"),
-        },
-      }
-    );
+    const { data } = await axios.delete(`/api/v1/admin/delete-news/${newsId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
     dispatch({
       type: "DeleteNewsSuccess",
       payload: data.message,
@@ -603,22 +1178,17 @@ export const deleteNews = (newsId) => async (dispatch) => {
   }
 };
 
-
-
 // update Enquiry Status
 export const updateEnquiryStatus = (enqId) => async (dispatch) => {
   try {
     dispatch({
       type: "EnquiryStatusRequest",
     });
-    const { data } = await axios.get(
-      `/api/v1/admin/update-enquiry/${enqId}`,
-      {
-        headers: {
-          "auth-token": localStorage.getItem("token"),
-        },
-      }
-    );
+    const { data } = await axios.get(`/api/v1/admin/update-enquiry/${enqId}`, {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
 
     dispatch({
       type: "EnquiryStatusSuccess",

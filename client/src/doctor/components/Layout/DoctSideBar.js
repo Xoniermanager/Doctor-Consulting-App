@@ -29,6 +29,13 @@ const DoctSideBar = () => {
               </Link>
             </li>
 
+            <li>
+              <Link className="ai-icon" to="/doctor/all-payment" aria-expanded="false">
+                <i className="fa fa-money"></i>
+                <span className="nav-text">All Transaction</span>
+              </Link>
+            </li>
+
             {/* <li key={1} data-index={1} onClick={handlerMenu} className={ getIndex ==1 ? 'mm-active' : ''}>
               <a
                 className="has-arrow ai-icon"
@@ -115,9 +122,9 @@ const DoctSideBar = () => {
                 <span className="nav-text">Appointment</span>
               </a>
               <ul aria-expanded="false" className={`mm-collapse  ${getIndex == 5 ? 'mm-show' : ''}`}>
-                <li>
+                {/* <li>
                   <Link to="/create-appointment">New Appointment</Link>
-                </li>
+                </li> */}
                 <li>
                   <Link to="/doctor-appointments">All Appointments</Link>
                 </li>
@@ -130,7 +137,7 @@ const DoctSideBar = () => {
                 aria-expanded={ getIndex == 6 ? true : false}
               >
                 <i className="flaticon-381-clock"></i>
-                <span className="nav-text">Time Slot</span>
+                <span className="nav-text">Appointment Slot</span>
               </a>
               <ul aria-expanded="false" className={`mm-collapse  ${getIndex == 6 ? 'mm-show' : ''}`}>
                 <li>
@@ -141,6 +148,27 @@ const DoctSideBar = () => {
                 </li>
                 <li>
                   <Link to="/date-slot">My Slot</Link>
+                </li>
+              </ul>
+            </li>
+            <li key={7} data-index={7} onClick={handlerMenu} className={ getIndex==7 ? 'mm-active' : ''}>
+              <a
+                className="has-arrow ai-icon"
+                href="#"
+                aria-expanded={ getIndex == 7 ? true : false}
+              >
+                <i className="flaticon-381-settings-1"></i>
+                <span className="nav-text">Setting</span>
+              </a>
+              <ul aria-expanded="false" className={`mm-collapse  ${getIndex == 7 ? 'mm-show' : ''}`}>
+                <li>
+                  <Link to="/appointment-fee">Appointment Fee</Link>
+                </li>
+                <li>
+                  <Link to="/email-template">Email Template</Link>
+                </li>
+                <li>
+                  <Link to="/payment-credential">Payment Credential</Link>
                 </li>
               </ul>
             </li>

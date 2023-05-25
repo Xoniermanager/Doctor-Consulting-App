@@ -105,10 +105,10 @@ const Report = require('../models/reportModel');
     exports.getPatient = catchAsyncErrors(async( req, res) => {
       try {
          const patient = await User.find({ $and: [
-            {status:1},
+            {status:1}, 
             {role:'patient'},
             { doctors: { $in: [ req.user._id ] } }
-        ]});
+        ]}).sort({_id:-1});
          res.status(200).json({
              success : true,
              patient
@@ -171,8 +171,10 @@ const Report = require('../models/reportModel');
   //upcomming appointments list
   exports.getUpcommingAppointments = catchAsyncErrors(async( req, res) => {
     try {
+        let now = new Date();
+        let yesterday = new Date(now.getTime() - 1000 * 60 * 60 * 24);
        const patientAppointments = await Appointment.aggregate([
-        {$match: {"$and": [{  patientId : req.user._id}, {isPrescription: 0}]}},
+        {$match: {"$and": [{  patientId : req.user._id}, {isPrescription: 0},{appointmentDate: {$gt: yesterday}}]}},
         {
           $lookup: {
             from: "users",
@@ -219,7 +221,7 @@ const Report = require('../models/reportModel');
          success : false,
          message : error.message
       })
-     }
+     } 
   });
     // get Prescriptions details
     exports.getPrescriptions = catchAsyncErrors(async( req, res) => {
@@ -319,6 +321,8 @@ const Report = require('../models/reportModel');
         patientId : req.user._id,
         document
       }
+      //res.status(200).json({reportData});
+
       await Report.create(reportData);
       res.status(200).json({
         success : true,
@@ -351,9 +355,18 @@ const Report = require('../models/reportModel');
      // dashboard data
      exports.getDashboard = catchAsyncErrors(async( req, res) => {
       try {
-         let dt = new Date(req.body.selectedDate);
+         let dt = new Date();
+         //console.log('dt',dt);
+        let now = new Date();
+        let yesterday = new Date(now.getTime() - 1000 * 60 * 60 * 24);
+        // var today = new Date().toISOString();
+        // var today_last = new Date().toISOString();
+        
+        // const today = dt.toLocaleDateString(`fr-CA`).split('/').join('-');
+        // console.log(today);
+
          const todayApp = await Appointment.aggregate([
-          { $match:{patientId : req.user._id, appointmentDate: {$gt: dt}}},
+          { $match:{patientId : req.user._id,appointmentDate: {$gt: yesterday}}},
           {
             $lookup: {
               from: "users",
@@ -364,9 +377,13 @@ const Report = require('../models/reportModel');
           },{$sort: {_id: -1}} 
         ]);
 
+        console.log(todayApp);
+        
         const allApp = await Appointment.find({patientId : req.user._id});
         const allDoct = await User.find({_id : req.user._id}).select('doctors');
         const allPres = await Prescription.find({patientId : req.user._id});
+
+        //console.log('todayApp',todayApp);
       
         let patientDashBoard = {
           allApp : allApp.length,

@@ -36,7 +36,9 @@ const appointmentSchema = new mongoose.Schema({
     createdBy : {
         type : mongoose.Schema.Types.ObjectId,
         ref : 'User'
-    }
+    },
+    orderStatus: String,
+    joinUrl: String
 });
 
 module.exports = mongoose.model('Appointment', appointmentSchema);

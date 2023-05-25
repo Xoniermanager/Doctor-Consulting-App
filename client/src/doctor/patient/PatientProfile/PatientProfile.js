@@ -43,7 +43,11 @@ const PatientProfile = () => {
   const handleChange = (e) =>{
     setDetail({...detail, [e.target.name]: e.target.value});
   }
-
+  const onInputChange = e => {
+    setDetail({...detail, [e.target.name]: e.target.value.replace(/^\S*$/,'')});
+  }
+  
+  
 
   useEffect(() => {
     if (error) {
@@ -58,7 +62,7 @@ const PatientProfile = () => {
 
   const validate = (values) => {
     const errors = {};
-    const nameRegex = /^[A-Za-z ]+$/i;
+    const nameRegex = /^[A-Za-z]+$/i;
     const phoneRegex = /^[6789]\d{9}$/i;
     const addressRegex = /^[a-zA-Z0-9\s,'-]*$/i;
 
@@ -198,6 +202,7 @@ const PatientProfile = () => {
                         name="name"
                         onChange={handleChange}
                         value={detail.name}
+                        
                       />
                       <span className="text-danger">{formErrors.name}</span>
                     </div>
